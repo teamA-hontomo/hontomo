@@ -1,4 +1,4 @@
-<template>
+<template v-if="true">
   <div id='list'>
     <TitleBox v-bind:title='id + "のリスト"'>
       <button v-on:click='onClick' v-if='open' slot='button' class='btn btn-success'>公開</button>
@@ -10,8 +10,8 @@
   </div>
 </template>
 <script>
-import TitleBox from "./TitleBox.vue";
-import ContentsBox from "./ContentsBox.vue";
+import TitleBox from "./shared/TitleBox.vue";
+import ContentsBox from "./shared/ContentsBox.vue";
 export default {
   data: function () {
     return {
