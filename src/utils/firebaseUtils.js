@@ -4,7 +4,6 @@ export default {
 
   data() {
     return {
-      listName: "新規リスト",
       db: null
     };
   },
@@ -27,10 +26,10 @@ export default {
       this.db.collection("lists")
         .add(listData)
         .then(() => {
-          alert(this.listName + "を新規作成しました。");
+          alert(listData.name + "を新規作成しました。");
         })
         .catch(() => {
-          alert(this.listName + "を作成するときにエラーが発生しました。");
+          alert(this.listData.name + "を作成するときにエラーが発生しました。");
         });
     },
   },
