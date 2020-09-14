@@ -11,26 +11,36 @@ export default {
   created() {
     this.db = firebase.firestore()
   },
-/*
-  @param listData
-{
-          name: this.listName,
-          created: firebase.firestore.FieldValue.serverTimestamp(),
-          open: false,
-          ownerId: "4oFo1QKy3X8wGwuGx98h",
-          rating: 0
-        }
- */
+
   methods: {
+    /*
+      @param Object
+      {name: this.listName,
+              created: firebase.firestore.FieldValue.serverTimestamp(),
+              open: false,
+              ownerId: "4oFo1QKy3X8wGwuGx98h",
+              rating: 0
+            }
+      @return null
+     */
     createList(listData) {
-      this.db.collection("lists")
-        .add(listData)
+      var newId = this.db.collection("lists").doc().id //複数箇所でつかうので事前に取得。
+      //listに追加
+      this.db.collection("lists").doc(newId)
+        .set(listData)
         .then(() => {
           alert(listData.name + "を新規作成しました。");
         })
         .catch(() => {
-          alert(this.listData.name + "を作成するときにエラーが発生しました。");
+          alert(listData.name + "を作成するときにエラーが発生しました。");
         });
+
+      //users/<currentUser>/listsのarrayに追加
+      this.db.collection("users").doc(listData.ownerId)
+        .update({
+          lists: firebase.firestore.FieldValue.arrayUnion(newId)
+        })
+
     },
   },
 }
