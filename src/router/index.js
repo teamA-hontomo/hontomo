@@ -5,6 +5,7 @@ import Shelf from "../components/Shelf";
 import List from "../components/List";
 import MyLists from "../components/MyLists";
 import GlobalLists from "../components/GlobalLists";
+import View from "../components/View";
 
 Vue.use(Router);
 
@@ -14,6 +15,11 @@ export default new Router({
       path: "/",
       name: "Top",
       component: Top
+    },
+    {
+      path: "/view",
+      name: "View",
+      component: View
     },
     {
       path: "/shelf",
