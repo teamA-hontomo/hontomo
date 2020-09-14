@@ -1,4 +1,4 @@
-<template v-if="true">
+<template>
   <div id='list'>
     <TitleBox v-bind:title='name'>
       <font-awesome-icon v-on:click='add' v-if='!fav' icon='star' slot='button' class='fa-lg' />
