@@ -2,7 +2,7 @@
   <TitleBox title='メインページ' />
 </template>
 <script>
-import TitleBox from "./TitleBox.vue";
+import TitleBox from "./shared/TitleBox.vue";
 export default {
   components: {
     TitleBox,
