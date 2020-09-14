@@ -4,6 +4,7 @@
   </div>
 </template>
 <script>
+import ModalWindow from "./ModalWindow.vue";
 export default {
   name: "ContentsBox",
 };
