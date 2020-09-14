@@ -3,6 +3,9 @@
 import Vue from "vue";
 import App from "./App";
 import router from "./router";
+import firebase from 'firebase'
+
+
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -13,6 +16,18 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fas);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.config.productionTip = false;
+
+const firebaseConfig = {
+  apiKey: "AIzaSyD827jJpA2nw6-dHpyjNUe2KmwcEiObLZY",
+  authDomain: "hontomo-41f21.firebaseapp.com",
+  databaseURL: "https://hontomo-41f21.firebaseio.com",
+  projectId: "hontomo-41f21",
+  storageBucket: "hontomo-41f21.appspot.com",
+  messagingSenderId: "222453016377",
+  appId: "1:222453016377:web:f44ad6a759e9a841802ae8",
+  measurementId: "G-HLRMXWBK8E"
+};
+firebase.initializeApp(firebaseConfig)
 
 /* eslint-disable no-new */
 new Vue({
