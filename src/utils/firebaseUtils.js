@@ -13,16 +13,17 @@ export default {
   },
 
   methods: {
-    /*
-      @param Object
-      {name: this.listName,
-              created: firebase.firestore.FieldValue.serverTimestamp(),
-              open: false,
-              ownerId: "4oFo1QKy3X8wGwuGx98h",
-              rating: 0
-            }
-      @return null
-     */
+
+    // @param Object
+    // {
+    //         name: this.listName,
+    //         created: firebase.firestore.FieldValue.serverTimestamp(),
+    //         open: false,
+    //         ownerId: "4oFo1QKy3X8wGwuGx98h",
+    //         rating: 0
+    //  }
+    // @return null
+
     createList(listData) {
       var newId = this.db.collection("lists").doc().id //複数箇所でつかうので事前に取得。
       //listに追加
@@ -40,7 +41,50 @@ export default {
         .update({
           lists: firebase.firestore.FieldValue.arrayUnion(newId)
         })
-
     },
+
+    //@param userId
+    //@return Object ListのArray
+    getOwnedListsFromUserId(userId) {
+      var returnLists = []
+      this.db.collection("lists").where("ownerId", "==", userId).get()
+        .then((lists) => {
+          lists.forEach((list) => {
+            returnLists.push(list.data())
+          })
+        })
+
+      return returnLists
+    },
+
+    //@param listId 
+    //@return Object listData
+    async getListFromListId(listId) {
+      var returnList = {}
+      await this.db.collection("lists").doc(listId).get()
+        .then((list) => {
+          console.debug("a", list.data())
+          returnList = list.data()
+        })
+      console.debug("hoge,", returnList)
+      return returnList
+    },
+
+    //@param userId
+    //@return Object ListのArray
+    getSubscribedListsFromUserId(userId) {
+      var returnLists = []
+      this.db.collection("users").doc(userId).get()
+        .then((user) => {
+          user.data().lists.forEach((listId) => {
+            this.getListFromListId(listId).then((list) => {
+              console.debug("tmp", list)
+              returnLists.push(list)
+
+            })
+          })
+        })
+      return returnLists
+    }
   },
 }
