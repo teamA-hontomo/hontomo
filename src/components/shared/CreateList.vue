@@ -11,7 +11,7 @@ export default {
 
   data() {
     return {
-      listName: "sampleList",
+      listName: "新規リスト",
       db:null
     };
   },
@@ -25,6 +25,10 @@ export default {
       this.db.collection("lists")
         .add({
           name: this.listName,
+          created:firebase.firestore.FieldValue.serverTimestamp(),//firebaseのサーバー時間を取得。
+          open:false,
+          ownerId:"4oFo1QKy3X8wGwuGx98h",
+          rating:0
         })
         .then(() => {
           alert(this.listName + "を新規作成しました。");
