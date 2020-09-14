@@ -2,7 +2,12 @@
   <div>
     <p>動作確認用ページ</p>
     <CreateList />
-    <div>{{lists[0].name}}</div>
+    <ul>
+      <li
+        v-for="list in lists"
+        :key="list.name"
+      >リスト名:{{list.name}},制作日:{{list.created.toDate()}},公開かどうか{{list.open}},オーナー:{{owenerId}},いいね数:{{rating}}</li>
+    </ul>
   </div>
 </template>
 
@@ -17,12 +22,13 @@ export default {
   data() {
     return {
       lists: {},
+      userId: "4oFo1QKy3X8wGwuGx98h",
     };
   },
 
   created() {
-    this.lists = this.getOwnedListsFromUserId("4oFo1QKy3X8wGwuGx98h");
-    console.debug("fuga:",this.lists);
+    this.lists = this.getOwnedListsFromUserId(this.userId);
+    console.debug("fuga:", this.lists);
   },
 };
 </script>
