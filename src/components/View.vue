@@ -42,6 +42,7 @@ export default {
 #view-wrap {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 #view {
