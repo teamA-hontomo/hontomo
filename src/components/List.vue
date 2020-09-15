@@ -105,16 +105,15 @@ export default {
     //公開非公開の変更
     changeOpen: function () {
       this.open = !this.open;
-      //firebase側処理
-      // if (this.open) {
-      //   const userRef = this.db.collection("lists").doc(this.listId).update({
-      //     open: true,
-      //   });
-      // } else {
-      //   const userRef = this.db.collection("lists").doc(this.listId).update({
-      //     open: false,
-      //   });
-      // }
+      if (this.open) {
+        const userRef = this.db.collection("lists").doc(this.list.id).update({
+          open: true,
+        });
+      } else {
+        const userRef = this.db.collection("lists").doc(this.list.id).update({
+          open: false,
+        });
+      }
       this.closeModal();
     },
 
