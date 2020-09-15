@@ -12,7 +12,6 @@ export default {
     makeList() {
       var listData = {
         name: "新しいリスト",
-        //created: firebase.firestore.FieldValue.serverTimestamp(), //firebaseのサーバー時間を取得。
         open: false,
         ownerId: "4oFo1QKy3X8wGwuGx98h",
         rating: 0,

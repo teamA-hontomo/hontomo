@@ -1,24 +1,48 @@
 <template>
   <div>
-    <p>動作確認用ページ</p>
+    <h1>動作確認用ページ</h1>新規リスト作成
     <CreateList />
+    <hr />
+
     <div>
       <p>所有しているリスト一覧</p>
       <ul>
         <li
           v-for="list in ownedLists"
-          :key="list.name"
-        >リスト名:{{list.name}},制作日:{{list.created.toDate()}},公開かどうか{{list.open}},オーナー:{{owenerId}},いいね数:{{rating}}</li>
+          :key="list.id"
+        >リスト名:{{list.name}},制作日:{{list.created.toDate()}},公開かどうか{{list.open}},オーナー:{{list.owenerId}},いいね数:{{list.rating}}</li>
       </ul>
     </div>
+    <hr />
     <div>
       <p>登録しているリスト一覧</p>
       <ul>
         <li
           v-for="list in subscribedLists"
-          :key="list.name"
-        >リスト名:{{list.name}},制作日:{{list.created.toDate()}},公開かどうか{{list.open}},オーナー:{{owenerId}},いいね数:{{rating}}</li>
+          :key="list.id"
+        >リスト名:{{list.name}},制作日:{{list.created.toDate()}},公開かどうか{{list.open}},オーナー:{{list.owenerId}},いいね数:{{list.rating}}</li>
       </ul>
+    </div>
+    <hr />
+    <div>
+      <p>リスト名変更</p>
+      <span>「{{ownedLists[0].name}}」の名前を変更します</span>
+      <input v-model="newName" />
+      <button @click="changeListName()" type="button">名前を変更</button>
+    </div>
+    <hr />
+    <div>
+      <p>コマをリストに追加</p>
+      <img :src="imagePath" />
+      <span>このコマを「{{ownedLists[0].name}}」に</span>
+      <button @click="addFrameToList()" type="button">追加</button>
+    </div>
+    <hr />
+    <div>
+      <span>「{{ownedLists[0].name}}」に登録されているコマ一覧</span>
+      <div v-for="image in imagesArray" :key="image.addedTime">
+        <img :src="imagePath" />
+      </div>
     </div>
   </div>
 </template>
@@ -33,16 +57,40 @@ export default {
 
   data() {
     return {
-      ownedLists: {},
+      ownedLists: [],
       subscribedLists: [],
+      newName: "",
       userId: "4oFo1QKy3X8wGwuGx98h",
+      listId: "3XAbHkY5hnkk8YLNyMXp",
+      imageName: "frames/ブラックジャックによろしく1.jpg",
+      imagePath: "",
     };
   },
 
   created() {
+    this.imagePath = require("../assets/" + this.imageName);
     this.ownedLists = this.getOwnedListsFromUserId(this.userId);
     this.subscribedLists = this.getSubscribedListsFromUserId(this.userId);
-    console.debug(this.subscribedLists);
+  },
+  
+  computed: {
+    imagesArray() {
+      return this.getFramesFromList(this.ownedLists[0].id)
+    },
+  },
+
+  methods: {
+    changeListName() {
+      this.renameList(this.ownedLists[0].id, this.newName);
+      alert("リスト名を変更しました");
+      this.$router.push("Top");
+    },
+
+    addFrameToList() {
+      this.setFrameToList(this.ownedLists[0].id, this.imageName);
+      alert("画像をリストに追加しました。");
+      this.$router.push("Top");
+    },
   },
 };
 </script>
