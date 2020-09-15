@@ -13,7 +13,7 @@ export default {
   },
 
   methods: {
-
+    //リストを新規作成する
     // @param Object
     // {
     //         name: this.listName,
@@ -23,7 +23,6 @@ export default {
     //         rating: 0
     //  }
     // @return null
-
     createList(listData) {
       var newId = this.db.collection("lists").doc().id //複数箇所でつかうので事前に取得。
       listData.id = newId;
@@ -46,6 +45,7 @@ export default {
         })
     },
 
+    //ユーザーIDからそのユーザーがオーナーのリストを持ってくる
     //@param userId
     //@return Object ListのArray
     getOwnedListsFromUserId(userId) {
@@ -60,6 +60,7 @@ export default {
       return returnLists
     },
 
+    //リストIDからリスト情報を持ってくる。
     //@param listId 
     //@return Object listData
     async getListFromListId(listId) {
@@ -72,6 +73,7 @@ export default {
       return returnList
     },
 
+    //ユーザーIDからそのユーザーがいいねしてるorそのユーザーがオーナーのリストを取得
     //@param userId
     //@return Object ListのArray
     getSubscribedListsFromUserId(userId) {
@@ -87,7 +89,9 @@ export default {
       return returnLists
     },
 
-
+    //リストの名前を変更
+    //@param listId ,新しい名前
+    //@return null
     renameList(listId, newName) {
       this.db.collection("lists").doc(listId).set({
           name: newName
@@ -97,6 +101,9 @@ export default {
         .then(() => {})
     },
 
+    //リストにコマを追加
+    //@param リストID,コマのファイルパス
+    //@return null
     setFrameToList(listId, framePath) {
       this.db.collection("lists").doc(listId)
         .collection("frames").add({
@@ -104,6 +111,17 @@ export default {
           addedTime: firebase.firestore.FieldValue.serverTimestamp(),
         })
         .then(() => {})
+    },
+
+    getFramesFromList(listId) {
+      const frames = []
+      this.db.collection("lists").doc(listId)
+        .collection("frames").get().then((querySnapshot) => {
+          querySnapshot.forEach((frame) => {
+            frames.push(frame)
+          })
+        })
+      return frames
     }
   }
 }
