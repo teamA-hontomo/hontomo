@@ -1,22 +1,10 @@
 <template>
   <div id="list">
     <TitleBox>
-      <span class="mx-auto my-auto">{{ name }}</span>
-      <div slot="button">
-        <font-awesome-icon
-          icon="star"
-          class="fa-lg"
-          v-on:click="onClickStar"
-          v-bind:class="starColor"
-        />
-        <span>{{ rating }}</span>
-        <button v-on:click="openModal" v-if="open" class="btn btn-success">
-          公開
-        </button>
-        <button v-on:click="openModal" v-if="!open" class="btn btn-danger">
-          非公開
-        </button>
-      </div>
+      <span class="mx-auto my-auto">{{ id }}</span>
+      <StarButton :listId="id" :userId="userId" />
+      <button v-on:click="openModal" v-if="open" class="btn btn-success">公開</button>
+      <button v-on:click="openModal" v-if="!open" class="btn btn-danger">非公開</button>
     </TitleBox>
 
     <ContentsBox>
@@ -28,12 +16,10 @@
             v-on:click="openFrame"
           />
           <div class="card-body">
-            <p class="card-title">{{ cartoonFrames[id]["title"] }}</p>
+            <p class="card-title">{{cartoonFrames[id]["title"]}}</p>
             <p class="card-title">
-              {{ cartoonFrames[id]["volume"] }}巻 /{{
-                cartoonFrames[id]["page"]
-              }}ページ<br />
-              追加日:{{ date }}
+              {{cartoonFrames[id]["volume"]}}巻
+              /{{cartoonFrames[id]["page"]}}ページ
             </p>
           </div>
         </div>
@@ -81,17 +67,16 @@
 import TitleBox from "./shared/TitleBox.vue";
 import ContentsBox from "./shared/ContentsBox.vue";
 import ModalWindow from "./shared/ModalWindow.vue";
-import firebase from "firebase";
-import "firebase/firestore";
+import StarButton from "./shared/StarButton.vue";
+
 export default {
   data: function() {
     return {
-      db: null,
-      id: this.$route.params.id,
+      // id: this.$route.params.id,
+      id: "EjF12B6bV3sIfqip9yQH",
+      userId:"4oFo1QKy3X8wGwuGx98h",//TODO:ハードコーディング
       open: true,
-      rating: 5,
       name: "リストサンプルタイトル",
-      followed: false,
       showModal: false,
       openingImg: "",
       date: "",
@@ -134,14 +119,7 @@ export default {
     console.log(`debugだよ${this.getFramesFromList("EjF12B6bV3sIfqip9yQH")}`);
   },
   computed: {
-    starColor: function() {
-      if (this.followed) {
-        return { yellowStar: true };
-      } else {
-        return { yellowStar: false };
-      }
-    },
-    openStatus: function() {
+    openStatus: function () {
       if (this.open) {
         return "公開";
       } else {
@@ -152,7 +130,8 @@ export default {
   components: {
     TitleBox,
     ContentsBox,
-    ModalWindow
+    ModalWindow,
+    StarButton,
   },
   methods: {
     openModal: function() {
@@ -161,23 +140,7 @@ export default {
     onClick: function() {
       this.open = !this.open;
     },
-    onClickStar: function() {
-      if (this.followed) {
-        this.followed = false;
-        this.rating--;
-      } else {
-        this.followed = true;
-        this.rating++;
-      }
-      //firebase側の更新
-      const userRef = this.db
-        .collection("lists")
-        .doc(this.listId)
-        .update({
-          rating: this.rating
-        });
-    },
-    closeModal: function() {
+    closeModal: function () {
       this.showModal = false;
     },
 
@@ -234,8 +197,5 @@ export default {
 }
 .card-text {
   color: #eeeeee;
-}
-.yellowStar {
-  color: yellow;
 }
 </style>
