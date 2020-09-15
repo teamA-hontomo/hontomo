@@ -2,7 +2,7 @@
   <div id="list">
     <TitleBox>
       <span class="mx-auto my-auto">{{ list.name }}</span>
-      <StarButton :listId="list.id" :userId="userId" />
+      <StarButton :list="list" :userId="userId" />
       <button v-on:click="openModal" v-if="open" class="btn btn-success">公開</button>
       <button v-on:click="openModal" v-if="!open" class="btn btn-danger">非公開</button>
     </TitleBox>
@@ -39,17 +39,18 @@
     </ModalWindow>
   </div>
 </template>
+
 <script>
 import TitleBox from "./shared/TitleBox.vue";
 import ContentsBox from "./shared/ContentsBox.vue";
 import ModalWindow from "./shared/ModalWindow.vue";
 import StarButton from "./shared/StarButton.vue";
+import firebase from "firebase";
+import "firebase/firestore";
 
 export default {
   data: function () {
     return {
-      // id: this.$route.params.id,
-      id: "EjF12B6bV3sIfqip9yQH",
       userId: "4oFo1QKy3X8wGwuGx98h", //TODO:ハードコーディング
       open: true,
       showModal: false,
@@ -64,7 +65,6 @@ export default {
 
   created() {
     this.id = this.$route.params.id;
-
     this.getListFromListId(this.id).then((returnedlist) => {
       this.list = returnedlist;
     });
@@ -127,18 +127,19 @@ export default {
       this.showFrame = false;
     },
   },
+
   watch: {
     $route: function (val, oldVal) {
       this.id = val.params.id;
-
-      this.getListFromListId(this.listId).then((returnedlist) => {
+      console.debug(this.id);
+      this.getListFromListId(this.id).then((returnedlist) => {
         this.list = returnedlist;
-        F;
       });
     },
   },
 };
 </script>
+
 <style scoped>
 .card {
   background-color: #3e3e3e;
