@@ -55,6 +55,36 @@ export default {
         })
 
       return returnLists
+    },
+
+    //@param listId 
+    //@return Object listData
+    async getListFromListId(listId) {
+      var returnList = {}
+      await this.db.collection("lists").doc(listId).get()
+        .then((list) => {
+          console.debug("a", list.data())
+          returnList = list.data()
+        })
+      console.debug("hoge,", returnList)
+      return returnList
+    },
+
+    //@param userId
+    //@return Object ListのArray
+    getSubscribedListsFromUserId(userId) {
+      var returnLists = []
+      this.db.collection("users").doc(userId).get()
+        .then((user) => {
+          user.data().lists.forEach((listId) => {
+            this.getListFromListId(listId).then((list) => {
+              console.debug("tmp", list)
+              returnLists.push(list)
+
+            })
+          })
+        })
+      return returnLists
     }
   },
 }
