@@ -24,6 +24,10 @@ export default {
     //  }
     // @return null
 
+    test(){
+      console.log("Hello World");
+    },
+
     createList(listData) {
       var newId = this.db.collection("lists").doc().id //複数箇所でつかうので事前に取得。
       //listに追加

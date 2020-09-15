@@ -1,7 +1,7 @@
 <template>
   <div id='list'>
     <TitleBox>
-      <span class='mx-auto my-auto'>{{ id }}</span>
+      <span class='mx-auto my-auto'>{{ name }}</span>
       <div slot='button'>
         <font-awesome-icon
           icon='star'
@@ -51,9 +51,12 @@
 import TitleBox from "./shared/TitleBox.vue";
 import ContentsBox from "./shared/ContentsBox.vue";
 import ModalWindow from "./shared/ModalWindow.vue";
+import firebase from "firebase";
+import "firebase/firestore";
 export default {
-  data: function() {
+  data: function () {
     return {
+      db: null,
       id: this.$route.params.id,
       open: true,
       rating: 5,
@@ -61,7 +64,10 @@ export default {
       followed: false,
       showModal: false,
       openingImg: "",
+      date:"",
       showFrame: false,
+      listId: "EjF12B6bV3sIfqip9yQH",
+      owenerId: "",
       cartoonFrames: {
         1: {
           page: "1",
@@ -77,6 +83,17 @@ export default {
         },
       },
     };
+  },
+  created(){
+    this.db = firebase.firestore()
+    this.getListFromListId(this.listId).then((returnedlist) => {
+      console.log(returnedlist);
+      this.name = returnedlist.name;
+      this.date = returnedlist.created;
+      this.open = returnedlist.open;
+      this.owenerId = returnedlist.owenerId;
+      this.rating = returnedlist.rating;
+    });
   },
   computed: {
     starColor: function () {
@@ -114,6 +131,10 @@ export default {
         this.followed = true;
         this.rating++;
       }
+      //firebase側の更新
+      const userRef = this.db.collection("lists").doc(this.listId).update({
+          rating: this.rating
+      })
     },
     closeModal: function () {
       this.showModal = false;
@@ -121,10 +142,22 @@ export default {
     changeOpen: function () {
       this.open = !this.open;
       this.closeModal();
+      //firebase側処理
+      if(this.open){
+        const userRef = this.db.collection("lists").doc(this.listId).update({
+          open: true
+      })
+      }
+      else{
+        const userRef = this.db.collection("lists").doc(this.listId).update({
+          open: false
+      })
+      }
     },
     openFrame: function (event) {
       this.openingImg = event.target.src;
       this.showFrame = true;
+      var returnLists = []
     },
     closeFrame: function () {
       this.showFrame = false;
@@ -133,6 +166,14 @@ export default {
   watch: {
     $route: function (val, oldVal) {
       this.id = val.params.id;
+      /*this.getListFromListId(this.listId).then((returnedlist) => {
+      console.log(returnedlist);
+      this.name = returnedlist.name;
+      this.date = returnedlist.created;
+      this.open = returnedlist.open;
+      this.owenerId = returnedlist.owenerId;
+      this.rating = returnedlist.rating;
+    });*/
     },
   },
 };

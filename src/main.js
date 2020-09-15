@@ -3,7 +3,7 @@
 import Vue from "vue";
 import App from "./App";
 import router from "./router";
-//import firebase from 'firebase'
+import firebase from 'firebase'
 
 
 
@@ -33,10 +33,10 @@ const firebaseConfig = {
   appId: "1:222453016377:web:f44ad6a759e9a841802ae8",
   measurementId: "G-HLRMXWBK8E"
 };
-//firebase.initializeApp(firebaseConfig)
+firebase.initializeApp(firebaseConfig)
 
-//import firebaseUtils from './utils/firebaseUtils'
-//Vue.mixin(firebaseUtils)
+import firebaseUtils from './utils/firebaseUtils'
+Vue.mixin(firebaseUtils)
 /* eslint-disable no-new */
 new Vue({
   el: "#app",
