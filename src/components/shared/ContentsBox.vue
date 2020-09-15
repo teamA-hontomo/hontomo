@@ -1,9 +1,10 @@
 <template>
   <div class='row contents-box mx-auto mt-3'>
-      <slot></slot>
+    <slot></slot>
   </div>
 </template>
 <script>
+import ModalWindow from "./ModalWindow.vue";
 export default {
   name: "ContentsBox",
 };
