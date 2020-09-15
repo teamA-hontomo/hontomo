@@ -4,7 +4,7 @@
       icon="star"
       class="fa-lg"
       v-on:click="onClickStar"
-      v-bind:class="{yellowStar: !isfollowed}"
+      v-bind:class="{yellowStar: isfollowed}"
     />
     <span>{{ rating }}</span>
   </div>
