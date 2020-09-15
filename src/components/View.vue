@@ -23,7 +23,7 @@ export default {
     }
   },
   mounted() {
-    this.viewer = new Viewer('/static/books/test.xml');
+    this.viewer = new Viewer('/static/books/test.xml', this.listClick, this.agoraClick);
 
     this.viewer.show();
   },
@@ -33,6 +33,12 @@ export default {
     },
     back() {
       this.viewer.back();
+    },
+    listClick() {
+      alert('listClick!!!');
+    },
+    agoraClick() {
+      alert('agoraClick!!!');
     }
   }
 }
