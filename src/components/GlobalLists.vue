@@ -70,7 +70,7 @@ export default {
               path: "frames/ブラックジャックによろしく2.jpg"
             }
           ],
-          name: "ワンピース名場面集2",
+          name: "スラムダンク名場面集",
           rating: 1,
           created: "2020/09/02",
           open: true,
@@ -83,7 +83,7 @@ export default {
               path: "frames/ブラックジャックによろしく1.jpg"
             }
           ],
-          name: "ワンピース名場面集3",
+          name: "ワンピース名場面集2",
           rating: 2,
           created: "2020/09/08",
           open: true,
