@@ -34,7 +34,7 @@
                 cartoonFrames[id]["page"]
               }}ページ<br />
               追加日:{{ date }}
-              debug:{{frames.data}}
+              debug:{{frames}}
             </p>
           </div>
         </div>
@@ -98,7 +98,7 @@ export default {
       //listId2: "jTCoI4Do2gB4fnXE4b2B",
       Id: ["EjF12B6bV3sIfqip9yQH", "jTCoI4Do2gB4fnXE4b2B"],
       owenerId: "",
-      frames: {},
+      frames: {gomi:"jj"},
       list_info:{},
       cartoonFrames: {
         1: {
@@ -216,10 +216,12 @@ export default {
       this.id = val.params.id;
 
       this.getListFromListId(this.Id[this.id - 1]).then(returnedlist => {
-        //console.log(returnedlist);
+        console.log(returnedlist);
         this.list_info = returnedlist;
         this.date = returnedlist.created.toDate();
       });
+      this.frames = this.getFramesFromList("EjF12B6bV3sIfqip9yQH");
+      console.log(this.frames)
     }
   }
 };
