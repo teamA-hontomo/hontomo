@@ -7,7 +7,7 @@
       <ul>
         <li
           v-for="list in ownedLists"
-          :key="list.created.toDate()"
+          :key="list.id"
         >リスト名:{{list.name}},制作日:{{list.created.toDate()}},公開かどうか{{list.open}},オーナー:{{list.owenerId}},いいね数:{{list.rating}}</li>
       </ul>
     </div>
@@ -16,7 +16,7 @@
       <ul>
         <li
           v-for="list in subscribedLists"
-          :key="list.created.toDate()"
+          :key="list.id"
         >リスト名:{{list.name}},制作日:{{list.created.toDate()}},公開かどうか{{list.open}},オーナー:{{list.owenerId}},いいね数:{{list.rating}}</li>
       </ul>
     </div>
@@ -54,9 +54,9 @@ export default {
 
   methods: {
     changeListName() {
-      this.renameList(this.listId, this.newName);
+      this.renameList(this.ownedLists[0].id, this.newName);
       alert("リスト名を変更しました");
-      router.push("Top");
+      this.$router.push("Top");
     },
   },
 };
