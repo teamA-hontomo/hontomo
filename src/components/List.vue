@@ -7,25 +7,21 @@
       <button v-on:click='openModal' v-if='!open' class='btn btn-danger'>非公開</button>
     </TitleBox>
 
-    <!-- <ContentsBox>
-      <div v-for="id in Object.keys(cartoonFrames)" class="col-md-3" :key="id">
-        <div class="card">
-          <img
-            :src="require('../' + cartoonFrames[id]['path'])"
-            class="card-img-top"
-            v-on:click="openFrame"
-          />
-          <div class="card-body">
-            <p class="card-title">{{cartoonFrames[id]["title"]}}</p>
-            <p class="card-title">
-              {{cartoonFrames[id]["volume"]}}巻
-              /{{cartoonFrames[id]["page"]}}ページ
+    <ContentsBox>
+      <div v-for='frame in this.frames' class='col-md-3' :key='Object.keys(frame)[0]'>
+        <div class='card'>
+          <img :src='require("../" + Object.values(frame)[0]["path"])' class='card-img-top' />
+          <div class='card-body'>
+            <p class='card-title'>{{Object.values(frame)[0]["title"]}}</p>
+            <p class='card-title'>
+              {{Object.values(frame)[0]["volume"]}}巻
+              /{{Object.values(frame)[0]["page"]}}ページ
             </p>
           </div>
         </div>
       </div>
-    </ContentsBox>-->
-    <ModalWindow v-show='showModal' v-on:fromModal='closeModal' :width=''20'' :height=''50''>
+    </ContentsBox>
+    <ModalWindow v-show='showModal' v-on:fromModal='closeModal' :width='"20"' :height='"50"'>
       <div class='mt-5 mx-auto'>
         <h5 class='mx-auto font-weight-bold'>ただいまの設定は[{{ openStatus }}]です</h5>
         <h5 class='mx-auto font-weight-bold'>変更してもよろしいですか？</h5>
@@ -34,7 +30,7 @@
       </div>
     </ModalWindow>
 
-    <ModalWindow v-show='showFrame' v-on:fromModal='closeFrame' :width=''50'' :height=''50''>
+    <ModalWindow v-show='showFrame' v-on:fromModal='closeFrame' :width='"50"' :height='"50"'>
       <img :src='openingImg' class='card-img-top' v-on:click='openFrame' />
     </ModalWindow>
   </div>
@@ -45,37 +41,68 @@ import TitleBox from "./shared/TitleBox.vue";
 import ContentsBox from "./shared/ContentsBox.vue";
 import ModalWindow from "./shared/ModalWindow.vue";
 import StarButton from "./shared/StarButton.vue";
-import firebase from "firebase";
-import "firebase/firestore";
 
 export default {
   data: function () {
     return {
       userId: "4oFo1QKy3X8wGwuGx98h", //TODO:ハードコーディング
+      id: this.$route.params.id,
       open: true,
+      rating: 5,
+      name: "リストサンプルタイトル",
+      followed: false,
       showModal: false,
       openingImg: "",
       showFrame: false,
-      Id: ["EjF12B6bV3sIfqip9yQH", "jTCoI4Do2gB4fnXE4b2B"],
+      listId: "EjF12B6bV3sIfqip9yQH",
       list: {},
       owenerId: "",
       frames: [],
     };
   },
 
-  created() {
-    this.id = this.$route.params.id;
-    this.getListFromListId(this.id).then((returnedlist) => {
-      this.list = returnedlist;
-    });
-    //コマの情報取得
-    this.frames = this.getFramesFromList(this.list.id);
+  computed: {
+    starColor: function () {
+      if (this.followed) {
+        return { yellowStar: true };
+      } else {
+        return { yellowStar: false };
+      }
+    },
+    openStatus: function () {
+      if (this.open) {
+        return "公開";
+      } else {
+        return "非公開";
+      }
+    },
+    imagesArray: function () {
+      return this.getFramesFromList(this.listId);
+    },
   },
 
-  computed: {
+  created() {
+    /*this.getListFromListId(this.Id[this.id - 1]).then((returnedlist) => {
+      //console.log(returnedlist);
+      this.name = returnedlist.name;
+      this.date = returnedlist.created.toDate();
+      this.open = returnedlist.open;
+      this.owenerId = returnedlist.owenerId;
+      this.rating = returnedlist.rating;
+    });
+    */
+    this.frames = this.getFramesFromList(this.listId);
+    //コマの情報取得
+    //this.frames = this.getFramesFromList(this.list.id);
+    console.log(`debugだよ${this.frames}`);
+    console.log(this.frames);
+  },
+
+  components: {
     TitleBox,
     ModalWindow,
     StarButton,
+    ContentsBox,
   },
 
   methods: {
