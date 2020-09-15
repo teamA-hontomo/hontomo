@@ -27,8 +27,10 @@ export default {
     createList(listData) {
       var newId = this.db.collection("lists").doc().id //複数箇所でつかうので事前に取得。
       listData.id = newId;
-      //listに追加
-      this.db.collection("lists").doc(newId)
+      listData.created = firebase.firestore.FieldValue.serverTimestamp(), //firebaseのサーバー時間を取得。
+
+        //listに追加
+        this.db.collection("lists").doc(newId)
         .set(listData)
         .then(() => {
           alert(listData.name + "を新規作成しました。");
@@ -94,5 +96,14 @@ export default {
         })
         .then(() => {})
     },
+
+    setFrameToList(listId, framePath) {
+      this.db.collection("lists").doc(listId)
+        .collection("frames").add({
+          path: framePath,
+          addedTime: firebase.firestore.FieldValue.serverTimestamp(),
+        })
+        .then(() => {})
+    }
   }
 }
