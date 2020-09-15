@@ -34,7 +34,7 @@ export default {
     back() {
       this.viewer.back();
     },
-    listClick() {
+    listClick(e) {
       this.selected_frame = e.currentTarget.parentElement.getAttribute('frame_src');
       this.$refs.modal.show();
     },
