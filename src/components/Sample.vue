@@ -1,7 +1,9 @@
 <template>
   <div>
-    <p>動作確認用ページ</p>
+    <h1>動作確認用ページ</h1>新規リスト作成
     <CreateList />
+    <hr />
+
     <div>
       <p>所有しているリスト一覧</p>
       <ul>
@@ -11,6 +13,7 @@
         >リスト名:{{list.name}},制作日:{{list.created.toDate()}},公開かどうか{{list.open}},オーナー:{{list.owenerId}},いいね数:{{list.rating}}</li>
       </ul>
     </div>
+    <hr />
     <div>
       <p>登録しているリスト一覧</p>
       <ul>
@@ -20,11 +23,13 @@
         >リスト名:{{list.name}},制作日:{{list.created.toDate()}},公開かどうか{{list.open}},オーナー:{{list.owenerId}},いいね数:{{list.rating}}</li>
       </ul>
     </div>
+    <hr />
     <div>
       <p>リスト名変更</p>
       <input v-model="newName" />
       <button @click="changeListName()" type="button">名前を変更</button>
     </div>
+    <hr />
   </div>
 </template>
 
