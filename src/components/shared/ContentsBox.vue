@@ -1,8 +1,6 @@
 <template>
   <div class='row contents-box mx-auto mt-3'>
-    <div class='mx-auto'>
       <slot></slot>
-    </div>
   </div>
 </template>
 <script>
