@@ -37,6 +37,13 @@
       <span>このコマを「{{ownedLists[0].name}}」に</span>
       <button @click="addFrameToList()" type="button">追加</button>
     </div>
+    <hr />
+    <div>
+      <span>「{{ownedLists[0].name}}」に登録されているコマ一覧</span>
+      <div v-for="image in imagesArray" :key="image.addedTime">
+        <img :src="imagePath" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -64,7 +71,12 @@ export default {
     this.imagePath = require("../assets/" + this.imageName);
     this.ownedLists = this.getOwnedListsFromUserId(this.userId);
     this.subscribedLists = this.getSubscribedListsFromUserId(this.userId);
-    console.debug(this.subscribedLists);
+  },
+  
+  computed: {
+    imagesArray() {
+      return this.getFramesFromList(this.ownedLists[0].id)
+    },
   },
 
   methods: {

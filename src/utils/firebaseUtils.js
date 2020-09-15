@@ -112,5 +112,16 @@ export default {
         })
         .then(() => {})
     },
+
+    getFramesFromList(listId) {
+      const frames = []
+      this.db.collection("lists").doc(listId)
+        .collection("frames").get().then((querySnapshot) => {
+          querySnapshot.forEach((frame) => {
+            frames.push(frame)
+          })
+        })
+      return frames
+    }
   }
 }
