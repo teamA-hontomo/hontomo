@@ -26,6 +26,7 @@ export default {
 
     createList(listData) {
       var newId = this.db.collection("lists").doc().id //複数箇所でつかうので事前に取得。
+      listData.id = newId;
       //listに追加
       this.db.collection("lists").doc(newId)
         .set(listData)
@@ -66,7 +67,6 @@ export default {
           console.debug("a", list.data())
           returnList = list.data()
         })
-      console.debug("hoge,", returnList)
       return returnList
     },
 
@@ -78,13 +78,21 @@ export default {
         .then((user) => {
           user.data().lists.forEach((listId) => {
             this.getListFromListId(listId).then((list) => {
-              console.debug("tmp", list)
               returnLists.push(list)
-
             })
           })
         })
       return returnLists
-    }
-  },
+    },
+
+
+    renameList(listId, newName) {
+      this.db.collection("lists").doc(listId).set({
+          name: newName
+        }, {
+          merge: true
+        })
+        .then(() => {})
+    },
+  }
 }
