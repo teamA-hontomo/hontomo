@@ -1,27 +1,35 @@
 <template>
-  <div id="view-wrap">
-    <div id="go" class="btn" @click="go">
-      進む
+  <div>
+    <div id='view-wrap'>
+      <div id='go' class='btn' @click='go'>進む</div>
+      <div id='view'></div>
+      <div id='back' class='btn' @click='back'>戻る</div>
     </div>
-    <div id="view"></div>
-    <div id="back" class="btn" @click="back">
-      戻る
-    </div>
+    <FrameSaveModal :frame_src='selected_frame' ref='modal'></FrameSaveModal>
   </div>
 </template>
 
 <script>
 import Viewer from "../viewer/viewer";
+import FrameSaveModal from "./FrameSaveModal";
 
 export default {
   name: "ViewerPage",
+  components: { FrameSaveModal },
   data() {
     return {
-      viewer: {}
+      viewer: {},
+      selected_frame: "",
     };
   },
   mounted() {
-    this.viewer = new Viewer("/static/books/test.xml");
+    this.viewer = new Viewer({
+      xml_src: "/static/books/test.xml",
+      listClick: this.listClick,
+      agoraClick: this.agoraClick,
+      canvas_width: 400,
+      canvas_height: 600,
+    });
 
     this.viewer.show();
   },
@@ -31,8 +39,17 @@ export default {
     },
     back() {
       this.viewer.back();
-    }
-  }
+    },
+    listClick(e) {
+      this.selected_frame = e.currentTarget.parentElement.getAttribute(
+        "frame_src"
+      );
+      this.$refs.modal.show();
+    },
+    agoraClick() {
+      alert("agoraClick!!!");
+    },
+  },
 };
 </script>
 
@@ -40,11 +57,10 @@ export default {
 #view-wrap {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 #view {
-  width: 200px;
-  height: 300px;
   background-color: gray;
   position: relative;
 }

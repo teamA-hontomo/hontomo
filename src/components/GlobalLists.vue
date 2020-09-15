@@ -1,3 +1,180 @@
 <template>
-  <div class='global-lists'>みんなのリストだよ</div>
+  <div class="global-lists">
+    <div class="search-box">
+      <input type="text" v-model="searchWord" placeholder="検索" class="mt-3" />
+      <font-awesome-icon icon="search" ckass="fa-lg" />
+    </div>
+    <ContentsBox class="mt-3">
+      <h2 class="my-3">人気のリスト一覧</h2>
+      <ul id="v-for-object" class="cards-list">
+        <!-- <li v-for="id in Object.keys(lists)" :key="id"> -->
+          <li v-for="id of filteredUsers" :key="id">
+          <div class="list-card mt-3">
+            <img
+              :src="require('../assets/' + lists[id]['frames'][0]['path'])"
+            />
+            <p class="ttl" v-text="lists[id].name"></p>
+            <p>登録日：{{ lists[id]["created"] }}</p>
+            <div slot="button">
+              <font-awesome-icon
+                icon="star"
+                class="fa-lg"
+                v-on:click="onClickStar(id)"
+                v-bind:class="starColor(id)"
+              />
+              {{ lists[id]["rating"] }}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </ContentsBox>
+  </div>
 </template>
+
+<script>
+import ContentsBox from "./shared/ContentsBox.vue";
+import { firestore } from "firebase";
+export default {
+  data: function() {
+    return {
+      id: this.$route.params.id,
+      open: true,
+      searchWord: "",
+      ito: {
+        followLists: [1, 3]
+      },
+      // followInfos: {
+      //   1: {
+      //     followed: false,
+      //     yellowStar: false
+      //   }
+      // },
+      lists: [
+        {
+          frames: [
+            {
+              addedTime: "時間",
+              path: "frames/ブラックジャックによろしく1.jpg"
+            }
+          ],
+          name: "ワンピース名場面集1",
+          rating: 112,
+          created: "2020/09/02",
+          open: true,
+          ownerId: "ownerId"
+        },
+        {
+          frames: [
+            {
+              addedTime: "時間",
+              path: "frames/ブラックジャックによろしく2.jpg"
+            }
+          ],
+          name: "スラムダンク名場面集",
+          rating: 1,
+          created: "2020/09/02",
+          open: true,
+          ownerId: "ownerId"
+        },
+        {
+          frames: [
+            {
+              addedTime: "時間",
+              path: "frames/ブラックジャックによろしく1.jpg"
+            }
+          ],
+          name: "ワンピース名場面集2",
+          rating: 2,
+          created: "2020/09/08",
+          open: true,
+          ownerId: "ownerId"
+        },
+        {
+          frames: [
+            {
+              addedTime: "時間",
+              path: "frames/ブラックジャックによろしく2.jpg"
+            }
+          ],
+          name: "鬼滅の刃",
+          rating: 12,
+          created: "2020/09/10",
+          open: true,
+          ownerId: "ownerId"
+        }
+      ]
+    };
+  },
+  computed: {
+    filteredUsers() {
+      const lists = [];
+      for (let id in this.lists) {
+        let item = this.lists[id].name;
+        if (item.indexOf(this.searchWord) !== -1) {
+          lists.push(id);
+        }
+      }
+      return lists;
+    }
+  },
+  components: {
+    ContentsBox
+  },
+  methods: {
+    starColor: function(id) {
+      if (this.lists[id].followed) {
+        return { yellowStar: true };
+      } else {
+        return { yellowStar: false };
+      }
+    },
+    onClickStar: function(id) {
+      if (this.lists[id].followed) {
+        this.lists[id].followed = false;
+        this.lists[id].rating--;
+      } else {
+        this.lists[id].followed = true;
+        this.lists[id].rating++;
+      }
+    }
+  }
+};
+</script>
+
+<style>
+.global-lists {
+  text-align: left;
+}
+.cards-list {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  width: 100%;
+}
+.cards-list li {
+  width: 33%;
+}
+.list-card {
+  margin: 0 15px;
+  padding: 25px;
+  background: rgb(44, 43, 43);
+}
+.list-card img {
+  width: 100%;
+}
+ul {
+  list-style: none;
+}
+h2 {
+  width: 100vw;
+  padding: 10px 20px;
+}
+.yellowStar {
+  color: yellow;
+}
+.ttl {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+</style>
