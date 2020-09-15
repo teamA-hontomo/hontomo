@@ -1,15 +1,19 @@
 <template>
   <div class="global-lists">
     <div class="search-box">
-      <input v-model="message" placeholder="検索" class="mt-3" />
+      <input type="text" v-model="searchWord" placeholder="検索" class="mt-3" />
+      <font-awesome-icon icon="search" ckass="fa-lg" />
     </div>
     <ContentsBox class="mt-3">
       <h2 class="my-3">人気のリスト一覧</h2>
       <ul id="v-for-object" class="cards-list">
-        <li v-for="id in Object.keys(lists)" :key="id">
+        <!-- <li v-for="id in Object.keys(lists)" :key="id"> -->
+          <li v-for="id of filteredUsers" :key="id">
           <div class="list-card mt-3">
-            <img :src="require('../assets/' + lists[id]['frames'][id]['path'])" />
-            <p class="ttl">{{ lists[id]["name"] }}</p>
+            <img
+              :src="require('../assets/' + lists[id]['frames'][0]['path'])"
+            />
+            <p class="ttl" v-text="lists[id].name"></p>
             <p>登録日：{{ lists[id]["created"] }}</p>
             <div slot="button">
               <font-awesome-icon
@@ -35,7 +39,7 @@ export default {
     return {
       id: this.$route.params.id,
       open: true,
-      message: "",
+      searchWord: "",
       ito: {
         followLists: [1, 3]
       },
@@ -45,63 +49,74 @@ export default {
       //     yellowStar: false
       //   }
       // },
-      lists: {
-        1: {
-          frames: {
-            1: {
+      lists: [
+        {
+          frames: [
+            {
               addedTime: "時間",
               path: "frames/ブラックジャックによろしく1.jpg"
             }
-          },
+          ],
           name: "ワンピース名場面集1",
           rating: 112,
           created: "2020/09/02",
           open: true,
           ownerId: "ownerId"
         },
-        2: {
-          frames: {
-            2: {
+        {
+          frames: [
+            {
               addedTime: "時間",
               path: "frames/ブラックジャックによろしく2.jpg"
             }
-          },
+          ],
           name: "ワンピース名場面集2",
           rating: 1,
           created: "2020/09/02",
           open: true,
           ownerId: "ownerId"
         },
-        3: {
-          frames: {
-            3: {
+        {
+          frames: [
+            {
               addedTime: "時間",
               path: "frames/ブラックジャックによろしく1.jpg"
             }
-          },
+          ],
           name: "ワンピース名場面集3",
           rating: 2,
           created: "2020/09/08",
           open: true,
           ownerId: "ownerId"
         },
-        4: {
-          frames: {
-            4: {
+        {
+          frames: [
+            {
               addedTime: "時間",
               path: "frames/ブラックジャックによろしく2.jpg"
             }
-          },
-          name: "ワンピース名場面集1",
+          ],
+          name: "鬼滅の刃",
           rating: 12,
           created: "2020/09/10",
           open: true,
           ownerId: "ownerId"
         }
-      }
+      ]
     };
   },
-
+  computed: {
+    filteredUsers() {
+      const lists = [];
+      for (let id in this.lists) {
+        let item = this.lists[id].name;
+        if (item.indexOf(this.searchWord) !== -1) {
+          lists.push(id);
+        }
+      }
+      return lists;
+    }
+  },
   components: {
     ContentsBox
   },
@@ -134,6 +149,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   padding: 0;
+  width: 100%;
 }
 .cards-list li {
   width: 33%;
