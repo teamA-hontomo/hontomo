@@ -4,7 +4,7 @@
       icon="star"
       class="fa-lg"
       v-on:click="onClickStar"
-      v-bind:class="{yellowStar: isfollowed}"
+      v-bind:class="{yellowStar: isFollowed}"
     />
     <span>{{ rating }}</span>
   </div>
@@ -13,22 +13,25 @@
 <script>
 export default {
   name: "StarButton",
+  props: ["listId", "userId"],
 
   data() {
     return {
       rating: 5,
-      iffollowed: false,
+      isFollowed: false,
     };
   },
 
   methods: {
     onClickStar: function () {
-      if (this.isfollowed) {
-        this.isfollowed = false;
+      if (this.isFollowed) {
+        this.isFollowed = false;
         this.rating--;
+        this.removeStarFromList(this.listId, this.userId);
       } else {
-        this.isfollowed = true;
+        this.isFollowed = true;
         this.rating++;
+        this.addStarToList(this.listId, this.userId);
       }
     },
   },

@@ -67,7 +67,6 @@ export default {
       var returnList = {}
       await this.db.collection("lists").doc(listId).get()
         .then((list) => {
-          console.debug("a", list.data())
           returnList = list.data()
         })
       return returnList
@@ -122,6 +121,30 @@ export default {
           })
         })
       return frames
+    },
+
+    //リストのratingを1増やし、user/listに追加。
+    addStarToList(listId, userId) {
+      this.db.collection("lists").doc(listId)
+        .update({
+          rating: firebase.firestore.FieldValue.increment(1)
+        })
+      this.db.collection("users").doc(userId)
+        .update({
+          lists: firebase.firestore.FieldValue.arrayUnion(listId)
+        })
+    },
+
+    //リストのratingを１減らし、user/listからlistIdを削除。
+    removeStarFromList(listId, userId) {
+      this.db.collection("lists").doc(listId)
+        .update({
+          rating: firebase.firestore.FieldValue.increment(-1)
+        })
+      this.db.collection("users").doc(userId)
+        .update({
+          lists: firebase.firestore.FieldValue.arrayRemove(listId)
+        })
     }
   }
 }

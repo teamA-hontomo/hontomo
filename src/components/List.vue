@@ -2,7 +2,7 @@
   <div id="list">
     <TitleBox>
       <span class="mx-auto my-auto">{{ id }}</span>
-      <StarButton />
+      <StarButton :listId="id" :userId="userId" />
       <button v-on:click="openModal" v-if="open" class="btn btn-success">公開</button>
       <button v-on:click="openModal" v-if="!open" class="btn btn-danger">非公開</button>
     </TitleBox>
@@ -48,7 +48,9 @@ import StarButton from "./shared/StarButton.vue";
 export default {
   data: function () {
     return {
-      id: this.$route.params.id,
+      // id: this.$route.params.id,
+      id: "EjF12B6bV3sIfqip9yQH",
+      userId:"4oFo1QKy3X8wGwuGx98h",//TODO:ハードコーディング
       open: true,
       name: "リストサンプルタイトル",
       showModal: false,
