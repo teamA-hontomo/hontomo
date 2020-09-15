@@ -75,6 +75,9 @@ export default class Viewer {
     const src = elm.getAttribute("src");
     frame.style.backgroundImage = "url('/static/frames/" + src + "')";
 
+    //リスト保存のために属性を追加しておく
+    frame.setAttribute('frame_src', src);
+
     this.addBtns(frame);
     this.canvas.appendChild(frame);
   }

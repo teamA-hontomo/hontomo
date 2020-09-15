@@ -1,19 +1,25 @@
 <template>
-  <div id="view-wrap">
-    <div id="go" class="btn" @click="go">進む</div>
-    <div id="view"></div>
-    <div id="back" class="btn" @click="back">戻る</div>
+  <div>
+    <div id="view-wrap">
+      <div id="go" class="btn" @click="go">進む</div>
+      <div id="view"></div>
+      <div id="back" class="btn" @click="back">戻る</div>
+    </div>
+    <FrameSaveModal :frame_src="selected_frame" ref="modal"></FrameSaveModal>
   </div>
 </template>
 
 <script>
 import Viewer from "../viewer/viewer";
+import FrameSaveModal from "./FrameSaveModal";
 
 export default {
   name: "ViewerPage",
+  components: {FrameSaveModal},
   data() {
     return {
-      viewer: {}
+      viewer: {},
+      selected_frame: "" 
     }
   },
   mounted() {
@@ -28,8 +34,9 @@ export default {
     back() {
       this.viewer.back();
     },
-    listClick() {
-      alert('listClick!!!');
+    listClick(e) {
+      this.selected_frame = e.currentTarget.parentElement.getAttribute('frame_src');
+      this.$refs.modal.show();
     },
     agoraClick() {
       alert('agoraClick!!!');
