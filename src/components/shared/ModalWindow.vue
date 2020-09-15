@@ -4,8 +4,8 @@
   下記二つの属性が必要
     ①モーダルウインドウの表示状態を切り替えるdata(ブール値)(初期値はfalseに設定してください)
     ②fromModalイベントに対して上で述べたdataをfalseに切り替えるイベントハンドラ
-    ③横幅を決めるString型のwidth(0~100%で指定)
-    ④縦幅を決めるString型のheight(0~100%で指定)
+    ③横幅を決めるString型のwidth(0~100で指定)属性
+    ④縦幅を決めるString型のheight(0~100で指定)属性
   また、モーダルウインドウを表示状態にするために下記のイベントハンドラが必要
     ボタンなどにClickイベントへのハンドラなどの形で上で述べたdataをtrueにするためのイベントハンドラ
   <ModalWindow></ModalWindow>の間の要素がModalWindow内に出力されます
@@ -33,19 +33,15 @@
       }
     }
   </script>-->
-  <div class="overlay" v-on:click="closeOverlay" v-show="showOverlay">
-    <div class="content" v-on:click="stopClose" :style="modalStyle">
-      <div class="row">
-        <div class="col-md-3 offset-9">
-          <font-awesome-icon
-            icon="times"
-            class="fa-2x mx-auto my-auto"
-            v-on:click="closeOverlay"
-          />
+  <div class='overlay' v-on:click='closeOverlay' v-show='showOverlay'>
+    <div class='content' v-on:click='stopClose' :style='modalStyle'>
+      <div class='row'>
+        <div class='col-md-3 offset-9'>
+          <font-awesome-icon icon='times' class='fa-2x mx-auto my-auto' v-on:click='closeOverlay' />
         </div>
       </div>
-      <div class="container">
-        <div class="row mx-auto my-auto">
+      <div class='container'>
+        <div class='row mx-auto my-auto'>
           <slot></slot>
         </div>
       </div>
@@ -58,31 +54,31 @@ export default {
   props: {
     width: {
       type: String,
-      required: true
+      required: true,
     },
     height: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
-  data: function() {
+  data: function () {
     return {
-      showOverlay: true
+      showOverlay: true,
     };
   },
   methods: {
-    closeOverlay: function() {
+    closeOverlay: function () {
       this.$emit("fromModal");
     },
-    stopClose: function() {
+    stopClose: function () {
       event.stopPropagation();
-    }
+    },
   },
   computed: {
-    modalStyle: function() {
+    modalStyle: function () {
       return `width: ${this.width}%; height: ${this.height}%;`;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -101,7 +97,7 @@ export default {
 .content {
   z-index: 2;
   position: fixed;
-  background: #656565;
+  background-color: rgba(0, 0, 0, 0);
 }
 .close-button {
   position: fixed;

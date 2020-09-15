@@ -6,8 +6,8 @@
       <p>所有しているリスト一覧</p>
       <ul>
         <li
-          v-for="list in ownedLists"
-          :key="list.id"
+          v-for='list in ownedLists'
+          :key='list.id'
         >リスト名:{{list.name}},制作日:{{list.created.toDate()}},公開かどうか{{list.open}},オーナー:{{list.owenerId}},いいね数:{{list.rating}}</li>
       </ul>
     </div>
@@ -15,15 +15,15 @@
       <p>登録しているリスト一覧</p>
       <ul>
         <li
-          v-for="list in subscribedLists"
-          :key="list.id"
+          v-for='list in subscribedLists'
+          :key='list.id'
         >リスト名:{{list.name}},制作日:{{list.created.toDate()}},公開かどうか{{list.open}},オーナー:{{list.owenerId}},いいね数:{{list.rating}}</li>
       </ul>
     </div>
     <div>
       <p>リスト名変更</p>
-      <input v-model="newName" />
-      <button @click="changeListName()" type="button">名前を変更</button>
+      <input v-model='newName' />
+      <button @click='changeListName()' type='button'>名前を変更</button>
     </div>
   </div>
 </template>
@@ -49,7 +49,7 @@ export default {
   created() {
     this.ownedLists = this.getOwnedListsFromUserId(this.userId);
     this.subscribedLists = this.getSubscribedListsFromUserId(this.userId);
-    console.debug(this.subscribedLists);
+    //console.debug(this.subscribedLists);
   },
 
   methods: {
