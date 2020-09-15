@@ -46,8 +46,8 @@
     <hr />
     <div>
       <span>「{{ ownedLists[0].name }}」に登録されているコマ一覧</span>
-      <div v-for='image in imagesArray' :key='image.addedTime'>
-        <img :src='imagePath' />
+      <div v-for="image in imagesArray" :key="image.addedTime">
+        <img :src="image.path" />{{image.title}}
       </div>
     </div>
   </div>
