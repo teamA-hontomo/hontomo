@@ -1,13 +1,13 @@
 <template>
   <div id="list">
     <TitleBox>
-      <span class="mx-auto my-auto">{{ id }}</span>
-      <StarButton :listId="id" :userId="userId" />
+      <span class="mx-auto my-auto">{{ list.name }}</span>
+      <StarButton :listId="list.id" :userId="userId" />
       <button v-on:click="openModal" v-if="open" class="btn btn-success">公開</button>
       <button v-on:click="openModal" v-if="!open" class="btn btn-danger">非公開</button>
     </TitleBox>
 
-    <ContentsBox>
+    <!-- <ContentsBox>
       <div v-for="id in Object.keys(cartoonFrames)" class="col-md-3" :key="id">
         <div class="card">
           <img
@@ -24,41 +24,17 @@
           </div>
         </div>
       </div>
-    </ContentsBox>
-    <ModalWindow
-      v-show="showModal"
-      v-on:fromModal="closeModal"
-      :width="'20'"
-      :height="'50'"
-    >
+    </ContentsBox>-->
+    <ModalWindow v-show="showModal" v-on:fromModal="closeModal" :width="'20'" :height="'50'">
       <div class="mt-5 mx-auto">
-        <h5 class="mx-auto font-weight-bold">
-          ただいまの設定は[{{ openStatus }}]です
-        </h5>
+        <h5 class="mx-auto font-weight-bold">ただいまの設定は[{{ openStatus }}]です</h5>
         <h5 class="mx-auto font-weight-bold">変更してもよろしいですか？</h5>
-        <button
-          v-show="open"
-          v-on:click="changeOpen"
-          class="btn btn-danger mx-auto mt-5"
-        >
-          非公開にする
-        </button>
-        <button
-          v-show="!open"
-          v-on:click="changeOpen"
-          class="btn btn-success mx-auto mt-5"
-        >
-          公開する
-        </button>
+        <button v-show="open" v-on:click="changeOpen" class="btn btn-danger mx-auto mt-5">非公開にする</button>
+        <button v-show="!open" v-on:click="changeOpen" class="btn btn-success mx-auto mt-5">公開する</button>
       </div>
     </ModalWindow>
 
-    <ModalWindow
-      v-show="showFrame"
-      v-on:fromModal="closeFrame"
-      :width="'50'"
-      :height="'50'"
-    >
+    <ModalWindow v-show="showFrame" v-on:fromModal="closeFrame" :width="'50'" :height="'50'">
       <img :src="openingImg" class="card-img-top" v-on:click="openFrame" />
     </ModalWindow>
   </div>
@@ -70,54 +46,32 @@ import ModalWindow from "./shared/ModalWindow.vue";
 import StarButton from "./shared/StarButton.vue";
 
 export default {
-  data: function() {
+  data: function () {
     return {
       // id: this.$route.params.id,
       id: "EjF12B6bV3sIfqip9yQH",
-      userId:"4oFo1QKy3X8wGwuGx98h",//TODO:ハードコーディング
+      userId: "4oFo1QKy3X8wGwuGx98h", //TODO:ハードコーディング
       open: true,
-      name: "リストサンプルタイトル",
       showModal: false,
       openingImg: "",
-      date: "",
       showFrame: false,
-      listId: "EjF12B6bV3sIfqip9yQH",
-      listId2: "jTCoI4Do2gB4fnXE4b2B",
       Id: ["EjF12B6bV3sIfqip9yQH", "jTCoI4Do2gB4fnXE4b2B"],
+      list: {},
       owenerId: "",
       frames: [],
-      cartoonFrames: {
-        1: {
-          page: "1",
-          title: "ブラックジャックによろしく",
-          path: "assets/frames/ブラックジャックによろしく1.jpg",
-          volume: "1"
-        },
-        2: {
-          page: "1",
-          title: "ブラックジャックによろしく",
-          path: "assets/frames/ブラックジャックによろしく2.jpg",
-          volume: "2"
-        }
-      }
     };
   },
-  created() {
-    this.db = firebase.firestore();
-    //リストの情報取得
-    this.getListFromListId(this.Id[this.id - 1]).then(returnedlist => {
-      //console.log(returnedlist);
-      this.name = returnedlist.name;
-      this.date = returnedlist.created.toDate();
-      this.open = returnedlist.open;
-      this.owenerId = returnedlist.owenerId;
-      this.rating = returnedlist.rating;
-    });
 
+  created() {
+    this.id = this.$route.params.id;
+
+    this.getListFromListId(this.id).then((returnedlist) => {
+      this.list = returnedlist;
+    });
     //コマの情報取得
-    this.frames = this.getFramesFromList("EjF12B6bV3sIfqip9yQH");
-    console.log(`debugだよ${this.getFramesFromList("EjF12B6bV3sIfqip9yQH")}`);
+    this.frames = this.getFramesFromList(this.list.id);
   },
+
   computed: {
     openStatus: function () {
       if (this.open) {
@@ -125,70 +79,65 @@ export default {
       } else {
         return "非公開";
       }
-    }
+    },
   },
+
   components: {
     TitleBox,
     ContentsBox,
     ModalWindow,
     StarButton,
   },
+
   methods: {
-    openModal: function() {
+    openModal: function () {
       this.showModal = true;
     },
-    onClick: function() {
+
+    onClick: function () {
       this.open = !this.open;
     },
+
     closeModal: function () {
       this.showModal = false;
     },
 
     //公開非公開の変更
-    changeOpen: function() {
+    changeOpen: function () {
       this.open = !this.open;
-
       //firebase側処理
-      if (this.open) {
-        const userRef = this.db
-          .collection("lists")
-          .doc(this.listId)
-          .update({
-            open: true
-          });
-      } else {
-        const userRef = this.db
-          .collection("lists")
-          .doc(this.listId)
-          .update({
-            open: false
-          });
-      }
+      // if (this.open) {
+      //   const userRef = this.db.collection("lists").doc(this.listId).update({
+      //     open: true,
+      //   });
+      // } else {
+      //   const userRef = this.db.collection("lists").doc(this.listId).update({
+      //     open: false,
+      //   });
+      // }
       this.closeModal();
     },
-    openFrame: function(event) {
+
+    openFrame: function (event) {
       this.openingImg = event.target.src;
       this.showFrame = true;
       var returnLists = [];
     },
-    closeFrame: function() {
+
+    closeFrame: function () {
       this.showFrame = false;
-    }
+    },
   },
   watch: {
-    $route: function(val, oldVal) {
+    $route: function (val, oldVal) {
       this.id = val.params.id;
 
-      this.getListFromListId(this.Id[this.id - 1]).then(returnedlist => {
-        //console.log(returnedlist);
-        this.name = returnedlist.name;
-        this.date = returnedlist.created.toDate();
-        this.open = returnedlist.open;
-        this.owenerId = returnedlist.owenerId;
-        this.rating = returnedlist.rating;
+      this.getListFromListId(this.listId).then((returnedlist) => {
+        this.list = returnedlist;
+        F;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
