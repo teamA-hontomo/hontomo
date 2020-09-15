@@ -1,7 +1,7 @@
 <template>
   <div id="list">
     <TitleBox>
-      <span class="mx-auto my-auto">{{ name }}</span>
+      <span class="mx-auto my-auto">{{ list_info.name }}</span>
       <div slot="button">
         <font-awesome-icon
           icon="star"
@@ -9,11 +9,11 @@
           v-on:click="onClickStar"
           v-bind:class="starColor"
         />
-        <span>{{ rating }}</span>
-        <button v-on:click="openModal" v-if="open" class="btn btn-success">
+        <span>{{ list_info.rating }}</span>
+        <button v-on:click="openModal" v-if="list_info.open" class="btn btn-success">
           公開
         </button>
-        <button v-on:click="openModal" v-if="!open" class="btn btn-danger">
+        <button v-on:click="openModal" v-if="!list_info.open" class="btn btn-danger">
           非公開
         </button>
       </div>
@@ -34,6 +34,7 @@
                 cartoonFrames[id]["page"]
               }}ページ<br />
               追加日:{{ date }}
+              debug:{{frames.data}}
             </p>
           </div>
         </div>
@@ -51,14 +52,14 @@
         </h5>
         <h5 class="mx-auto font-weight-bold">変更してもよろしいですか？</h5>
         <button
-          v-show="open"
+          v-show="list_info.open"
           v-on:click="changeOpen"
           class="btn btn-danger mx-auto mt-5"
         >
           非公開にする
         </button>
         <button
-          v-show="!open"
+          v-show="!list_info.open"
           v-on:click="changeOpen"
           class="btn btn-success mx-auto mt-5"
         >
@@ -88,19 +89,17 @@ export default {
     return {
       db: null,
       id: this.$route.params.id,
-      open: true,
-      rating: 5,
-      name: "リストサンプルタイトル",
       followed: false,
       showModal: false,
       openingImg: "",
       date: "",
       showFrame: false,
-      listId: "EjF12B6bV3sIfqip9yQH",
-      listId2: "jTCoI4Do2gB4fnXE4b2B",
+      //listId: "EjF12B6bV3sIfqip9yQH",
+      //listId2: "jTCoI4Do2gB4fnXE4b2B",
       Id: ["EjF12B6bV3sIfqip9yQH", "jTCoI4Do2gB4fnXE4b2B"],
       owenerId: "",
-      frames: [],
+      frames: {},
+      list_info:{},
       cartoonFrames: {
         1: {
           page: "1",
@@ -122,11 +121,8 @@ export default {
     //リストの情報取得
     this.getListFromListId(this.Id[this.id - 1]).then(returnedlist => {
       //console.log(returnedlist);
-      this.name = returnedlist.name;
+      this.list_info = returnedlist;
       this.date = returnedlist.created.toDate();
-      this.open = returnedlist.open;
-      this.owenerId = returnedlist.owenerId;
-      this.rating = returnedlist.rating;
     });
 
     //コマの情報取得
@@ -142,7 +138,7 @@ export default {
       }
     },
     openStatus: function() {
-      if (this.open) {
+      if (this.list_info.open) {
         return "公開";
       } else {
         return "非公開";
@@ -159,22 +155,25 @@ export default {
       this.showModal = true;
     },
     onClick: function() {
-      this.open = !this.open;
+      this.list_info.open = !this.list_info.open;
     },
     onClickStar: function() {
       if (this.followed) {
         this.followed = false;
-        this.rating--;
+        //this.rating--;
+        this.list_info.rating--;
       } else {
         this.followed = true;
-        this.rating++;
+        //this.rating++;
+        this.list_info.rating++;
       }
       //firebase側の更新
       const userRef = this.db
         .collection("lists")
-        .doc(this.listId)
+        .doc(this.Id[this.id - 1])
         .update({
-          rating: this.rating
+          //rating: this.rating
+          rating: this.list_info.rating
         });
     },
     closeModal: function() {
@@ -183,20 +182,20 @@ export default {
 
     //公開非公開の変更
     changeOpen: function() {
-      this.open = !this.open;
+      this.list_info.open = !this.list_info.open;
 
       //firebase側処理
-      if (this.open) {
+      if (this.list_info.open) {
         const userRef = this.db
           .collection("lists")
-          .doc(this.listId)
+          .doc(this.Id[this.id - 1])
           .update({
             open: true
           });
       } else {
         const userRef = this.db
           .collection("lists")
-          .doc(this.listId)
+          .doc(this.Id[this.id - 1])
           .update({
             open: false
           });
@@ -218,11 +217,8 @@ export default {
 
       this.getListFromListId(this.Id[this.id - 1]).then(returnedlist => {
         //console.log(returnedlist);
-        this.name = returnedlist.name;
+        this.list_info = returnedlist;
         this.date = returnedlist.created.toDate();
-        this.open = returnedlist.open;
-        this.owenerId = returnedlist.owenerId;
-        this.rating = returnedlist.rating;
       });
     }
   }
