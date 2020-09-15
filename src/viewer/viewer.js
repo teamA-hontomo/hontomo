@@ -3,6 +3,7 @@ export default class Viewer {
   request = {};
   root;
   current_page = 0;
+  last_page;
   canvas;
 
   constructor({xml_src, listClick, agoraClick, canvas_id = "view", canvas_width = 200, canvas_height = 300}) {
@@ -34,6 +35,7 @@ export default class Viewer {
       e.target.responseText,
       "application/xml"
     );
+    this.last_page = this.root.getElementsByTagName("page").length - 1 ;
   }
 
   // ページを表示するためのDOMの登録
@@ -100,11 +102,20 @@ export default class Viewer {
   }
 
   go() {
+    if (this.current_page === this.last_page ) {
+      alert('次のページがありません');
+      return;
+    }
+
     this.current_page++;
     this.show();
   }
 
   back() {
+    if (this.current_page === 0 ) {
+      alert('前のページがありません');
+      return;
+    }
     this.current_page--;
     this.show();
   }
