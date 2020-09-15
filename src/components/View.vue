@@ -23,7 +23,7 @@ export default {
     }
   },
   mounted() {
-    this.viewer = new Viewer('/static/test.xml');
+    this.viewer = new Viewer('/static/books/test.xml');
 
     this.viewer.show();
   },
