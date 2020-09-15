@@ -50,6 +50,7 @@
       <div v-for="image in imagesArray" :key="image.addedTime">
         <img :src="imagePath" />
       </div>
+      <p>debug用 {{ imagesArray }}</p>
     </div>
   </div>
 </template>

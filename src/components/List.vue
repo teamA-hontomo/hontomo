@@ -39,6 +39,7 @@
         </div>
       </div>
     </ContentsBox>
+    debug用{{ frames }}
     <ModalWindow
       v-show="showModal"
       v-on:fromModal="closeModal"
@@ -130,8 +131,9 @@ export default {
     });
 
     //コマの情報取得
+
     this.frames = this.getFramesFromList("EjF12B6bV3sIfqip9yQH");
-    console.log(`debugだよ${this.getFramesFromList("EjF12B6bV3sIfqip9yQH")}`);
+    console.log(`debugだよ${this.frames}`);
   },
   computed: {
     starColor: function() {
@@ -172,7 +174,7 @@ export default {
       //firebase側の更新
       const userRef = this.db
         .collection("lists")
-        .doc(this.listId)
+        .doc(this.Id[this.id - 1])
         .update({
           rating: this.rating
         });
@@ -189,14 +191,14 @@ export default {
       if (this.open) {
         const userRef = this.db
           .collection("lists")
-          .doc(this.listId)
+          .doc(this.Id[this.id - 1])
           .update({
             open: true
           });
       } else {
         const userRef = this.db
           .collection("lists")
-          .doc(this.listId)
+          .doc(this.Id[this.id - 1])
           .update({
             open: false
           });
