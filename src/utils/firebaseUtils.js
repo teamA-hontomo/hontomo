@@ -78,13 +78,22 @@ export default {
         .then((user) => {
           user.data().lists.forEach((listId) => {
             this.getListFromListId(listId).then((list) => {
-              console.debug("tmp", list)
               returnLists.push(list)
-
             })
           })
         })
       return returnLists
-    }
-  },
+    },
+
+
+    renameList(listId, newName) {
+      this.db.collection("lists").doc(listId).set({
+          name: newName
+        }, {
+          merge: true
+        })
+        .then(() => {
+        })
+    },
+  }
 }
