@@ -5,8 +5,16 @@ export default class Viewer {
   current_page = 0;
   canvas;
 
-  constructor(xml_src, listClick, agoraClick, canvas_id = "view") {
+  constructor({xml_src, listClick, agoraClick, canvas_id = "view", canvas_width = 200, canvas_height = 300}) {
+
     this.setCanvas(canvas_id);
+    this.canvas.style.width = canvas_width + 'px';
+    this.canvas.style.height = canvas_height + 'px';
+
+    // 基準値　横幅200px 縦幅300px とする。この値にそってxmlは記述されているものとする
+    this.ratio_width = canvas_width / 200;
+    this.ratio_height = canvas_height / 300;
+
     this.xml_src = xml_src;
     this.listClick = listClick;
     this.agoraClick = agoraClick;
@@ -51,10 +59,15 @@ export default class Viewer {
 
     //位置の指定
     const position = elm.children[0];
-    frame.style.top = position.getAttribute("top") + "px";
-    frame.style.right = position.getAttribute("right") + "px";
-    frame.style.width = position.getAttribute("width") + "px";
-    frame.style.height = position.getAttribute("height") + "px";
+    const top = parseInt(position.getAttribute("top"), 10) * this.ratio_height;
+    const height = parseInt(position.getAttribute("height"), 10) * this.ratio_height;
+    const right = parseInt(position.getAttribute("right"), 10) * this.ratio_width;
+    const width = parseInt(position.getAttribute("width"), 10) * this.ratio_width;
+
+    frame.style.top = top + "px";
+    frame.style.height = height + "px";
+    frame.style.right = right + "px";
+    frame.style.width = width + "px";
 
     //画像の指定
     const src = elm.getAttribute("src");
