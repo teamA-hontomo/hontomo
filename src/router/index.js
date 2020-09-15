@@ -6,6 +6,7 @@ import List from "../components/List";
 import MyLists from "../components/MyLists";
 import GlobalLists from "../components/GlobalLists";
 import View from "../components/View";
+import Sample from "../components/Sample";
 
 Vue.use(Router);
 
@@ -40,6 +41,11 @@ export default new Router({
       path: "/global-lists",
       name: "GlobalLists",
       component: GlobalLists
+    },
+    {
+      path: "/sample",
+      name: "Sample",
+      component: Sample
     }
   ]
 });
