@@ -94,5 +94,13 @@ export default {
         })
         .then(() => {})
     },
+
+    setFrameToList(listId,framePath){
+      this.db.collection("lists").doc(listId)
+      .collection("frames").add({
+        path:framePath
+      })
+      .then(() => {})
+    }
   }
 }

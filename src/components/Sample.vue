@@ -26,10 +26,17 @@
     <hr />
     <div>
       <p>リスト名変更</p>
+      <span>「{{ownedLists[0].name}}」の名前を変更します</span>
       <input v-model="newName" />
       <button @click="changeListName()" type="button">名前を変更</button>
     </div>
     <hr />
+    <div>
+      <p>コマをリストに追加</p>
+      <img :src="imagePath" />
+      <span>このコマを「{{ownedLists[0].name}}」に</span>
+      <button @click="addFrameToList()" type="button">追加</button>
+    </div>
   </div>
 </template>
 
@@ -48,6 +55,7 @@ export default {
       newName: "",
       userId: "4oFo1QKy3X8wGwuGx98h",
       listId: "3XAbHkY5hnkk8YLNyMXp",
+      imagePath: require("../assets/frames/ブラックジャックによろしく1.jpg"),
     };
   },
 
@@ -62,6 +70,12 @@ export default {
       this.renameList(this.ownedLists[0].id, this.newName);
       alert("リスト名を変更しました");
       this.$router.push("Top");
+    },
+
+    addFrameToList() {
+      this.setFrameToList(this.ownedLists[0].id, this.imagePath);
+      alert("画像をリストに追加しました。");
+      this.$router.push("Sample");
     },
   },
 };
