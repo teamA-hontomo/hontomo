@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document>
+    <book>
+        <meta></meta>
+        <pages>
+            <page>
+                <frame src="1.png">
+                    <position top="0" right="0" width="130" height="100">
+                    </position>
+                </frame>
+                <frame src="2.png">
+                    <position top="0" right="150" width="50" height="100">
+                    </position>
+                </frame>
+                <frame src="3.png">
+                    <position top="120" right="0" width="200" height="180">
+                    </position>
+                </frame>
+            </page>
+            <page>
+                <frame src="4.png">
+                    <position top="0" right="0" width="200" height="90">
+                    </position>
+                </frame>
+                <frame src="5.png">
+                    <position top="100" right="0" width="200" height="90">
+                    </position>
+                </frame>
+                <frame src="6.png">
+                    <position top="200" right="0" width="200" height="90">
+                    </position>
+                </frame>
+            </page>
+        </pages>
+    </book>
+</Document>
