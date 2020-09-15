@@ -55,11 +55,13 @@ export default {
       newName: "",
       userId: "4oFo1QKy3X8wGwuGx98h",
       listId: "3XAbHkY5hnkk8YLNyMXp",
-      imagePath: require("../assets/frames/ブラックジャックによろしく1.jpg"),
+      imageName: "frames/ブラックジャックによろしく1.jpg",
+      imagePath: "",
     };
   },
 
   created() {
+    this.imagePath = require("../assets/" + this.imageName);
     this.ownedLists = this.getOwnedListsFromUserId(this.userId);
     this.subscribedLists = this.getSubscribedListsFromUserId(this.userId);
     console.debug(this.subscribedLists);
@@ -73,9 +75,9 @@ export default {
     },
 
     addFrameToList() {
-      this.setFrameToList(this.ownedLists[0].id, this.imagePath);
+      this.setFrameToList(this.ownedLists[0].id, this.imageName);
       alert("画像をリストに追加しました。");
-      this.$router.push("Sample");
+      this.$router.push("Top");
     },
   },
 };
