@@ -1,7 +1,6 @@
 import firebase from "firebase";
 import "firebase/firestore";
 export default {
-
   data() {
     return {
       db: null
@@ -9,11 +8,10 @@ export default {
   },
 
   created() {
-    this.db = firebase.firestore()
+    this.db = firebase.firestore();
   },
 
   methods: {
-
     // @param Object
     // {
     //         name: this.listName,
@@ -25,9 +23,12 @@ export default {
     // @return null
 
     createList(listData) {
-      var newId = this.db.collection("lists").doc().id //複数箇所でつかうので事前に取得。
+      var newId = this.db.collection("lists").doc().id; //複数箇所でつかうので事前に取得。
+      listData.id = newId;
       //listに追加
-      this.db.collection("lists").doc(newId)
+      this.db
+        .collection("lists")
+        .doc(newId)
         .set(listData)
         .then(() => {
           alert(listData.name + "を新規作成しました。");
@@ -37,54 +38,77 @@ export default {
         });
 
       //users/<currentUser>/listsのarrayに追加
-      this.db.collection("users").doc(listData.ownerId)
+      this.db
+        .collection("users")
+        .doc(listData.ownerId)
         .update({
           lists: firebase.firestore.FieldValue.arrayUnion(newId)
-        })
+        });
     },
 
     //@param userId
     //@return Object ListのArray
     getOwnedListsFromUserId(userId) {
-      var returnLists = []
-      this.db.collection("lists").where("ownerId", "==", userId).get()
-        .then((lists) => {
-          lists.forEach((list) => {
-            returnLists.push(list.data())
-          })
-        })
+      var returnLists = [];
+      this.db
+        .collection("lists")
+        .where("ownerId", "==", userId)
+        .get()
+        .then(lists => {
+          lists.forEach(list => {
+            returnLists.push(list.data());
+          });
+        });
 
-      return returnLists
+      return returnLists;
     },
 
-    //@param listId 
+    //@param listId
     //@return Object listData
     async getListFromListId(listId) {
-      var returnList = {}
-      await this.db.collection("lists").doc(listId).get()
-        .then((list) => {
-          console.debug("a", list.data())
-          returnList = list.data()
-        })
-      console.debug("hoge,", returnList)
-      return returnList
+      var returnList = {};
+      await this.db
+        .collection("lists")
+        .doc(listId)
+        .get()
+        .then(list => {
+          console.debug("a", list.data());
+          returnList = list.data();
+        });
+      return returnList;
     },
 
     //@param userId
     //@return Object ListのArray
     getSubscribedListsFromUserId(userId) {
-      var returnLists = []
-      this.db.collection("users").doc(userId).get()
-        .then((user) => {
-          user.data().lists.forEach((listId) => {
-            this.getListFromListId(listId).then((list) => {
-              console.debug("tmp", list)
-              returnLists.push(list)
+      var returnLists = [];
+      this.db
+        .collection("users")
+        .doc(userId)
+        .get()
+        .then(user => {
+          user.data().lists.forEach(listId => {
+            this.getListFromListId(listId).then(list => {
+              returnLists.push(list);
+            });
+          });
+        });
+      return returnLists;
+    },
 
-            })
-          })
-        })
-      return returnLists
+    renameList(listId, newName) {
+      this.db
+        .collection("lists")
+        .doc(listId)
+        .set(
+          {
+            name: newName
+          },
+          {
+            merge: true
+          }
+        )
+        .then(() => {});
     }
-  },
-}
+  }
+};

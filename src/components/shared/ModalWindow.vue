@@ -33,15 +33,19 @@
       }
     }
   </script>-->
-  <div class='overlay' v-on:click='closeOverlay' v-show='showOverlay'>
-    <div class='content' v-on:click='stopClose' :style='modalStyle'>
-      <div class='row'>
-        <div class='col-md-3 offset-9'>
-          <font-awesome-icon icon='times' class='fa-2x mx-auto my-auto' v-on:click='closeOverlay' />
+  <div class="overlay" v-on:click="closeOverlay" v-show="showOverlay">
+    <div class="content" v-on:click="stopClose" :style="modalStyle">
+      <div class="row">
+        <div class="col-md-3 offset-9">
+          <font-awesome-icon
+            icon="times"
+            class="fa-2x mx-auto my-auto"
+            v-on:click="closeOverlay"
+          />
         </div>
       </div>
-      <div class='container'>
-        <div class='row mx-auto'>
+      <div class="container">
+        <div class="row mx-auto my-auto">
           <slot></slot>
         </div>
       </div>
@@ -54,31 +58,31 @@ export default {
   props: {
     width: {
       type: String,
-      required: true,
+      required: true
     },
     height: {
       type: String,
-      required: true,
-    },
+      required: true
+    }
   },
-  data: function () {
+  data: function() {
     return {
-      showOverlay: true,
+      showOverlay: true
     };
   },
   methods: {
-    closeOverlay: function () {
+    closeOverlay: function() {
       this.$emit("fromModal");
     },
-    stopClose: function () {
+    stopClose: function() {
       event.stopPropagation();
-    },
+    }
   },
   computed: {
-    modalStyle: function () {
+    modalStyle: function() {
       return `width: ${this.width}%; height: ${this.height}%;`;
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>
