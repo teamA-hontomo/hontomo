@@ -26,32 +26,7 @@ export default {
       newMessage: "",
       frameId: "BDyb4dA26stiHHaMuPhM",
       userId: "4oFo1QKy3X8wGwuGx98h",
-      messages: [
-        // {
-        //   created: "2020/4/1",
-        //   id: "qYYDFYQIqCNxawdfFlbH",
-        //   text: "hogehgoe",
-        //   userId: "4oFo1QKy3X8wGwuGx98h",
-        // },
-        // {
-        //   created: "2020/4/1",
-        //   id: "qYYDFYQIqCNxawdfFlbj",
-        //   text: "hogehgoe",
-        //   userId: "4oFo1QKy3X8wGwuGx98h",
-        // },
-        // {
-        //   created: "2020/4/1",
-        //   id: "qYYDFYQIqCNxawdfFlbk",
-        //   text: "hogehgoe",
-        //   userId: "4oFo1QKy3X8wGwuGx98h",
-        // },
-        // {
-        //   created: "2020/4/1",
-        //   id: "qYYDFYQIqCNxawdfFlbl",
-        //   text: "hogehgoe",
-        //   userId: "4oFo1QKy3X8wGwuGx98h",
-        // },
-      ],
+      messages: [],
     };
   },
 
