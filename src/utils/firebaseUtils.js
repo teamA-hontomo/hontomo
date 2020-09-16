@@ -148,7 +148,7 @@ export default {
             frames.push(result);
           });
         });
-      console.log(frames);
+      //console.log(frames);
       return frames;
     },
 

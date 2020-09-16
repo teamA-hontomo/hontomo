@@ -1,8 +1,8 @@
 <template>
   <div id='list'>
     <TitleBox>
-      <span class='mx-auto my-auto'>{{ list.name }}</span>
-      <StarButton :list='list' :userId='userId' />
+      <span class='mx-auto my-auto'>{{ name }}</span>
+      <StarButton :list='listInfo' :userId='userId' />
       <button v-on:click='openModal' v-if='open' class='btn btn-success'>公開</button>
       <button v-on:click='openModal' v-if='!open' class='btn btn-danger'>非公開</button>
     </TitleBox>
@@ -10,7 +10,11 @@
     <ContentsBox>
       <div v-for='frame in this.frames' class='col-md-3' :key='Object.keys(frame)[0]'>
         <div class='card'>
-          <img :src='require("../" + Object.values(frame)[0]["path"])' class='card-img-top' />
+          <img
+            :src='require("../" + Object.values(frame)[0]["path"])'
+            class='card-img-top'
+            v-on:click='openFrame'
+          />
           <div class='card-body'>
             <p class='card-title'>{{Object.values(frame)[0]["title"]}}</p>
             <p class='card-title'>
@@ -41,12 +45,15 @@ import TitleBox from "./shared/TitleBox.vue";
 import ContentsBox from "./shared/ContentsBox.vue";
 import ModalWindow from "./shared/ModalWindow.vue";
 import StarButton from "./shared/StarButton.vue";
+import firebase from "firebase";
+import "firebase/firestore";
 
 export default {
   data: function () {
     return {
       userId: "4oFo1QKy3X8wGwuGx98h", //TODO:ハードコーディング
-      id: this.$route.params.id,
+      listId: this.$route.params.id,
+      listInfo: {},
       open: true,
       rating: 5,
       name: "リストサンプルタイトル",
@@ -54,10 +61,10 @@ export default {
       showModal: false,
       openingImg: "",
       showFrame: false,
-      listId: "EjF12B6bV3sIfqip9yQH",
-      list: {},
       owenerId: "",
       frames: [],
+
+      db: null,
     };
   },
 
@@ -81,21 +88,9 @@ export default {
     },
   },
 
-  created() {
-    /*this.getListFromListId(this.Id[this.id - 1]).then((returnedlist) => {
-      //console.log(returnedlist);
-      this.name = returnedlist.name;
-      this.date = returnedlist.created.toDate();
-      this.open = returnedlist.open;
-      this.owenerId = returnedlist.owenerId;
-      this.rating = returnedlist.rating;
-    });
-    */
-    this.frames = this.getFramesFromList(this.listId);
-    //コマの情報取得
-    //this.frames = this.getFramesFromList(this.list.id);
-    console.log(`debugだよ${this.frames}`);
-    console.log(this.frames);
+  async created() {
+    this.db = firebase.firestore();
+    await this.setListInfo();
   },
 
   components: {
@@ -120,16 +115,16 @@ export default {
 
     //公開非公開の変更
     changeOpen: function () {
-      this.open = !this.open;
       if (this.open) {
-        const userRef = this.db.collection("lists").doc(this.list.id).update({
-          open: true,
-        });
-      } else {
-        const userRef = this.db.collection("lists").doc(this.list.id).update({
+        this.db.collection("lists").doc(this.listId).update({
           open: false,
         });
+      } else {
+        this.db.collection("lists").doc(this.listId).update({
+          open: true,
+        });
       }
+      this.setListInfo();
       this.closeModal();
     },
 
@@ -142,15 +137,39 @@ export default {
     closeFrame: function () {
       this.showFrame = false;
     },
+    setListInfo: function () {
+      let self = this;
+      this.listId = this.$route.params.id;
+      this.frames = this.getFramesFromList(self.listId);
+      let listInfo = "";
+      this.getListFromListId(this.listId).then(async (info) => {
+        let result = {};
+        await (function () {
+          console.log(info);
+          self.listInfo = info;
+        })();
+      });
+      this.name = this.listInfo.name;
+      this.open = this.listInfo.open;
+      this.rating = this.listInfo.rating;
+      this.ownerId = this.listInfo.ownerId;
+      //すでにお気に入り登録済みかどうか
+      this.db
+        .collection("users")
+        .doc(this.userId)
+        .get()
+        .then((user) => {
+          self.followed = user.data().lists.includes(self.listId)
+            ? true
+            : false;
+        });
+    },
   },
 
   watch: {
     $route: function (val, oldVal) {
-      this.id = val.params.id;
-      console.debug(this.id);
-      this.getListFromListId(this.id).then((returnedlist) => {
-        this.list = returnedlist;
-      });
+      this.listId = val.params.id;
+      this.setListInfo();
     },
   },
 };
