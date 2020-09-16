@@ -174,6 +174,7 @@ export default {
   watch: {
     $route: function (val, oldVal) {
       this.id = val.params.id;
+      this.reportMessage("qYYDFYQIqCNxawdfFlbH");
       console.debug(this.id);
       this.getListFromListId(this.id).then((returnedlist) => {
         this.list = returnedlist;

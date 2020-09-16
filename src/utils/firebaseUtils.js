@@ -198,6 +198,7 @@ export default {
           userId: userId,
           created: firebase.firestore.FieldValue.serverTimestamp(),
           id: newId,
+          report: 0,
           frame_id: frame_id
         });
     },
@@ -216,6 +217,16 @@ export default {
         });
 
       return returnMessages;
+    },
+
+    //メッセージを通報、reportの値を1増やす
+    reportMessage(messageId) {
+      this.db
+        .collection("messages")
+        .doc(messageId)
+        .update({
+          report: firebase.firestore.FieldValue.increment(1)
+        });
     },
 
 
