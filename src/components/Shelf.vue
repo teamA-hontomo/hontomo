@@ -25,7 +25,7 @@
             <div class='col-md-6 my-auto mx-auto'>
               <p>{{ this.openingImg.title }} {{ this.openingImg.volume }}巻</p>
               <p>著者 : {{this.openingImg.author }}</p>
-              <p>出版社: {{ this.openingImg.author }}</p>
+              <p>出版社: {{ this.openingImg.publisher }}</p>
               <button v-on:click='openViewer(this.openingImg.id)' class='btn btn-danger mt-3'>読む</button>
             </div>
           </div>

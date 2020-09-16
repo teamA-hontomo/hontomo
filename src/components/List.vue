@@ -1,21 +1,25 @@
 <template>
   <div id='list'>
     <TitleBox>
-      <span class="mx-auto my-auto">{{ list.name }}</span>
-      <StarButton :list="list" :userId="userId" />
-      <button v-on:click="openModal" v-if="open" class="btn btn-success">公開</button>
-      <button v-on:click="openModal" v-if="!open" class="btn btn-danger">非公開</button>
+      <span class='mx-auto my-auto'>{{ name }}</span>
+      <StarButton :list='listInfo' :userId='userId'/>
+      <button v-on:click='openModal' v-if='open' class='btn btn-success'>公開</button>
+      <button v-on:click='openModal' v-if='!open' class='btn btn-danger'>非公開</button>
     </TitleBox>
 
     <ContentsBox>
-      <div v-for="frame in frames" class="col-md-3" :key="frame.addedTime">
-        <div class="card">
-          <img :src="require('../' + frame.path)" class="card-img-top" v-on:click="openFrame" />
-          <div class="card-body">
-            <p class="card-title">{{frame.title}}</p>
-            <p class="card-title">
-              {{frame.volume}}巻
-              /{{frame.page}}ページ
+      <div v-for='frame in this.frames' class='col-md-3' :key='Object.keys(frame)[0]'>
+        <div class='card'>
+          <img
+            :src='require("../" + Object.values(frame)[0]["path"])'
+            class='card-img-top'
+            v-on:click='openFrame'
+          />
+          <div class='card-body'>
+            <p class='card-title'>{{Object.values(frame)[0]["title"]}}</p>
+            <p class='card-title'>
+              {{Object.values(frame)[0]["volume"]}}巻
+              /{{Object.values(frame)[0]["page"]}}ページ
             </p>
           </div>
         </div>
@@ -57,10 +61,10 @@ export default {
       showModal: false,
       openingImg: "",
       showFrame: false,
-      list: {},
-      frames: [],
       owenerId: "",
-      db: "",
+      frames: [],
+
+      db: null,
     };
   },
 
@@ -70,6 +74,7 @@ export default {
     this.getListFromListId(this.id).then((returnedlist) => {
       this.list = returnedlist;
     });
+    this.hoge = this.recieveMessage("comics");
     //コマの情報取得
     this.frames = this.getFramesFromList(this.id);
     this.db //TODO: utils
@@ -97,6 +102,14 @@ export default {
         return "非公開";
       }
     },
+    imagesArray: function () {
+      return this.getFramesFromList(this.listId);
+    },
+  },
+
+  async created() {
+    this.db = firebase.firestore();
+    await this.setListInfo();
   },
 
   components: {

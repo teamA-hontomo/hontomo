@@ -136,14 +136,23 @@ export default {
     },
 
     getFramesFromList(listId) {
-      const frames = []
-      this.db.collection("lists").doc(listId)
-        .collection("frames").get().then((querySnapshot) => {
-          querySnapshot.forEach((frame) => {
-            frames.push(frame.data())
-          })
-        })
-      return frames
+      const frames = [];
+      this.db
+        .collection("lists")
+        .doc(listId)
+        .collection("frames")
+        .get()
+        .then(async docs => {
+          await docs.forEach(doc => {
+            let value = doc.data();
+            let id = doc.id;
+            let result = {};
+            result[id] = value;
+            frames.push(result);
+          });
+        });
+      //console.log(frames);
+      return frames;
     },
 
     //リストのratingを1増やし、user/listに追加。
@@ -184,6 +193,49 @@ export default {
         .get().then((user) => {
           return user.data();
         })
-    }
+    },
+    //メッセージの送信
+    sendMessage(userId, Message, frame_id){
+      var newId = this.db.collection("messages").doc().id; 
+       this.db
+        .collection("messages")
+        .doc(newId)
+        .set({
+          text: Message,
+          userId: userId,
+          created: firebase.firestore.FieldValue.serverTimestamp(),
+          id: newId,
+          report: 0,
+          frame_id: frame_id
+        });
+    },
+    
+    //コマを指定してそのコマに対するメッセージの取得、ちゃんと動くか分かりません
+    recieveMesage(frame_id) {
+      var returnMessages = [];
+      this.db
+        .collection("messages")
+        .where("frame_id", "==", frame_id)
+        .get()
+        .then(messages => {
+          messages.forEach(message => {
+            returnMessages.push(message.data());
+          });
+        });
+
+      return returnMessages;
+    },
+
+    //メッセージを通報、reportの値を1増やす
+    reportMessage(messageId) {
+      this.db
+        .collection("messages")
+        .doc(messageId)
+        .update({
+          report: firebase.firestore.FieldValue.increment(1)
+        });
+    },
+
+
   }
 };
