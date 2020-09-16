@@ -217,6 +217,7 @@ export default {
       this.db
         .collection("messages")
         .where("frame_id", "==", frame_id)
+        .orderBy("created")
         .get()
         .then(messages => {
           messages.forEach(message => {
