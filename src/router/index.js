@@ -6,19 +6,21 @@ import List from "../components/List";
 import MyLists from "../components/MyLists";
 import GlobalLists from "../components/GlobalLists";
 import View from "../components/View";
+import Author from "../components/Author";
+import AuthorIndex from "../components/AuthorIndex";
 import Sample from "../components/Sample";
+
 
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: "/",
       name: "Top",
       component: Top
     },
     {
-      path: "/view",
+      path: "/view/:xml_src",
       name: "View",
       component: View
     },
@@ -46,6 +48,16 @@ export default new Router({
       path: "/sample",
       name: "Sample",
       component: Sample
-    }
+    },
+
+    {
+      path: "/authors/:id",
+      name: "Author",
+      component: Author
+    }, {
+      path: "/authors",
+      name: "AuthorIndex",
+      component: AuthorIndex
+    },
   ]
 });

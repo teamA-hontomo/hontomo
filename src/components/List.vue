@@ -1,25 +1,35 @@
 <template>
   <div id='list'>
     <TitleBox>
-      <span class='mx-auto my-auto'>{{ name }}</span>
-      <StarButton :list='listInfo' :userId='userId'/>
-      <button v-on:click='openModal' v-if='open' class='btn btn-success'>公開</button>
-      <button v-on:click='openModal' v-if='!open' class='btn btn-danger'>非公開</button>
+      <span class='mx-auto my-auto'>{{ list.name }}</span>
+      <div class='my-auto mr-2'>
+        <div v-if='ownerId != userId'>
+          <span v-if='!followed'>フォローする</span>
+          <span v-else>フォローしています</span>
+          <font-awesome-icon
+            icon='heart'
+            class='fa-lg'
+            v-on:click='onClickHeart'
+            v-bind:class='heartColor'
+          />
+        </div>
+        <span>フォロワー : {{ rating }}</span>
+      </div>
+      <div v-if='ownerId == userId'>
+        <button v-on:click='openModal' v-if='isopen' class='btn btn-success'>公開</button>
+        <button v-on:click='openModal' v-if='!isopen' class='btn btn-danger'>非公開</button>
+      </div>
     </TitleBox>
 
     <ContentsBox>
-      <div v-for='frame in this.frames' class='col-md-3' :key='Object.keys(frame)[0]'>
+      <div v-for='frame in frames' class='col-md-3' :key='frame.addedTime'>
         <div class='card'>
-          <img
-            :src='require("../" + Object.values(frame)[0]["path"])'
-            class='card-img-top'
-            v-on:click='openFrame'
-          />
+          <img :src='"/static/" + frame.path' class='card-img-top' v-on:click='openFrame' />
           <div class='card-body'>
-            <p class='card-title'>{{Object.values(frame)[0]["title"]}}</p>
+            <p class='card-title'>{{frame.title}}</p>
             <p class='card-title'>
-              {{Object.values(frame)[0]["volume"]}}巻
-              /{{Object.values(frame)[0]["page"]}}ページ
+              {{frame.volume}}巻
+              /{{frame.page}}ページ
             </p>
           </div>
         </div>
@@ -29,8 +39,8 @@
       <div class='mt-5 mx-auto'>
         <h5 class='mx-auto font-weight-bold'>ただいまの設定は[{{ openStatus }}]です</h5>
         <h5 class='mx-auto font-weight-bold'>変更してもよろしいですか？</h5>
-        <button v-show='open' v-on:click='changeOpen' class='btn btn-danger mx-auto mt-5'>非公開にする</button>
-        <button v-show='!open' v-on:click='changeOpen' class='btn btn-success mx-auto mt-5'>公開する</button>
+        <button v-show='isopen' v-on:click='changeOpen' class='btn btn-danger mx-auto mt-5'>非公開にする</button>
+        <button v-show='!isopen' v-on:click='changeOpen' class='btn btn-success mx-auto mt-5'>公開する</button>
       </div>
     </ModalWindow>
 
@@ -54,62 +64,57 @@ export default {
       userId: "4oFo1QKy3X8wGwuGx98h", //TODO:ハードコーディング
       listId: this.$route.params.id,
       listInfo: {},
-      open: true,
-      rating: 5,
+      isopen: false,
       name: "",
+
+      rating: 0,
       followed: false,
       showModal: false,
       openingImg: "",
       showFrame: false,
-      owenerId: "",
+      list: {},
       frames: [],
-
-      db: null,
+      ownerId: "",
+      db: "",
     };
   },
 
-  created() {
+  async created() {
     this.id = this.$route.params.id;
     this.db = firebase.firestore();
     this.getListFromListId(this.id).then((returnedlist) => {
       this.list = returnedlist;
+      this.isopen = this.list.open;
+      this.rating = this.list.rating;
+      this.ownerId = this.list.ownerId;
     });
-    this.hoge = this.recieveMessage("comics");
     //コマの情報取得
     this.frames = this.getFramesFromList(this.id);
-    this.db //TODO: utils
+    let self = this;
+    await this.db //TODO: utils
       .collection("users")
       .doc(this.userId)
       .get()
       .then((user) => {
-        this.followed = user.data().lists.includes(self.listId) ? true : false;
+        self.followed = user.data().lists.includes(self.listId) ? true : false;
       });
   },
 
   computed: {
-    starColor: function () {
-      if (this.followed) {
-        return { yellowStar: true };
-      } else {
-        return { yellowStar: false };
-      }
-    },
-
     openStatus: function () {
-      if (this.open) {
+      if (this.isopen) {
         return "公開";
       } else {
         return "非公開";
       }
     },
-    imagesArray: function () {
-      return this.getFramesFromList(this.listId);
+    heartColor: function () {
+      if (this.followed) {
+        return { clickedHeart: true };
+      } else {
+        return { clickedHeart: false };
+      }
     },
-  },
-
-  async created() {
-    this.db = firebase.firestore();
-    await this.setListInfo();
   },
 
   components: {
@@ -134,16 +139,17 @@ export default {
 
     //公開非公開の変更
     changeOpen: function () {
-      if (this.open) {
+      if (this.isopen) {
         this.db.collection("lists").doc(this.listId).update({
           open: false,
         });
+        this.isopen = false;
       } else {
         this.db.collection("lists").doc(this.listId).update({
           open: true,
         });
+        this.isopen = true;
       }
-      this.setListInfo();
       this.closeModal();
     },
 
@@ -156,35 +162,36 @@ export default {
     closeFrame: function () {
       this.showFrame = false;
     },
-
-    setListInfo: function () {
-      //すでにお気に入り登録済みかどうか
-      this.db
-        .collection("users")
-        .doc(this.userId)
-        .get()
-        .then((user) => {
-          self.followed = user.data().lists.includes(self.listId)
-            ? true
-            : false;
-        });
+    onClickHeart: function () {
+      if (this.followed) {
+        this.followed = false;
+        this.rating--;
+        this.removeStarFromList(this.listId, this.userId);
+      } else {
+        this.followed = true;
+        this.rating++;
+        this.addStarToList(this.listId, this.userId);
+      }
     },
   },
 
   watch: {
     $route: function (val, oldVal) {
-      this.id = val.params.id;
-      console.debug(this.id);
-      this.getListFromListId(this.id).then((returnedlist) => {
+      this.listId = val.params.id;
+      this.getListFromListId(this.listId).then((returnedlist) => {
         this.list = returnedlist;
+        this.isopen = this.list.open;
+        this.rating = this.list.rating;
+        this.ownerId = this.list.ownerId;
       });
-      this.frames = this.getFramesFromList(this.id);
+      this.frames = this.getFramesFromList(this.listId);
+      const self = this;
       this.db
         .collection("users")
-        .doc(this.userId)
+        .doc(self.userId)
         .get()
         .then((user) => {
-          this.followed = user.data().lists.includes(self.listId)
+          self.followed = user.data().lists.includes(self.listId)
             ? true
             : false;
         });
@@ -199,5 +206,8 @@ export default {
 }
 .card-text {
   color: #eeeeee;
+}
+.clickedHeart {
+  color: pink;
 }
 </style>
