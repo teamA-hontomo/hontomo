@@ -1,19 +1,19 @@
 <template>
-  <div id="list">
+  <div id='list'>
     <TitleBox>
-      <span class="mx-auto my-auto">{{ list.name }}</span>
-      <StarButton :list="list" :userId="userId" />
-      <button v-on:click="openModal" v-if="open" class="btn btn-success">公開</button>
-      <button v-on:click="openModal" v-if="!open" class="btn btn-danger">非公開</button>
+      <span class='mx-auto my-auto'>{{ list.name }}</span>
+      <StarButton :list='list' :userId='userId' />
+      <button v-on:click='openModal' v-if='isopen' class='btn btn-success'>公開</button>
+      <button v-on:click='openModal' v-if='!isopen' class='btn btn-danger'>非公開</button>
     </TitleBox>
 
     <ContentsBox>
-      <div v-for="frame in frames" class="col-md-3" :key="frame.addedTime">
-        <div class="card">
-          <img :src="require('../' + frame.path)" class="card-img-top" v-on:click="openFrame" />
-          <div class="card-body">
-            <p class="card-title">{{frame.title}}</p>
-            <p class="card-title">
+      <div v-for='frame in frames' class='col-md-3' :key='frame.addedTime'>
+        <div class='card'>
+          <img :src='require("../" + frame.path)' class='card-img-top' v-on:click='openFrame' />
+          <div class='card-body'>
+            <p class='card-title'>{{frame.title}}</p>
+            <p class='card-title'>
               {{frame.volume}}巻
               /{{frame.page}}ページ
             </p>
@@ -21,17 +21,17 @@
         </div>
       </div>
     </ContentsBox>
-    <ModalWindow v-show="showModal" v-on:fromModal="closeModal" :width="'20'" :height="'50'">
-      <div class="mt-5 mx-auto">
-        <h5 class="mx-auto font-weight-bold">ただいまの設定は[{{ openStatus }}]です</h5>
-        <h5 class="mx-auto font-weight-bold">変更してもよろしいですか？</h5>
-        <button v-show="open" v-on:click="changeOpen" class="btn btn-danger mx-auto mt-5">非公開にする</button>
-        <button v-show="!open" v-on:click="changeOpen" class="btn btn-success mx-auto mt-5">公開する</button>
+    <ModalWindow v-show='showModal' v-on:fromModal='closeModal' :width='"20"' :height='"50"'>
+      <div class='mt-5 mx-auto'>
+        <h5 class='mx-auto font-weight-bold'>ただいまの設定は[{{ openStatus }}]です</h5>
+        <h5 class='mx-auto font-weight-bold'>変更してもよろしいですか？</h5>
+        <button v-show='isopen' v-on:click='changeOpen' class='btn btn-danger mx-auto mt-5'>非公開にする</button>
+        <button v-show='!isopen' v-on:click='changeOpen' class='btn btn-success mx-auto mt-5'>公開する</button>
       </div>
     </ModalWindow>
 
-    <ModalWindow v-show="showFrame" v-on:fromModal="closeFrame" :width="'50'" :height="'50'">
-      <img :src="openingImg" class="card-img-top" v-on:click="openFrame" />
+    <ModalWindow v-show='showFrame' v-on:fromModal='closeFrame' :width='"50"' :height='"50"'>
+      <img :src='openingImg' class='card-img-top' v-on:click='openFrame' />
     </ModalWindow>
   </div>
 </template>
@@ -50,8 +50,7 @@ export default {
       userId: "4oFo1QKy3X8wGwuGx98h", //TODO:ハードコーディング
       listId: this.$route.params.id,
       listInfo: {},
-      open: true,
-      rating: 5,
+      isopen: false,
       name: "",
       followed: false,
       showModal: false,
@@ -69,6 +68,7 @@ export default {
     this.db = firebase.firestore();
     this.getListFromListId(this.id).then((returnedlist) => {
       this.list = returnedlist;
+      this.isopen = this.list.open;
     });
     //コマの情報取得
     this.frames = this.getFramesFromList(this.id);
@@ -91,7 +91,7 @@ export default {
     },
 
     openStatus: function () {
-      if (this.open) {
+      if (this.isopen) {
         return "公開";
       } else {
         return "非公開";
@@ -121,16 +121,17 @@ export default {
 
     //公開非公開の変更
     changeOpen: function () {
-      if (this.open) {
+      if (this.isopen) {
         this.db.collection("lists").doc(this.listId).update({
           open: false,
         });
+        this.isopen = false;
       } else {
         this.db.collection("lists").doc(this.listId).update({
           open: true,
         });
+        this.isopen = true;
       }
-      this.setListInfo();
       this.closeModal();
     },
 
@@ -143,29 +144,16 @@ export default {
     closeFrame: function () {
       this.showFrame = false;
     },
-
-    setListInfo: function () {
-      //すでにお気に入り登録済みかどうか
-      this.db
-        .collection("users")
-        .doc(this.userId)
-        .get()
-        .then((user) => {
-          self.followed = user.data().lists.includes(self.listId)
-            ? true
-            : false;
-        });
-    },
   },
 
   watch: {
     $route: function (val, oldVal) {
-      this.id = val.params.id;
-      console.debug(this.id);
-      this.getListFromListId(this.id).then((returnedlist) => {
+      this.listId = val.params.id;
+      this.getListFromListId(this.listId).then((returnedlist) => {
         this.list = returnedlist;
+        this.isopen = this.list.open;
       });
-      this.frames = this.getFramesFromList(this.id);
+      this.frames = this.getFramesFromList(this.listid);
       this.db
         .collection("users")
         .doc(this.userId)
