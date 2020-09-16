@@ -108,6 +108,7 @@ export default {
   computed: {
     filteredUsers() {
       const lists = [];
+      console.log(this.lists);
       for (let id in this.lists) {
         let item = this.lists[id].name;
         if (item.indexOf(this.searchWord) !== -1) {
