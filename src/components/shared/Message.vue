@@ -3,7 +3,7 @@
     <div class="card-body">
       <h5 class="card-title">{{writerName}}</h5>
       <p>{{message.text}}</p>
-      <span>{{message.created}}</span>
+      <span>{{getDate}}</span>
     </div>
   </div>
 </template>
@@ -24,6 +24,12 @@ export default {
       this.writerName = user.name;
     });
   },
+
+  computed: {
+    getDate() {
+      return this.formatDate(this.message.created);
+    },
+  },
 };
 </script>
 
@@ -36,7 +42,7 @@ export default {
   text-align: left;
 }
 .my-message {
-  margin-right:1em;
+  margin-right: 1em;
   margin-left: 0.5em;
 }
 </style>

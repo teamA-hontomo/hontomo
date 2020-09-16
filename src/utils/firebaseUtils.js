@@ -194,10 +194,11 @@ export default {
           return user.data();
         })
     },
+
     //メッセージの送信
-    sendMessage(userId, Message, frame_id){
-      var newId = this.db.collection("messages").doc().id; 
-       this.db
+    sendMessage(userId, Message, frame_id) {
+      var newId = this.db.collection("messages").doc().id;
+      this.db
         .collection("messages")
         .doc(newId)
         .set({
@@ -209,7 +210,7 @@ export default {
           frame_id: frame_id
         });
     },
-    
+
     //コマを指定してそのコマに対するメッセージの取得、ちゃんと動くか分かりません
     recieveMesage(frame_id) {
       var returnMessages = [];
@@ -236,6 +237,9 @@ export default {
         });
     },
 
-
+    formatDate(firebaseTimestamp) {
+      var date = firebaseTimestamp.toDate()
+      return date.getFullYear() + "/" + date.getMonth() + 1 + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
+    }
   }
 };
