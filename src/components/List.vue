@@ -1,7 +1,6 @@
 <template>
   <div id='list'>
     <TitleBox>
-<<<<<<< HEAD
       <span class='mx-auto my-auto'>{{ list.name }}</span>
       <div class='my-auto mr-2'>
         <div v-if='ownerId != userId'>
@@ -29,21 +28,6 @@
           <div class='card-body'>
             <p class='card-title'>{{frame.title}}</p>
             <p class='card-title'>
-=======
-      <span class="mx-auto my-auto">{{ list.name }}</span>
-      <StarButton :list="list" :userId="userId" />
-      <button v-on:click="openModal" v-if="open" class="btn btn-success">公開</button>
-      <button v-on:click="openModal" v-if="!open" class="btn btn-danger">非公開</button>
-    </TitleBox>
-
-    <ContentsBox>
-      <div v-for="frame in frames" class="col-md-3" :key="frame.id">
-        <div class="card">
-          <img :src="require('../' + frame.path)" class="card-img-top" v-on:click="openFrame" />
-          <div class="card-body">
-            <p class="card-title">{{frame.title}}</p>
-            <p class="card-title">
->>>>>>> 1c324ca7451bc7444341d8052a407fb8c1190af5
               {{frame.volume}}巻
               /{{frame.page}}ページ
             </p>
@@ -125,7 +109,6 @@ export default {
         return "非公開";
       }
     },
-<<<<<<< HEAD
     heartColor: function () {
       if (this.followed) {
         return { clickedHeart: true };
@@ -133,8 +116,6 @@ export default {
         return { clickedHeart: false };
       }
     },
-=======
->>>>>>> 1c324ca7451bc7444341d8052a407fb8c1190af5
   },
 
   components: {
@@ -197,14 +178,8 @@ export default {
 
   watch: {
     $route: function (val, oldVal) {
-<<<<<<< HEAD
       this.listId = val.params.id;
       this.getListFromListId(this.listId).then((returnedlist) => {
-=======
-      this.id = val.params.id;
-      console.debug(this.id);
-      this.getListFromListId(this.id).then((returnedlist) => {
->>>>>>> 1c324ca7451bc7444341d8052a407fb8c1190af5
         this.list = returnedlist;
         this.isopen = this.list.open;
         this.rating = this.list.rating;
