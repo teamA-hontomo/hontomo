@@ -14,8 +14,7 @@ import Sample from "../components/Sample";
 Vue.use(Router);
 
 export default new Router({
-  routes: [
-    {
+  routes: [{
       path: "/",
       name: "Top",
       component: Top
@@ -50,15 +49,15 @@ export default new Router({
       name: "Sample",
       component: Sample
     },
+
     {
-      path:"/author",
-      name:"AuthorIndex",
-      component:AuthorIndex
+      path: "/authors/:id",
+      name: "Author",
+      component: Author
+    }, {
+      path: "/authors",
+      name: "AuthorIndex",
+      component: AuthorIndex
     },
-    {
-      path:"/author/:id",
-      name:"Author",
-      component:Author
-    }
   ]
 });
