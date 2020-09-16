@@ -133,23 +133,14 @@ export default {
     },
 
     getFramesFromList(listId) {
-      const frames = [];
-      this.db
-        .collection("lists")
-        .doc(listId)
-        .collection("frames")
-        .get()
-        .then(async docs => {
-          await docs.forEach(doc => {
-            let value = doc.data();
-            let id = doc.id;
-            let result = {};
-            result[id] = value;
-            frames.push(result);
-          });
-        });
-      //console.log(frames);
-      return frames;
+      const frames = []
+      this.db.collection("lists").doc(listId)
+        .collection("frames").get().then((querySnapshot) => {
+          querySnapshot.forEach((frame) => {
+            frames.push(frame.data())
+          })
+        })
+      return frames
     },
 
     //リストのratingを1増やし、user/listに追加。
