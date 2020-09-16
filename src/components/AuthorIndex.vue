@@ -7,7 +7,7 @@
       <router-link
         :to="{ name:'Author', params: { id: author.id } }"
         class="nav-link"
-      >{{author.name}}:{{author.id}}</router-link>
+      >{{author.name}}</router-link>
     </div>
   </div>
 </template>
