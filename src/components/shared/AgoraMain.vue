@@ -49,8 +49,7 @@ export default {
   },
 
   created() {
-    //this.messages = this.recieveMesage(this.frameId);
-    this.messages = this.newrecieveMessage(this.frameId,10);
+    this.messages = this.recieveMessage(this.frameId);
     console.debug(this.messages);
   },
 
@@ -70,15 +69,6 @@ export default {
       this.$emit("fromAgora");
     },
 
-    closeAgora() {
-      this.$emit("fromAgora");
-    },
-  },
-
-  computed: {
-    isMessageExist() {
-      return this.messages.length > 0;
-    },
   },
 
   computed: {
@@ -89,8 +79,7 @@ export default {
 
   mounted(){
     this.db.collection("messages").onSnapshot(()=>{
-      //this.messages = this.recieveMesage(this.frameId);
-      this.messages = this.newrecieveMessage(this.frameId,10);
+      this.messages = this.recieveMessage(this.frameId,10);
     })
   }
 };
