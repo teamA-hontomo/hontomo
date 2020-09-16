@@ -54,7 +54,6 @@
       </div>
     </div>
     <div class="col-4">
-      <p>アゴラテスト</p>
       <AgoraMain></AgoraMain>
     </div>
   </div>
