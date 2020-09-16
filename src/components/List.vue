@@ -58,8 +58,6 @@ export default {
       showFrame: false,
       list: {},
       frames: [],
-      owenerId: "",
-      db: "",
     };
   },
 

@@ -173,6 +173,37 @@ export default {
         .update({
           lists: firebase.firestore.FieldValue.arrayRemove(listId)
         });
+    },
+
+    // 公開リストをレーティング順に取得する
+    async getListsOrderByRating() {
+      const returnLists =[];
+
+      await this.db
+        .collection("lists")
+        .where("open", "==", true)
+        .orderBy("rating", "desc")
+        .get()
+        .then(qs => {
+          qs.forEach(list => {
+            returnLists.push(list.data());
+          });
+        });
+        return returnLists;
+    },
+
+    // ユーザがいいねしたリストであれば true を返す。　要デバッグ！！
+    async isListStared(list_id, user_id = '4oFo1QKy3X8wGwuGx98h') {
+      let lists = [];
+      await this.db
+        .collection("users")
+        .doc(user_id)
+        .get()
+        .then( user => {
+          lists = user.data().lists;
+        });
+
+      return (lists.includes(list_id));
     }
   }
 };
