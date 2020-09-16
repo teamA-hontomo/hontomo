@@ -120,13 +120,28 @@ export default {
     //リストにコマを追加
     //@param リストID,コマのファイルパス
     //@return null
-    setFrameToList(listId, framePath) {
+    setFrameToList(
+      listId,
+      framePath,
+      title = "タイトルが設定されていません",
+      volume = "巻数が設定されていません",
+      page = "ページが設定されていません"
+    ) {
+      var newId = this.db
+        .collection("lists")
+        .doc(listId)
+        .collection("frames")
+        .doc().id;
       this.db
         .collection("lists")
         .doc(listId)
         .collection("frames")
-        .add({
+        .doc(newId)
+        .set({
           path: framePath,
+          page: page,
+          title: title,
+          volume: volume,
           addedTime: firebase.firestore.FieldValue.serverTimestamp()
         })
         .then(() => {});
