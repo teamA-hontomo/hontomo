@@ -144,9 +144,7 @@ export default {
       this.getListFromListId(this.id).then((returnedlist) => {
         this.list = returnedlist;
       });
-      this.getFramesFromList(this.id).then((frames) => {
-        this.frames = frames;
-      });
+      this.frames = this.getFramesFromList(this.id);
     },
   },
 };
