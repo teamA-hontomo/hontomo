@@ -4,8 +4,8 @@
   下記二つの属性が必要
     ①モーダルウインドウの表示状態を切り替えるdata(ブール値)(初期値はfalseに設定してください)
     ②fromModalイベントに対して上で述べたdataをfalseに切り替えるイベントハンドラ
-    ③横幅を決めるString型のwidth(0~100%で指定)
-    ④縦幅を決めるString型のheight(0~100%で指定)
+    ③横幅を決めるString型のwidth(0~100で指定)属性
+    ④縦幅を決めるString型のheight(0~100で指定)属性
   また、モーダルウインドウを表示状態にするために下記のイベントハンドラが必要
     ボタンなどにClickイベントへのハンドラなどの形で上で述べたdataをtrueにするためのイベントハンドラ
   <ModalWindow></ModalWindow>の間の要素がModalWindow内に出力されます
@@ -41,7 +41,7 @@
         </div>
       </div>
       <div class='container'>
-        <div class='row mx-auto'>
+        <div class='row mx-auto my-auto'>
           <slot></slot>
         </div>
       </div>
@@ -95,7 +95,7 @@ export default {
 .content {
   z-index: 2;
   position: fixed;
-  background: #656565;
+  background-color: rgba(0, 0, 0, 0);
 }
 .close-button {
   position: fixed;
