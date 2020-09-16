@@ -1,8 +1,13 @@
 <template>
   <div class="agora">
     <h3 class="agora-title">Agora</h3>
-    <div v-for="message in messages" :key="message.id">
-      <Message :message="message" />
+    <div v-show="isMessageExist">
+      <div v-for="message in messages" :key="message.id">
+        <Message :message="message" />
+      </div>
+    </div>
+    <div v-show="!isMessageExist">
+      <p>まだこのコマにはメッセージがありません</p>
     </div>
     <div class="input-group">
       <textarea class="form-control" v-model="newMessage" placeholder="メッセージを追加"></textarea>
@@ -43,6 +48,12 @@ export default {
         this.sendMessage(this.userId, this.newMessage, this.frameId);
         alert("メッセージを送信しました。");
       }
+    },
+  },
+
+  computed: {
+    isMessageExist() {
+      return this.messages.length > 0;
     },
   },
 };
