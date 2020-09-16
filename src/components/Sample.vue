@@ -7,7 +7,7 @@
     <div>
       <p>所有しているリスト一覧</p>
       <ul>
-        <li v-for='list in ownedLists' :key='list.id'>
+        <li v-for="list in ownedLists" :key="list.id">
           リスト名:{{ list.name }},制作日:{{
           list.created.toDate()
           }},公開かどうか{{ list.open }},オーナー:{{
@@ -20,7 +20,7 @@
     <div>
       <p>登録しているリスト一覧</p>
       <ul>
-        <li v-for='list in subscribedLists' :key='list.id'>
+        <li v-for="list in subscribedLists" :key="list.id">
           リスト名:{{ list.name }},制作日:{{
           list.created.toDate()
           }},公開かどうか{{ list.open }},オーナー:{{
@@ -33,32 +33,39 @@
     <div>
       <p>リスト名変更</p>
       <span>「{{ ownedLists[0].name }}」の名前を変更します</span>
-      <input v-model='newName' />
-      <button @click='changeListName()' type='button'>名前を変更</button>
+      <input v-model="newName" />
+      <button @click="changeListName()" type="button">名前を変更</button>
     </div>
     <hr />
     <div>
       <p>コマをリストに追加</p>
-      <img :src='imagePath' />
+      <img :src="imagePath" />
       <span>このコマを「{{ ownedLists[0].name }}」に</span>
-      <button @click='addFrameToList()' type='button'>追加</button>
+      <button @click="addFrameToList()" type="button">追加</button>
     </div>
     <hr />
     <div>
       <span>「{{ ownedLists[0].name }}」に登録されているコマ一覧</span>
       <div v-for="image in imagesArray" :key="image.page">
-        <img :src="image.path" />{{image.title}}
+        <img :src="image.path" />
+        {{image.title}}
       </div>
+    </div>
+    <div>
+      <p>アゴラテスト</p>
+      <AgoraMain></AgoraMain>
     </div>
   </div>
 </template>
 
 <script>
 import CreateList from "./shared/CreateList.vue";
+import AgoraMain from "./shared/AgoraMain.vue";
 
 export default {
   components: {
     CreateList,
+    AgoraMain,
   },
 
   data() {
