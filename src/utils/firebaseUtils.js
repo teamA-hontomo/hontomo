@@ -176,6 +176,14 @@ export default {
         .update({
           lists: firebase.firestore.FieldValue.arrayRemove(listId)
         });
+    },
+
+    getUserById(userId) {
+      return this.db.collection("users")
+        .doc(userId)
+        .get().then((user) => {
+          return user.data();
+        })
     }
   }
 };
