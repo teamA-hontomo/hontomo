@@ -2,17 +2,23 @@
   <div id='list'>
     <TitleBox>
       <span class='mx-auto my-auto'>{{ list.name }}</span>
-      <div class='my-auto'>
-        <font-awesome-icon
-          icon='star'
-          class='fa-lg'
-          v-on:click='onClickStar'
-          v-bind:class='starColor'
-        />
-        <span>{{ rating }}</span>
+      <div class='my-auto mr-2'>
+        <div v-if='ownerId != userId'>
+          <span v-if='!followed'>フォローする</span>
+          <span v-else>フォローしています</span>
+          <font-awesome-icon
+            icon='heart'
+            class='fa-lg'
+            v-on:click='onClickHeart'
+            v-bind:class='heartColor'
+          />
+        </div>
+        <span>フォロワー : {{ rating }}</span>
       </div>
-      <button v-on:click='openModal' v-if='isopen' class='btn btn-success'>公開</button>
-      <button v-on:click='openModal' v-if='!isopen' class='btn btn-danger'>非公開</button>
+      <div v-if='ownerId == userId'>
+        <button v-on:click='openModal' v-if='isopen' class='btn btn-success'>公開</button>
+        <button v-on:click='openModal' v-if='!isopen' class='btn btn-danger'>非公開</button>
+      </div>
     </TitleBox>
 
     <ContentsBox>
@@ -68,7 +74,7 @@ export default {
       showFrame: false,
       list: {},
       frames: [],
-      owenerId: "",
+      ownerId: "",
       db: "",
     };
   },
@@ -80,6 +86,7 @@ export default {
       this.list = returnedlist;
       this.isopen = this.list.open;
       this.rating = this.list.rating;
+      this.ownerId = this.list.ownerId;
     });
 
     //コマの情報取得
@@ -102,11 +109,11 @@ export default {
         return "非公開";
       }
     },
-    starColor: function () {
+    heartColor: function () {
       if (this.followed) {
-        return { yellowStar: true };
+        return { clickedHeart: true };
       } else {
-        return { yellowStar: false };
+        return { clickedHeart: false };
       }
     },
   },
@@ -156,7 +163,7 @@ export default {
     closeFrame: function () {
       this.showFrame = false;
     },
-    onClickStar: function () {
+    onClickHeart: function () {
       if (this.followed) {
         this.followed = false;
         this.rating--;
@@ -176,6 +183,7 @@ export default {
         this.list = returnedlist;
         this.isopen = this.list.open;
         this.rating = this.list.rating;
+        this.ownerId = this.list.ownerId;
       });
       this.frames = this.getFramesFromList(this.listId);
       const self = this;
@@ -200,7 +208,7 @@ export default {
 .card-text {
   color: #eeeeee;
 }
-.yellowStar {
-  color: yellow;
+.clickedHeart {
+  color: pink;
 }
 </style>
