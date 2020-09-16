@@ -51,12 +51,12 @@ export default new Router({
       component: Sample
     },
     {
-      path:"/Author",
-      name:"Index",
+      path:"/author",
+      name:"AuthorIndex",
       component:AuthorIndex
     },
     {
-      path:"/Author/:id",
+      path:"/author/:id",
       name:"Author",
       component:Author
     }
