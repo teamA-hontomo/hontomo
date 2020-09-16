@@ -26,7 +26,7 @@
               <p>{{ this.openingImg.title }} {{ this.openingImg.volume }}巻</p>
               <p>著者 : {{this.openingImg.author }}</p>
               <p>出版社: {{ this.openingImg.author }}</p>
-              <button v-on:click='openViewer(this.openingImg.id)' class='btn btn-danger mt-3'>読む</button>
+              <button v-on:click='openViewer' class='btn btn-danger mt-3'>読む</button>
             </div>
           </div>
         </div>
@@ -49,6 +49,7 @@ export default {
           publisher: "集英社",
           author: "吾峠呼世晴",
           coverPath: "/static/covers/id_1_kimetu_no_yaiba_1.jpg",
+          xml_src: "test_xml"
         },
         {
           id: 2,
@@ -57,11 +58,13 @@ export default {
           publisher: "集英社",
           author: "吾峠呼世晴",
           coverPath: "/static/covers/id_2_kimetu_no_yaiba_2.jpg",
+          xml_src: "test_xml"
         },
       ],
       showDetail: false,
       openingImgPath: "",
       openingImg: "",
+      xml_src: ""
     };
   },
   methods: {
@@ -70,13 +73,13 @@ export default {
       this.openingImgPath = event.target.src;
       let openingImgId = event.target.src.match(/id_(\d+)/)[1];
       this.openingImg = this.userComics.find((item) => item.id == openingImgId);
+      this.xml_src = this.openingImg.xml_src;
     },
     closeDetail: function () {
       this.showDetail = false;
     },
-    openViewer: function (comicId) {
-      //TODO ポップアップからビューアを開く処理
-      return true;
+    openViewer: function () {
+      this.$router.push({name: 'View', params: {'xml_src': this.xml_src}});
     },
   },
   components: {
