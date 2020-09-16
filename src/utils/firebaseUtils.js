@@ -199,7 +199,9 @@ export default {
       return this.db.collection("users")
         .doc(userId)
         .get().then((user) => {
-          return user.data();
+          var userData=user.data();
+          userData.id=user.id
+          return userData;
         })
     },
 
@@ -215,17 +217,19 @@ export default {
           created: firebase.firestore.FieldValue.serverTimestamp(),
           id: newId,
           report: 0,
+          good:0,
           frame_id: frame_id
         });
     },
 
     //コマを指定してそのコマに対するメッセージの取得、ちゃんと動くか分かりません
-    recieveMesage(frame_id) {
+    recieveMessage(frame_id,count=10) {
       var returnMessages = [];
       this.db
         .collection("messages")
         .where("frame_id", "==", frame_id)
         .orderBy("created")
+        .limit(count)
         .get()
         .then(messages => {
           messages.forEach(message => {
@@ -236,12 +240,13 @@ export default {
       return returnMessages;
     },
 
-    newrecieveMesage(frame_id) {
+    newrecieveMessage(frame_id,count=10) {
       var returnMessages = [];
       this.db
         .collection("messages")
         .where("frame_id", "==", frame_id)
-        .limit(25)
+        .orderBy("created","desc")
+        .limit(count)
         .get()
         .then(messages => {
           messages.forEach(message => {
@@ -251,6 +256,7 @@ export default {
 
       return returnMessages;
     },
+
 
 
 
@@ -264,9 +270,32 @@ export default {
         });
     },
 
+    //firebaseのタイムスタンプを文字列にする
+    //@param FirebaseTimestamp
+    //return String
     formatDate(firebaseTimestamp) {
       var date = firebaseTimestamp.toDate()
       return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
+    },
+
+    //作者一覧をcount件とってくる
+    //@param null
+    //@return Array
+    getAllAuthors(count = 20) {
+      var target = []
+      this.db
+        .collection("users")
+        .where("isAuthor", "==", true)
+        .limit(count)
+        .get()
+        .then(authors => {
+          authors.forEach(author => {
+            var authorObj = author.data()
+            authorObj.id = author.id
+            target.push(authorObj);
+          });
+        });
+      return target;
     }
   },
 

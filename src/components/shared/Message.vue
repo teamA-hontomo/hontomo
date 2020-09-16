@@ -1,9 +1,14 @@
 <template>
   <div class="card" :class="{'my-message':isMyMessage}">
-    <div class="card-body" :class="{'bg-success':isAuthor}">
+    <div class="card-body">
       <h5 class="card-title">{{writerName}}</h5>
       <p>{{message.text}}</p>
       <span>{{getDate}}</span>
+      <div class="row">
+      </div><!--
+      <button v-on:click='openModal' class='btn btn-success'>返信</button>
+      <button v-on:click='openThread' class='btn btn-primary'>スレッドを表示</button>
+      -->
     </div>
   </div>
 </template>
@@ -17,7 +22,6 @@ export default {
     return {
       writerName: "",
       isMyMessage: false,
-      isAuthor: true,
       currentUser: {
         id: "YJvLYXKuOw2hMddumjL7",
         //id:"4oFo1QKy3X8wGwuGx98h"
@@ -25,12 +29,25 @@ export default {
     };
   },
 
+  methods: {
+    openModal: function () {
+      this.showModal = true;
+    },
+
+    onClick: function () {
+      this.open = !this.open;
+    },
+
+    closeModal: function () {
+      this.showModal = false;
+    },
+  },
+
   created() {
     this.getUserById(this.message.userId).then((user) => {
       this.writerName = user.name;
     });
     this.isMyMessage = this.message.userId == this.currentUser.id;
-    this.isAuthor = this.message.userId == "4oFo1QKy3X8wGwuGx98h";//authorのidをとってこれるように
   },
 
   computed: {
@@ -52,5 +69,9 @@ export default {
 .my-message {
   margin-right: 0.5em;
   margin-left: 3em;
+}
+.author-message{
+  -color: salmon;
+
 }
 </style>

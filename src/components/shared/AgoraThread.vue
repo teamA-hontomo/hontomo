@@ -32,7 +32,7 @@ import "firebase/firestore";
 export default {
   components: { Message },
 
-  name: "AgoraMain",
+  name: "AgoraThread",
 
   // props:["frameId"],
 
@@ -49,8 +49,8 @@ export default {
   },
 
   created() {
-    //this.messages = this.recieveMesage(this.frameId);
-    this.messages = this.newrecieveMessage(this.frameId,10);
+    this.messages = this.recieveMesage(this.frameId);
+    //this.messages = this.newrecieveMesage(this.frameId);
     console.debug(this.messages);
   },
 
@@ -89,8 +89,8 @@ export default {
 
   mounted(){
     this.db.collection("messages").onSnapshot(()=>{
-      //this.messages = this.recieveMesage(this.frameId);
-      this.messages = this.newrecieveMessage(this.frameId,10);
+      this.messages = this.recieveMesage(this.frameId);
+      //this.messages = this.newrecieveMesage(this.frameId);
     })
   }
 };
