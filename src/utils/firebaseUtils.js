@@ -139,16 +139,11 @@ export default {
         .doc(listId)
         .collection("frames")
         .get()
-        .then(async docs => {
-          await docs.forEach(doc => {
-            let value = doc.data();
-            let id = doc.id;
-            let result = {};
-            result[id] = value;
-            frames.push(result);
+        .then(querySnapshot => {
+          querySnapshot.forEach(frame => {
+            frames.push(frame.data());
           });
         });
-      //console.log(frames);
       return frames;
     },
 
@@ -160,6 +155,7 @@ export default {
         .update({
           rating: firebase.firestore.FieldValue.increment(1)
         });
+
       this.db
         .collection("users")
         .doc(userId)

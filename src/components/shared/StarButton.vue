@@ -13,7 +13,7 @@
 <script>
 export default {
   name: "StarButton",
-  props: ["list"],
+  props: ["list", "followed", "userId"],
 
   data() {
     return {
@@ -25,7 +25,9 @@ export default {
   created() {
     console.debug(this.list.rating);
     //TODO:falseかどうかをfirebaseからもってくる。
+
     this.rating = this.list.rating;
+    this.isFollowed = this.followed;
   },
 
   methods: {
@@ -44,8 +46,9 @@ export default {
 
   watch: {
     list: function () {
-      console.debug("rate", this.list.rating);
+      //console.debug("rate", this.list.rating);
       this.rating = this.list.rating;
+      this.isFollowed = this.followed;
     },
   },
 };
