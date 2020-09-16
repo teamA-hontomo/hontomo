@@ -193,6 +193,62 @@ export default {
         .update({
           lists: firebase.firestore.FieldValue.arrayRemove(listId)
         });
+    },
+
+    getUserById(userId) {
+      return this.db.collection("users")
+        .doc(userId)
+        .get().then((user) => {
+          return user.data();
+        })
+    },
+
+    //メッセージの送信
+    sendMessage(userId, Message, frame_id) {
+      var newId = this.db.collection("messages").doc().id;
+      this.db
+        .collection("messages")
+        .doc(newId)
+        .set({
+          text: Message,
+          userId: userId,
+          created: firebase.firestore.FieldValue.serverTimestamp(),
+          id: newId,
+          report: 0,
+          frame_id: frame_id
+        });
+    },
+
+    //コマを指定してそのコマに対するメッセージの取得、ちゃんと動くか分かりません
+    recieveMesage(frame_id) {
+      var returnMessages = [];
+      this.db
+        .collection("messages")
+        .where("frame_id", "==", frame_id)
+        .orderBy("created")
+        .get()
+        .then(messages => {
+          messages.forEach(message => {
+            returnMessages.push(message.data());
+          });
+        });
+
+      return returnMessages;
+    },
+
+    //メッセージを通報、reportの値を1増やす
+    reportMessage(messageId) {
+      this.db
+        .collection("messages")
+        .doc(messageId)
+        .update({
+          report: firebase.firestore.FieldValue.increment(1)
+        });
+    },
+
+    formatDate(firebaseTimestamp) {
+      var date = firebaseTimestamp.toDate()
+      return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
     }
   }
 };

@@ -88,7 +88,6 @@ export default {
       this.rating = this.list.rating;
       this.ownerId = this.list.ownerId;
     });
-
     //コマの情報取得
     this.frames = this.getFramesFromList(this.id);
     let self = this;
