@@ -227,6 +227,24 @@ export default {
       return returnMessages;
     },
 
+    newrecieveMesage(frame_id) {
+      var returnMessages = [];
+      this.db
+        .collection("messages")
+        .where("frame_id", "==", frame_id)
+        .limit(25)
+        .get()
+        .then(messages => {
+          messages.forEach(message => {
+            returnMessages.push(message.data());
+          });
+        });
+
+      return returnMessages;
+    },
+
+
+
     //メッセージを通報、reportの値を1増やす
     reportMessage(messageId) {
       this.db
@@ -241,5 +259,6 @@ export default {
       var date = firebaseTimestamp.toDate()
       return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
     }
-  }
+  },
+
 };
