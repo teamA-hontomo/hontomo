@@ -192,7 +192,7 @@ export default {
         return returnLists;
     },
 
-    // ユーザがいいねしたリストであれば true を返す。　要デバッグ！！
+    // ユーザがいいねしたリストであれば true を返す。　要でばltぐ
     async isListStared(list_id, user_id = '4oFo1QKy3X8wGwuGx98h') {
       let lists = [];
       await this.db

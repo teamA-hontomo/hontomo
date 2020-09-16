@@ -1,64 +1,72 @@
 <template>
-  <div>
-    <h1>動作確認用ページ</h1>新規リスト作成
-    <CreateList />
-    <hr />
+  <div class="row">
+    <div class="col-8">
+      <h1>動作確認用ページ</h1>新規リスト作成
+      <CreateList />
+      <hr />
 
-    <div>
-      <p>所有しているリスト一覧</p>
-      <ul>
-        <li v-for='list in ownedLists' :key='list.id'>
-          リスト名:{{ list.name }},制作日:{{
-          list.created.toDate()
-          }},公開かどうか{{ list.open }},オーナー:{{
-          list.owenerId
-          }},いいね数:{{ list.rating }}
-        </li>
-      </ul>
-    </div>
-    <hr />
-    <div>
-      <p>登録しているリスト一覧</p>
-      <ul>
-        <li v-for='list in subscribedLists' :key='list.id'>
-          リスト名:{{ list.name }},制作日:{{
-          list.created.toDate()
-          }},公開かどうか{{ list.open }},オーナー:{{
-          list.owenerId
-          }},いいね数:{{ list.rating }}
-        </li>
-      </ul>
-    </div>
-    <hr />
-    <div>
-      <p>リスト名変更</p>
-      <span>「{{ ownedLists[0].name }}」の名前を変更します</span>
-      <input v-model='newName' />
-      <button @click='changeListName()' type='button'>名前を変更</button>
-    </div>
-    <hr />
-    <div>
-      <p>コマをリストに追加</p>
-      <img :src='imagePath' />
-      <span>このコマを「{{ ownedLists[0].name }}」に</span>
-      <button @click='addFrameToList()' type='button'>追加</button>
-    </div>
-    <hr />
-    <div>
-      <span>「{{ ownedLists[0].name }}」に登録されているコマ一覧</span>
-      <div v-for="image in imagesArray" :key="image.page">
-        <img :src="image.path" />{{image.title}}
+      <!-- <div>
+        <p>所有しているリスト一覧</p>
+        <ul>
+          <li v-for="list in ownedLists" :key="list.id">
+            リスト名:{{ list.name }},制作日:{{
+            list.created.toDate()
+            }},公開かどうか{{ list.open }},オーナー:{{
+            list.owenerId
+            }},いいね数:{{ list.rating }}
+          </li>
+        </ul>
       </div>
-    </div>
+      <hr />
+      <div>
+        <p>登録しているリスト一覧</p>
+        <ul>
+          <li v-for="list in subscribedLists" :key="list.id">
+            リスト名:{{ list.name }},制作日:{{
+            list.created.toDate()
+            }},公開かどうか{{ list.open }},オーナー:{{
+            list.owenerId
+            }},いいね数:{{ list.rating }}
+          </li>
+        </ul>
+      </div>
+      <hr />
+      <div>
+        <p>リスト名変更</p>
+        <span>「{{ ownedLists[0].name }}」の名前を変更します</span>
+        <input v-model="newName" />
+        <button @click="changeListName()" type="button">名前を変更</button>
+      </div>
+      <hr />
+      <div>
+        <p>コマをリストに追加</p>
+        <img :src="imagePath" />
+        <span>このコマを「{{ ownedLists[0].name }}」に</span>
+        <button @click="addFrameToList()" type="button">追加</button>
+      </div>
+      <hr />
+      <div>
+        <span>「{{ ownedLists[0].name }}」に登録されているコマ一覧</span>
+        <div v-for="image in imagesArray" :key="image.id">
+          <img :src="image.path" />
+          {{image.title}}
+        </div>
+      </div>-->
+      </div>
+      <div class="col-4">
+        <AgoraMain></AgoraMain>
+      </div>
   </div>
 </template>
 
 <script>
 import CreateList from "./shared/CreateList.vue";
+import AgoraMain from "./shared/AgoraMain.vue";
 
 export default {
   components: {
     CreateList,
+    AgoraMain,
   },
 
   data() {

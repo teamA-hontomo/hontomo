@@ -1,10 +1,10 @@
 <template>
-  <div class="my-auto">
+  <div class='my-auto'>
     <font-awesome-icon
-      icon="star"
-      class="fa-lg"
-      v-on:click="onClickStar"
-      v-bind:class="{yellowStar: isFollowed}"
+      icon='star'
+      class='fa-lg'
+      v-on:click='onClickStar'
+      v-bind:class='{yellowStar: isFollowed}'
     />
     <span>{{ rating }}</span>
   </div>
