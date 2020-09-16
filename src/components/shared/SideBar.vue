@@ -1,8 +1,10 @@
 <template>
   <div id='sidebar'>
     <ul class='nav flex-column'>
-      <li class='nav-item'>
-        <router-link :to='{ name: "Top" }' class='nav-link disable-router-link-active'>ほんとも</router-link>
+      <li class='nav-brand'>
+        <router-link :to='{ name: "Top" }' class='my-auto mx-auto disable-router-link-active'>
+          <img src='/static/logo/hontomo_logo.png' width='100' height='50' />
+        </router-link>
       </li>
       <li class='nav-item'>
         <router-link :to='{ name: "Top" }' class='nav-link'>
