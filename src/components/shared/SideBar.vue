@@ -39,6 +39,11 @@
       <font-awesome-icon icon='globe-asia' class='fa-lg' />
       <span>みんなのリスト</span>
     </router-link>
+     <hr />
+    <router-link :to='{ name: "AuthorIndex" }' class='nav-link'>
+      <font-awesome-icon icon='pen-fancy' class='fa-lg' />
+      <span>作者一覧</span>
+    </router-link>
   </div>
 </template>
 
@@ -80,6 +85,7 @@ export default {
 
 
 <style scoped>
+
 hr {
   border-top: 1px solid #eeeeee;
 }
