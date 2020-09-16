@@ -2,7 +2,15 @@
   <div id='list'>
     <TitleBox>
       <span class='mx-auto my-auto'>{{ list.name }}</span>
-      <StarButton :list='list' :userId='userId' />
+      <div class='my-auto'>
+        <font-awesome-icon
+          icon='star'
+          class='fa-lg'
+          v-on:click='onClickStar'
+          v-bind:class='starColor'
+        />
+        <span>{{ rating }}</span>
+      </div>
       <button v-on:click='openModal' v-if='isopen' class='btn btn-success'>公開</button>
       <button v-on:click='openModal' v-if='!isopen' class='btn btn-danger'>非公開</button>
     </TitleBox>
@@ -52,6 +60,8 @@ export default {
       listInfo: {},
       isopen: false,
       name: "",
+
+      rating: 0,
       followed: false,
       showModal: false,
       openingImg: "",
@@ -63,38 +73,40 @@ export default {
     };
   },
 
-  created() {
+  async created() {
     this.id = this.$route.params.id;
     this.db = firebase.firestore();
     this.getListFromListId(this.id).then((returnedlist) => {
       this.list = returnedlist;
       this.isopen = this.list.open;
+      this.rating = this.list.rating;
     });
+
     //コマの情報取得
     this.frames = this.getFramesFromList(this.id);
-    this.db //TODO: utils
+    let self = this;
+    await this.db //TODO: utils
       .collection("users")
       .doc(this.userId)
       .get()
       .then((user) => {
-        this.followed = user.data().lists.includes(self.listId) ? true : false;
+        self.followed = user.data().lists.includes(self.listId) ? true : false;
       });
   },
 
   computed: {
-    starColor: function () {
-      if (this.followed) {
-        return { yellowStar: true };
-      } else {
-        return { yellowStar: false };
-      }
-    },
-
     openStatus: function () {
       if (this.isopen) {
         return "公開";
       } else {
         return "非公開";
+      }
+    },
+    starColor: function () {
+      if (this.followed) {
+        return { yellowStar: true };
+      } else {
+        return { yellowStar: false };
       }
     },
   },
@@ -144,6 +156,17 @@ export default {
     closeFrame: function () {
       this.showFrame = false;
     },
+    onClickStar: function () {
+      if (this.followed) {
+        this.followed = false;
+        this.rating--;
+        this.removeStarFromList(this.listId, this.userId);
+      } else {
+        this.followed = true;
+        this.rating++;
+        this.addStarToList(this.listId, this.userId);
+      }
+    },
   },
 
   watch: {
@@ -152,14 +175,16 @@ export default {
       this.getListFromListId(this.listId).then((returnedlist) => {
         this.list = returnedlist;
         this.isopen = this.list.open;
+        this.rating = this.list.rating;
       });
-      this.frames = this.getFramesFromList(this.listid);
+      this.frames = this.getFramesFromList(this.listId);
+      const self = this;
       this.db
         .collection("users")
-        .doc(this.userId)
+        .doc(self.userId)
         .get()
         .then((user) => {
-          this.followed = user.data().lists.includes(self.listId)
+          self.followed = user.data().lists.includes(self.listId)
             ? true
             : false;
         });
@@ -174,5 +199,8 @@ export default {
 }
 .card-text {
   color: #eeeeee;
+}
+.yellowStar {
+  color: yellow;
 }
 </style>

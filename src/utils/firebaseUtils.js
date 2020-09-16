@@ -133,14 +133,18 @@ export default {
     },
 
     getFramesFromList(listId) {
-      const frames = []
-      this.db.collection("lists").doc(listId)
-        .collection("frames").get().then((querySnapshot) => {
-          querySnapshot.forEach((frame) => {
-            frames.push(frame.data())
-          })
-        })
-      return frames
+      const frames = [];
+      this.db
+        .collection("lists")
+        .doc(listId)
+        .collection("frames")
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(frame => {
+            frames.push(frame.data());
+          });
+        });
+      return frames;
     },
 
     //リストのratingを1増やし、user/listに追加。
@@ -151,6 +155,7 @@ export default {
         .update({
           rating: firebase.firestore.FieldValue.increment(1)
         });
+
       this.db
         .collection("users")
         .doc(userId)
