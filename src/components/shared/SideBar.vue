@@ -43,10 +43,8 @@ export default {
   data: function () {
     return {
       list: [
-        { name: "お気に入り", id: "favorite" },
-        { name: "リスト1", id: "EjF12B6bV3sIfqip9yQH" },
-        { name: "リスト2", id: "jTCoI4Do2gB4fnXE4b2B" },
-        { name: "リスト3", id: 3 },
+        { name: "お気に入り", id: "EjF12B6bV3sIfqip9yQH" },
+        { name: "リスト1", id: "jTCoI4Do2gB4fnXE4b2B" },
       ],
     };
   },

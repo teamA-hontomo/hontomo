@@ -48,10 +48,11 @@ export default {
   data: function () {
     return {
       userId: "4oFo1QKy3X8wGwuGx98h", //TODO:ハードコーディング
-      id: this.$route.params.id,
+      listId: this.$route.params.id,
+      listInfo: {},
       open: true,
       rating: 5,
-      name: "リストサンプルタイトル",
+      name: "",
       followed: false,
       showModal: false,
       openingImg: "",
@@ -71,6 +72,13 @@ export default {
     });
     //コマの情報取得
     this.frames = this.getFramesFromList(this.id);
+    this.db //TODO: utils
+      .collection("users")
+      .doc(this.userId)
+      .get()
+      .then((user) => {
+        this.followed = user.data().lists.includes(self.listId) ? true : false;
+      });
   },
 
   computed: {
@@ -113,16 +121,16 @@ export default {
 
     //公開非公開の変更
     changeOpen: function () {
-      this.open = !this.open;
       if (this.open) {
-        const userRef = this.db.collection("lists").doc(this.list.id).update({
-          open: true,
-        });
-      } else {
-        const userRef = this.db.collection("lists").doc(this.list.id).update({
+        this.db.collection("lists").doc(this.listId).update({
           open: false,
         });
+      } else {
+        this.db.collection("lists").doc(this.listId).update({
+          open: true,
+        });
       }
+      this.setListInfo();
       this.closeModal();
     },
 
@@ -135,6 +143,19 @@ export default {
     closeFrame: function () {
       this.showFrame = false;
     },
+
+    setListInfo: function () {
+      //すでにお気に入り登録済みかどうか
+      this.db
+        .collection("users")
+        .doc(this.userId)
+        .get()
+        .then((user) => {
+          self.followed = user.data().lists.includes(self.listId)
+            ? true
+            : false;
+        });
+    },
   },
 
   watch: {
@@ -145,6 +166,15 @@ export default {
         this.list = returnedlist;
       });
       this.frames = this.getFramesFromList(this.id);
+      this.db
+        .collection("users")
+        .doc(this.userId)
+        .get()
+        .then((user) => {
+          this.followed = user.data().lists.includes(self.listId)
+            ? true
+            : false;
+        });
     },
   },
 };
