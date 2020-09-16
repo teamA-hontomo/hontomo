@@ -239,7 +239,7 @@ export default {
 
     formatDate(firebaseTimestamp) {
       var date = firebaseTimestamp.toDate()
-      return date.getFullYear() + "/" + date.getMonth() + 1 + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
+      return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
     }
   }
 };
