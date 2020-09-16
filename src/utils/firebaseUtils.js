@@ -196,7 +196,9 @@ export default {
       return this.db.collection("users")
         .doc(userId)
         .get().then((user) => {
-          return user.data();
+          var userData=user.data();
+          userData.id=user.id
+          return userData;
         })
     },
 
@@ -263,7 +265,9 @@ export default {
         .get()
         .then(authors => {
           authors.forEach(author => {
-            target.push(author.data());
+            var authorObj = author.data()
+            authorObj.id = author.id
+            target.push(authorObj);
           });
         });
       return target;
