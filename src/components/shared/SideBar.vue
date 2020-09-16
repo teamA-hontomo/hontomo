@@ -1,8 +1,10 @@
 <template>
   <div id='sidebar'>
     <ul class='nav flex-column'>
-      <li class='nav-item'>
-        <router-link :to='{ name: "Top" }' class='nav-link disable-router-link-active'>ほんとも</router-link>
+      <li class='nav-brand'>
+        <router-link :to='{ name: "Top" }' class='my-auto mx-auto disable-router-link-active'>
+          <img src='/static/logo/hontomo_logo.png' width='100' height='35' class='my-3' />
+        </router-link>
       </li>
       <li class='nav-item'>
         <router-link :to='{ name: "Top" }' class='nav-link'>
@@ -23,10 +25,14 @@
       <span>リスト一覧</span>
     </router-link>
     <ul class='nav flex-column'>
-      <li v-for='l in list.slice(0, 3)' v-bind:key='l.id' class='nav-item'>
-        <router-link :to='{ name: "List", params: { id: l.id } }' class='nav-link'>
-          <font-awesome-icon icon='heart' class='fa-lg' v-show='l.id === "favorite"' />
-          <span>{{ l.name }}</span>
+      <li
+        v-for='i in Array.from(Array(favoriteLists.length), (v, k)=> k)'
+        v-bind:key='i'
+        class='nav-item'
+      >
+        <router-link :to='{ name: "List", params: { id: favoriteLists[i] } }' class='nav-link'>
+          <font-awesome-icon icon='heart' class='fa-lg' v-show='favoriteLists[i] === "favorite"' />
+          <span>{{ favoriteListsNames[i] }}</span>
         </router-link>
       </li>
     </ul>
@@ -35,22 +41,51 @@
       <font-awesome-icon icon='globe-asia' class='fa-lg' />
       <span>みんなのリスト</span>
     </router-link>
+    <hr />
+    <router-link :to='{ name: "AuthorIndex" }' class='nav-link'>
+      <font-awesome-icon icon='pen-fancy' class='fa-lg' />
+      <span>作者一覧</span>
+    </router-link>
   </div>
 </template>
+
 <script>
+import firebase from "firebase";
+import "firebase/firestore";
 export default {
   data: function () {
     return {
-      list: [
-        { name: "お気に入り", id: "favorite" },
-        { name: "リスト1", id: 1 },
-        { name: "リスト2", id: 2 },
-        { name: "リスト3", id: 3 },
-      ],
+      db: "",
+      favoriteLists: [],
+      favoriteListsNames: [],
+      userId: "4oFo1QKy3X8wGwuGx98h", //TODO:ハードコーディング
     };
+  },
+
+  created() {
+    this.db = firebase.firestore();
+    let userDoc = this.db.collection("users").doc(this.userId);
+    userDoc.get().then((user) => {
+      this.favoriteLists = user.data().lists.slice(0, 3);
+      //console.log(this.favoriteLists);
+      let self = this;
+      let listsRef = this.db.collection("lists");
+      listsRef
+        .where("id", "in", this.favoriteLists)
+        .get()
+        .then((docs) => {
+          docs.forEach((doc) => {
+            self.favoriteListsNames.push(doc.data().name);
+          });
+        });
+      //console.log(this.favoriteListsNames);
+    });
   },
 };
 </script>
+
+
+
 <style scoped>
 hr {
   border-top: 1px solid #eeeeee;

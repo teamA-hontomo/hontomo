@@ -1,23 +1,69 @@
 <template>
-  <div id="view-wrap">
-    <div id="go" class="btn" @click="go">進む</div>
-    <div id="view"></div>
-    <div id="back" class="btn" @click="back">戻る</div>
+  <div class="row">
+    <div class="col-8">
+      <div id="view-wrap">
+        <div id="go" class="btn" @click="go">
+          <svg
+            width="1em"
+            height="1em"
+            viewBox="0 0 16 16"
+            class="bi bi-chevron-left"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M11.354 1.646a.5.5 0 0 1 0 .708L5.707 8l5.647 5.646a.5.5 0 0 1-.708.708l-6-6a.5.5 0 0 1 0-.708l6-6a.5.5 0 0 1 .708 0z"
+            />
+          </svg>
+        </div>
+        <div id="view"></div>
+        <div id="back" class="btn" @click="back">
+          <svg
+            width="1em"
+            height="1em"
+            viewBox="0 0 16 16"
+            class="bi bi-chevron-right"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+    <div class="col-4">
+      <AgoraMain></AgoraMain>
+    </div>
+    <FrameSaveModal :frame_src="selected_frame" ref="modal"></FrameSaveModal>
   </div>
 </template>
 
 <script>
 import Viewer from "../viewer/viewer";
+import FrameSaveModal from "./FrameSaveModal";
+import AgoraMain from "./shared/AgoraMain";
 
 export default {
   name: "ViewerPage",
+  components: { FrameSaveModal, AgoraMain },
   data() {
     return {
-      viewer: {}
-    }
+      viewer: {},
+      selected_frame: ""
+    };
   },
   mounted() {
-    this.viewer = new Viewer({xml_src: '/static/books/test.xml', listClick: this.listClick, agoraClick: this.agoraClick, canvas_width: 400, canvas_height: 600});
+    this.viewer = new Viewer({
+      xml_src: "/static/books/test.xml",
+      listClick: this.listClick,
+      agoraClick: this.agoraClick,
+      canvas_width: 500,
+      canvas_height: 750
+    });
 
     this.viewer.show();
   },
@@ -28,14 +74,17 @@ export default {
     back() {
       this.viewer.back();
     },
-    listClick() {
-      alert('listClick!!!');
+    listClick(e) {
+      this.selected_frame = e.currentTarget.parentElement.getAttribute(
+        "frame_src"
+      );
+      this.$refs.modal.show();
     },
     agoraClick() {
-      alert('agoraClick!!!');
+      alert("agoraClick!!!");
     }
   }
-}
+};
 </script>
 
 <style scoped>
