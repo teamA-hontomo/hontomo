@@ -68,6 +68,16 @@ export default {
     };
   },
 
+  created() {
+    this.id = this.$route.params.id;
+    this.db = firebase.firestore();
+    this.getListFromListId(this.id).then((returnedlist) => {
+      this.list = returnedlist;
+    });
+    //コマの情報取得
+    this.frames = this.getFramesFromList(this.id);
+  },
+
   computed: {
     starColor: function () {
       if (this.followed) {
@@ -76,6 +86,7 @@ export default {
         return { yellowStar: false };
       }
     },
+
     openStatus: function () {
       if (this.open) {
         return "公開";
