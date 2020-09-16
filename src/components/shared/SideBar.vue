@@ -37,20 +37,23 @@
     </router-link>
   </div>
 </template>
+
 <script>
 export default {
   data: function () {
     return {
       list: [
-        { name: "お気に入り", id: "favorite" },
-        { name: "リスト1", id: 1 },
-        { name: "リスト2", id: 2 },
-        { name: "リスト3", id: 3 },
+        { name: "お気に入り", id: "EjF12B6bV3sIfqip9yQH" },
+        { name: "リスト1", id: "jTCoI4Do2gB4fnXE4b2B" },
+        { name: "test", id: "LYzgV30h8RwuxkMjU9ZP" },
       ],
     };
   },
 };
 </script>
+
+
+
 <style scoped>
 hr {
   border-top: 1px solid #eeeeee;
