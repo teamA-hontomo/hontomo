@@ -1,6 +1,6 @@
 <template>
   <div class="card" :class="{'my-message':isMyMessage}">
-    <div class="card-body">
+    <div class="card-body" :class="{'bg-success':isAuthor}">
       <h5 class="card-title">{{writerName}}</h5>
       <p>{{message.text}}</p>
       <span>{{getDate}}</span>
@@ -17,6 +17,7 @@ export default {
     return {
       writerName: "",
       isMyMessage: false,
+      isAuthor: true,
       currentUser: {
         id: "YJvLYXKuOw2hMddumjL7",
         //id:"4oFo1QKy3X8wGwuGx98h"
@@ -29,6 +30,7 @@ export default {
       this.writerName = user.name;
     });
     this.isMyMessage = this.message.userId == this.currentUser.id;
+    this.isAuthor = this.message.userId == "4oFo1QKy3X8wGwuGx98h";//authorのidをとってこれるように
   },
 
   computed: {
