@@ -4,7 +4,7 @@
       <h1>動作確認用ページ</h1>新規リスト作成
       <CreateList />
       <hr />
-
+      <button @click="openAgora" class="btn btn-primary">アゴラを開く</button>
       <!-- <div>
         <p>所有しているリスト一覧</p>
         <ul>
@@ -78,7 +78,7 @@ export default {
       listId: "3XAbHkY5hnkk8YLNyMXp",
       imageName: "frames/ブラックジャックによろしく1.jpg",
       imagePath: "",
-      showAgora: true,
+      showAgora: false,
     };
   },
 
@@ -108,8 +108,12 @@ export default {
     },
 
     closeAgora() {
-      this.showAgora = !this.showAgora;
+      this.showAgora = false;
     },
+
+    openAgora(){
+      this.showAgora = true;
+    }
   },
 };
 </script>
