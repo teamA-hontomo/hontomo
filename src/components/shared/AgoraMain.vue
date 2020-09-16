@@ -1,8 +1,21 @@
 <template>
   <div class="agora">
-    <h3 class="agora-title">Agora</h3>
-    <div v-for="message in messages" :key="message.id">
-      <Message :message="message" />
+    <div class="row">
+      <div class="col-1">
+        <font-awesome-icon icon="times" class="fa-2x mx-auto my-auto" v-on:click="closeAgora" />
+      </div>
+      <div class="col-11">
+        <h3 class="agora-title">Agora</h3>
+      </div>
+    </div>
+
+    <div v-show="isMessageExist">
+      <div v-for="message in messages" :key="message.id">
+        <Message :message="message" />
+      </div>
+    </div>
+    <div v-show="!isMessageExist">
+      <p>まだこのコマにはメッセージがありません</p>
     </div>
     <div class="input-group">
       <textarea class="form-control" v-model="newMessage" placeholder="メッセージを追加"></textarea>
@@ -59,8 +72,8 @@ export default {
   },
 
   created() {
-    //this.messages = this.recieveMesage(this.frameId);
     this.messages = this.recieveMesage(this.frameId);
+    //this.messages = this.newrecieveMesage(this.frameId);
     console.debug(this.messages);
   },
 
@@ -75,12 +88,22 @@ export default {
       //メッセージボックスを空にする
       this.newMessage="";
     },
+
+    closeAgora() {
+      this.$emit("fromAgora");
+    },
+  },
+
+  computed: {
+    isMessageExist() {
+      return this.messages.length > 0;
+    },
   },
 
   mounted(){
     this.db.collection("messages").onSnapshot(()=>{
-      //this.messages = this.recieveMesage(this.frameId);
-      this.messages = this.newrecieveMesage(this.frameId);
+      this.messages = this.recieveMesage(this.frameId);
+      //this.messages = this.newrecieveMesage(this.frameId);
     })
   }
 };

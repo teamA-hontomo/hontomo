@@ -18,7 +18,7 @@ export default new Router({
       component: Top
     },
     {
-      path: "/view",
+      path: "/view/:xml_src",
       name: "View",
       component: View
     },

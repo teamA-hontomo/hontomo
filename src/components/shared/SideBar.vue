@@ -23,10 +23,14 @@
       <span>リスト一覧</span>
     </router-link>
     <ul class='nav flex-column'>
-      <li v-for='l in list.slice(0, 3)' v-bind:key='l.id' class='nav-item'>
-        <router-link :to='{ name: "List", params: { id: l.id } }' class='nav-link'>
-          <font-awesome-icon icon='heart' class='fa-lg' v-show='l.id === "favorite"' />
-          <span>{{ l.name }}</span>
+      <li
+        v-for='i in Array.from(Array(favoriteLists.length), (v, k)=> k)'
+        v-bind:key='i'
+        class='nav-item'
+      >
+        <router-link :to='{ name: "List", params: { id: favoriteLists[i] } }' class='nav-link'>
+          <font-awesome-icon icon='heart' class='fa-lg' v-show='favoriteLists[i] === "favorite"' />
+          <span>{{ favoriteListsNames[i] }}</span>
         </router-link>
       </li>
     </ul>
@@ -39,17 +43,41 @@
 </template>
 
 <script>
+import firebase from "firebase";
+import "firebase/firestore";
 export default {
   data: function () {
     return {
-      list: [
-        { name: "お気に入り", id: "EjF12B6bV3sIfqip9yQH" },
-        { name: "リスト1", id: "jTCoI4Do2gB4fnXE4b2B" },
-      ],
+      db: "",
+      favoriteLists: [],
+      favoriteListsNames: [],
+      userId: "4oFo1QKy3X8wGwuGx98h", //TODO:ハードコーディング
     };
+  },
+
+  created() {
+    this.db = firebase.firestore();
+    let userDoc = this.db.collection("users").doc(this.userId);
+    userDoc.get().then((user) => {
+      this.favoriteLists = user.data().lists.slice(0, 3);
+      //console.log(this.favoriteLists);
+      let self = this;
+      let listsRef = this.db.collection("lists");
+      listsRef
+        .where("id", "in", this.favoriteLists)
+        .get()
+        .then((docs) => {
+          docs.forEach((doc) => {
+            self.favoriteListsNames.push(doc.data().name);
+          });
+        });
+      //console.log(this.favoriteListsNames);
+    });
   },
 };
 </script>
+
+
 
 <style scoped>
 hr {
