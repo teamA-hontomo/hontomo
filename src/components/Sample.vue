@@ -44,9 +44,6 @@
         <span>このコマを「{{ ownedLists[0].name }}」に</span>
         <button @click="addFrameToList()" type="button">追加</button>
       </div>
-<<<<<<< HEAD
-      <p>debug用 {{ imagesArray }}</p>
-=======
       <hr />
       <div>
         <span>「{{ ownedLists[0].name }}」に登録されているコマ一覧</span>
@@ -58,7 +55,6 @@
     </div>
     <div class="col-4" v-show="showAgora">
       <AgoraMain @fromAgora="closeAgora"></AgoraMain>
->>>>>>> 82bebad0a8f99432b2d3d367c12421d6b3b93fd7
     </div>
   </div>
 </template>
