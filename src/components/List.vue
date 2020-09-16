@@ -2,7 +2,7 @@
   <div id='list'>
     <TitleBox>
       <span class='mx-auto my-auto'>{{ name }}</span>
-      <StarButton :list='listInfo' :userId='userId' />
+      <StarButton :list='listInfo' :userId='userId'/>
       <button v-on:click='openModal' v-if='open' class='btn btn-success'>公開</button>
       <button v-on:click='openModal' v-if='!open' class='btn btn-danger'>非公開</button>
     </TitleBox>
@@ -56,7 +56,7 @@ export default {
       listInfo: {},
       open: true,
       rating: 5,
-      name: "リストサンプルタイトル",
+      name: "",
       followed: false,
       showModal: false,
       openingImg: "",
@@ -74,8 +74,16 @@ export default {
     this.getListFromListId(this.id).then((returnedlist) => {
       this.list = returnedlist;
     });
+    this.hoge = this.recieveMessage("comics");
     //コマの情報取得
     this.frames = this.getFramesFromList(this.id);
+    this.db //TODO: utils
+      .collection("users")
+      .doc(this.userId)
+      .get()
+      .then((user) => {
+        this.followed = user.data().lists.includes(self.listId) ? true : false;
+      });
   },
 
   computed: {
@@ -148,22 +156,8 @@ export default {
     closeFrame: function () {
       this.showFrame = false;
     },
+
     setListInfo: function () {
-      let self = this;
-      this.listId = this.$route.params.id;
-      this.frames = this.getFramesFromList(self.listId);
-      let listInfo = "";
-      this.getListFromListId(this.listId).then(async (info) => {
-        let result = {};
-        await (function () {
-          console.log(info);
-          self.listInfo = info;
-        })();
-      });
-      this.name = this.listInfo.name;
-      this.open = this.listInfo.open;
-      this.rating = this.listInfo.rating;
-      this.ownerId = this.listInfo.ownerId;
       //すでにお気に入り登録済みかどうか
       this.db
         .collection("users")
@@ -179,8 +173,21 @@ export default {
 
   watch: {
     $route: function (val, oldVal) {
-      this.listId = val.params.id;
-      this.setListInfo();
+      this.id = val.params.id;
+      console.debug(this.id);
+      this.getListFromListId(this.id).then((returnedlist) => {
+        this.list = returnedlist;
+      });
+      this.frames = this.getFramesFromList(this.id);
+      this.db
+        .collection("users")
+        .doc(this.userId)
+        .get()
+        .then((user) => {
+          this.followed = user.data().lists.includes(self.listId)
+            ? true
+            : false;
+        });
     },
   },
 };
