@@ -219,12 +219,13 @@ export default {
     },
 
     //コマを指定してそのコマに対するメッセージの取得、ちゃんと動くか分かりません
-    recieveMesage(frame_id) {
+    recieveMesage(frame_id,count=10) {
       var returnMessages = [];
       this.db
         .collection("messages")
         .where("frame_id", "==", frame_id)
         .orderBy("created")
+        .limit(count)
         .get()
         .then(messages => {
           messages.forEach(message => {
