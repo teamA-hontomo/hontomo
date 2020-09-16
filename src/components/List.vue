@@ -1,37 +1,37 @@
 <template>
-  <div id='list'>
+  <div id="list">
     <TitleBox>
-      <span class='mx-auto my-auto'>{{ list.name }}</span>
-      <StarButton :list='list' :userId='userId' />
-      <button v-on:click='openModal' v-if='open' class='btn btn-success'>公開</button>
-      <button v-on:click='openModal' v-if='!open' class='btn btn-danger'>非公開</button>
+      <span class="mx-auto my-auto">{{ list.name }}</span>
+      <StarButton :list="list" :userId="userId" />
+      <button v-on:click="openModal" v-if="open" class="btn btn-success">公開</button>
+      <button v-on:click="openModal" v-if="!open" class="btn btn-danger">非公開</button>
     </TitleBox>
 
     <ContentsBox>
-      <div v-for='frame in this.frames' class='col-md-3' :key='Object.keys(frame)[0]'>
-        <div class='card'>
-          <img :src='require("../" + Object.values(frame)[0]["path"])' class='card-img-top' />
-          <div class='card-body'>
-            <p class='card-title'>{{Object.values(frame)[0]["title"]}}</p>
-            <p class='card-title'>
-              {{Object.values(frame)[0]["volume"]}}巻
-              /{{Object.values(frame)[0]["page"]}}ページ
+      <div v-for="frame in frames" class="col-md-3" :key="frame.addedTime">
+        <div class="card">
+          <img :src="require('../' + frame.path)" class="card-img-top" v-on:click="openFrame" />
+          <div class="card-body">
+            <p class="card-title">{{frame.title}}</p>
+            <p class="card-title">
+              {{frame.volume}}巻
+              /{{frame.page}}ページ
             </p>
           </div>
         </div>
       </div>
     </ContentsBox>
-    <ModalWindow v-show='showModal' v-on:fromModal='closeModal' :width='"20"' :height='"50"'>
-      <div class='mt-5 mx-auto'>
-        <h5 class='mx-auto font-weight-bold'>ただいまの設定は[{{ openStatus }}]です</h5>
-        <h5 class='mx-auto font-weight-bold'>変更してもよろしいですか？</h5>
-        <button v-show='open' v-on:click='changeOpen' class='btn btn-danger mx-auto mt-5'>非公開にする</button>
-        <button v-show='!open' v-on:click='changeOpen' class='btn btn-success mx-auto mt-5'>公開する</button>
+    <ModalWindow v-show="showModal" v-on:fromModal="closeModal" :width="'20'" :height="'50'">
+      <div class="mt-5 mx-auto">
+        <h5 class="mx-auto font-weight-bold">ただいまの設定は[{{ openStatus }}]です</h5>
+        <h5 class="mx-auto font-weight-bold">変更してもよろしいですか？</h5>
+        <button v-show="open" v-on:click="changeOpen" class="btn btn-danger mx-auto mt-5">非公開にする</button>
+        <button v-show="!open" v-on:click="changeOpen" class="btn btn-success mx-auto mt-5">公開する</button>
       </div>
     </ModalWindow>
 
-    <ModalWindow v-show='showFrame' v-on:fromModal='closeFrame' :width='"50"' :height='"50"'>
-      <img :src='openingImg' class='card-img-top' v-on:click='openFrame' />
+    <ModalWindow v-show="showFrame" v-on:fromModal="closeFrame" :width="'50'" :height="'50'">
+      <img :src="openingImg" class="card-img-top" v-on:click="openFrame" />
     </ModalWindow>
   </div>
 </template>
@@ -41,6 +41,8 @@ import TitleBox from "./shared/TitleBox.vue";
 import ContentsBox from "./shared/ContentsBox.vue";
 import ModalWindow from "./shared/ModalWindow.vue";
 import StarButton from "./shared/StarButton.vue";
+import firebase from "firebase";
+import "firebase/firestore";
 
 export default {
   data: function () {
@@ -51,11 +53,21 @@ export default {
       showModal: false,
       openingImg: "",
       showFrame: false,
-      listId: "EjF12B6bV3sIfqip9yQH",
       list: {},
-      owenerId: "",
       frames: [],
+      owenerId: "",
+      db: "",
     };
+  },
+
+  created() {
+    this.id = this.$route.params.id;
+    this.db = firebase.firestore();
+    this.getListFromListId(this.id).then((returnedlist) => {
+      this.list = returnedlist;
+    });
+    //コマの情報取得
+    this.frames = this.getFramesFromList(this.id);
   },
 
   computed: {
@@ -66,6 +78,7 @@ export default {
         return { yellowStar: false };
       }
     },
+
     openStatus: function () {
       if (this.open) {
         return "公開";
@@ -73,26 +86,6 @@ export default {
         return "非公開";
       }
     },
-    imagesArray: function () {
-      return this.getFramesFromList(this.listId);
-    },
-  },
-
-  created() {
-    /*this.getListFromListId(this.Id[this.id - 1]).then((returnedlist) => {
-      //console.log(returnedlist);
-      this.name = returnedlist.name;
-      this.date = returnedlist.created.toDate();
-      this.open = returnedlist.open;
-      this.owenerId = returnedlist.owenerId;
-      this.rating = returnedlist.rating;
-    });
-    */
-    this.frames = this.getFramesFromList(this.listId);
-    //コマの情報取得
-    //this.frames = this.getFramesFromList(this.list.id);
-    console.log(`debugだよ${this.frames}`);
-    console.log(this.frames);
   },
 
   components: {
@@ -148,6 +141,7 @@ export default {
       this.getListFromListId(this.id).then((returnedlist) => {
         this.list = returnedlist;
       });
+      this.frames = this.getFramesFromList(this.id);
     },
   },
 };
