@@ -24,7 +24,7 @@
     <ContentsBox>
       <div v-for='frame in frames' class='col-md-3' :key='frame.addedTime'>
         <div class='card'>
-          <img :src='require("../" + frame.path)' class='card-img-top' v-on:click='openFrame' />
+          <img :src='"/static/" + frame.path' class='card-img-top' v-on:click='openFrame' />
           <div class='card-body'>
             <p class='card-title'>{{frame.title}}</p>
             <p class='card-title'>
