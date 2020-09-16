@@ -1,6 +1,14 @@
 <template>
   <div class="agora">
-    <h3 class="agora-title">Agora</h3>
+    <div class="row">
+      <div class="col-1">
+        <font-awesome-icon icon="times" class="fa-2x mx-auto my-auto" v-on:click="closeAgora" />
+      </div>
+      <div class="col-11">
+        <h3 class="agora-title">Agora</h3>
+      </div>
+    </div>
+
     <div v-show="isMessageExist">
       <div v-for="message in messages" :key="message.id">
         <Message :message="message" />
@@ -49,6 +57,10 @@ export default {
         this.sendMessage(this.userId, this.newMessage, this.frameId);
         alert("メッセージを送信しました。");
       }
+    },
+
+    closeAgora() {
+      this.$emit("fromAgora");
     },
   },
 

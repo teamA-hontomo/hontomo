@@ -52,10 +52,10 @@
           {{image.title}}
         </div>
       </div>-->
-      </div>
-      <div class="col-4">
-        <AgoraMain></AgoraMain>
-      </div>
+    </div>
+    <div class="col-4" v-show="showAgora">
+      <AgoraMain @fromAgora="closeAgora"></AgoraMain>
+    </div>
   </div>
 </template>
 
@@ -78,6 +78,7 @@ export default {
       listId: "3XAbHkY5hnkk8YLNyMXp",
       imageName: "frames/ブラックジャックによろしく1.jpg",
       imagePath: "",
+      showAgora: true,
     };
   },
 
@@ -104,6 +105,10 @@ export default {
       this.setFrameToList(this.ownedLists[0].id, this.imageName);
       alert("画像をリストに追加しました。");
       this.$router.push("Top");
+    },
+
+    closeAgora() {
+      this.showAgora = !this.showAgora;
     },
   },
 };
