@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" :class="{'my-message':isMyMessage}">
     <div class="card-body">
       <h5 class="card-title">{{writerName}}</h5>
       <p>{{message.text}}</p>
@@ -16,6 +16,11 @@ export default {
   data() {
     return {
       writerName: "",
+      isMyMessage: false,
+      currentUser: {
+        id: "YJvLYXKuOw2hMddumjL7",
+        //id:"4oFo1QKy3X8wGwuGx98h"
+      },
     };
   },
 
@@ -23,6 +28,7 @@ export default {
     this.getUserById(this.message.userId).then((user) => {
       this.writerName = user.name;
     });
+    this.isMyMessage = this.message.userId == this.currentUser.id;
   },
 
   computed: {
@@ -42,7 +48,7 @@ export default {
   text-align: left;
 }
 .my-message {
-  margin-right: 1em;
-  margin-left: 0.5em;
+  margin-right: 0.5em;
+  margin-left: 3em;
 }
 </style>

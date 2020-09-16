@@ -30,7 +30,8 @@ export default {
     return {
       newMessage: "",
       frameId: "BDyb4dA26stiHHaMuPhM",
-      userId: "4oFo1QKy3X8wGwuGx98h",
+      // userId: "4oFo1QKy3X8wGwuGx98h",
+      userId: "YJvLYXKuOw2hMddumjL7",
       messages: [],
     };
   },
