@@ -117,7 +117,7 @@ export default {
 
     openAgora(){
       this.showAgora = true;
-    }
+    },
   },
 };
 </script>

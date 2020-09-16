@@ -26,17 +26,17 @@ export default {
       var newId = this.db.collection("lists").doc().id; //複数箇所でつかうので事前に取得。
       listData.id = newId;
       (listData.created = firebase.firestore.FieldValue.serverTimestamp()), //firebaseのサーバー時間を取得。
-      //listに追加
-      this.db
-        .collection("lists")
-        .doc(newId)
-        .set(listData)
-        .then(() => {
-          alert(listData.name + "を新規作成しました。");
-        })
-        .catch(() => {
-          alert(listData.name + "を作成するときにエラーが発生しました。");
-        });
+        //listに追加
+        this.db
+          .collection("lists")
+          .doc(newId)
+          .set(listData)
+          .then(() => {
+            alert(listData.name + "を新規作成しました。");
+          })
+          .catch(() => {
+            alert(listData.name + "を作成するときにエラーが発生しました。");
+          });
 
       //users/<currentUser>/listsのarrayに追加
       this.db
@@ -106,11 +106,14 @@ export default {
       this.db
         .collection("lists")
         .doc(listId)
-        .set({
-          name: newName
-        }, {
-          merge: true
-        })
+        .set(
+          {
+            name: newName
+          },
+          {
+            merge: true
+          }
+        )
         .then(() => {});
     },
 
@@ -214,12 +217,13 @@ export default {
           created: firebase.firestore.FieldValue.serverTimestamp(),
           id: newId,
           report: 0,
+          good:0,
           frame_id: frame_id
         });
     },
 
     //コマを指定してそのコマに対するメッセージの取得、ちゃんと動くか分かりません
-    recieveMesage(frame_id,count=10) {
+    recieveMessage(frame_id,count=10) {
       var returnMessages = [];
       this.db
         .collection("messages")
@@ -235,6 +239,26 @@ export default {
 
       return returnMessages;
     },
+
+    newrecieveMessage(frame_id,count=10) {
+      var returnMessages = [];
+      this.db
+        .collection("messages")
+        .where("frame_id", "==", frame_id)
+        .orderBy("created","desc")
+        .limit(count)
+        .get()
+        .then(messages => {
+          messages.forEach(message => {
+            returnMessages.push(message.data());
+          });
+        });
+
+      return returnMessages;
+    },
+
+
+
 
     //メッセージを通報、reportの値を1増やす
     reportMessage(messageId) {
@@ -273,5 +297,6 @@ export default {
         });
       return target;
     }
-  }
+  },
+
 };

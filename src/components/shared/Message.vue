@@ -4,6 +4,11 @@
       <h5 class="card-title">{{writerName}}</h5>
       <p>{{message.text}}</p>
       <span>{{getDate}}</span>
+      <div class="row">
+      </div><!--
+      <button v-on:click='openModal' class='btn btn-success'>返信</button>
+      <button v-on:click='openThread' class='btn btn-primary'>スレッドを表示</button>
+      -->
     </div>
   </div>
 </template>
@@ -22,6 +27,20 @@ export default {
         //id:"4oFo1QKy3X8wGwuGx98h"
       },
     };
+  },
+
+  methods: {
+    openModal: function () {
+      this.showModal = true;
+    },
+
+    onClick: function () {
+      this.open = !this.open;
+    },
+
+    closeModal: function () {
+      this.showModal = false;
+    },
   },
 
   created() {
@@ -50,5 +69,9 @@ export default {
 .my-message {
   margin-right: 0.5em;
   margin-left: 3em;
+}
+.author-message{
+  -color: salmon;
+
 }
 </style>
