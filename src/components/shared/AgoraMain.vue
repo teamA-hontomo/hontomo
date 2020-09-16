@@ -1,6 +1,6 @@
 <template>
   <div class="agora">
-    <p>Agora</p>
+    <h3 class="agora-title">Agora</h3>
 
     <div v-for="message in messages" :key="message.id">
       <Message :message="message" />
@@ -68,6 +68,11 @@ export default {
   overflow-y: scroll;
   background-color: #656565;
 }
+
+.agora-title {
+  margin: 0.5em;
+}
+
 .submit-button {
   background-color: #af3d3d;
 }

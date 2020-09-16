@@ -1,11 +1,9 @@
 <template>
   <div class="card">
     <div class="card-body">
+      <h5 class="card-title">{{writerName}}</h5>
       <p>{{message.text}}</p>
-      <p>{{message.id}}</p>
-      <p>名前:{{writerName}}</p>
-      <p>{{message.userId}}</p>
-      <p>{{message.created}}</p>
+      <span>{{message.created}}</span>
     </div>
   </div>
 </template>
@@ -30,8 +28,15 @@ export default {
 </script>
 
 <style scoped>
+.card {
+  margin: 2em 3em 1em 0.5em;
+}
 .card-body {
   color: black;
   text-align: left;
+}
+.my-message {
+  margin-right:1em;
+  margin-left: 0.5em;
 }
 </style>

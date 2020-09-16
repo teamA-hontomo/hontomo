@@ -5,7 +5,7 @@
       <CreateList />
       <hr />
 
-      <div>
+      <!-- <div>
         <p>所有しているリスト一覧</p>
         <ul>
           <li v-for="list in ownedLists" :key="list.id">
@@ -51,11 +51,11 @@
           <img :src="image.path" />
           {{image.title}}
         </div>
+      </div>-->
       </div>
-    </div>
-    <div class="col-4">
-      <AgoraMain></AgoraMain>
-    </div>
+      <div class="col-4">
+        <AgoraMain></AgoraMain>
+      </div>
   </div>
 </template>
 
