@@ -1,8 +1,10 @@
 <template>
   <div id='sidebar'>
     <ul class='nav flex-column'>
-      <li class='nav-item'>
-        <router-link :to='{ name: "Top" }' class='nav-link disable-router-link-active'>ほんとも</router-link>
+      <li class='nav-brand'>
+        <router-link :to='{ name: "Top" }' class='my-auto mx-auto disable-router-link-active'>
+          <img src='/static/logo/hontomo_logo.png' width='100' height='35' class='my-3' />
+        </router-link>
       </li>
       <li class='nav-item'>
         <router-link :to='{ name: "Top" }' class='nav-link'>
@@ -39,7 +41,7 @@
       <font-awesome-icon icon='globe-asia' class='fa-lg' />
       <span>みんなのリスト</span>
     </router-link>
-     <hr />
+    <hr />
     <router-link :to='{ name: "AuthorIndex" }' class='nav-link'>
       <font-awesome-icon icon='pen-fancy' class='fa-lg' />
       <span>作者一覧</span>
@@ -85,7 +87,6 @@ export default {
 
 
 <style scoped>
-
 hr {
   border-top: 1px solid #eeeeee;
 }
