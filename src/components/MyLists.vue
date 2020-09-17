@@ -31,7 +31,7 @@ export default {
   },
 
   created() {
-    this.myLists = this.getOwnedListsFromUserId(this.userId);
+    this.myLists = this.getSubscribedListsFromUserId(this.userId);
   },
 };
 </script>
