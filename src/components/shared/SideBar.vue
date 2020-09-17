@@ -62,7 +62,7 @@ export default {
   },
 
   mounted() {
-    this.db.collection("lists").onSnapshot(() => {
+    this.db.collection("users").doc(this.userId).onSnapshot(() => {
       this.favoriteLists = this.getSubscribedListsFromUserId(this.userId);
     });
   },
