@@ -1,9 +1,11 @@
 <template>
-  <div class="card" :class="{'my-message':isMyMessage}">
+  <div class="card" :class="{'bg-success':isAuthor}">
+
     <div class="card-body">
       <h5 class="card-title">{{writerName}}</h5>
       <p>{{message.text}}</p>
       <span>{{getDate}}</span>
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -17,18 +19,27 @@ export default {
     return {
       writerName: "",
       isMyMessage: false,
+      isAuthor: false,
+      userdata:{},
       currentUser: {
         //id: "YJvLYXKuOw2hMddumjL7",
-        id:"4oFo1QKy3X8wGwuGx98h"
+        //id:"4oFo1QKy3X8wGwuGx98h",
+        id:"70fMKGbfmGdqMOnpZwwv"
       },
+      followed: false,
+      good: 0,
     };
   },
 
   created() {
     this.getUserById(this.message.userId).then((user) => {
       this.writerName = user.name;
+      this.isAuthor = user.isAuthor
     });
     this.isMyMessage = this.message.userId == this.currentUser.id;
+    console.log("debugだよ"+this.isAuthor)
+
+
   },
 
   computed: {
@@ -50,5 +61,8 @@ export default {
 .my-message {
   margin-right: 0.5em;
   margin-left: 3em;
+}
+.author-message{
+
 }
 </style>

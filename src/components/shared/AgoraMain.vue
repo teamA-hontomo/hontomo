@@ -11,7 +11,15 @@
 
     <div v-show="isMessageExist">
       <div v-for="message in messages" :key="message.id">
-        <Message :message="message" />
+        <Message :message="message"> 
+         <!-- <font-awesome-icon
+            icon='thumbs-up'
+            class='fa-lg'
+            v-on:click='onClickGood(message.id)'
+          />
+           <span>{{ message.good }}</span>
+           -->
+          </Message>
       </div>
     </div>
     <div v-show="!isMessageExist">
@@ -40,18 +48,40 @@ export default {
     return {
       newMessage: "",
       frameId: "BDyb4dA26stiHHaMuPhM",
-      //userId: "4oFo1QKy3X8wGwuGx98h",
-      userId: "public",
+      userId: "4oFo1QKy3X8wGwuGx98h",
+      //userId: "public",
       db: null,
+      isAuthor : false,
       messages: [
       ],
+      author_mes:[
+      ],
+      user_mes:[
+
+      ]
+
     };
   },
 
   created() {
-    this.messages = this.recieveMessage(this.frameId);
-    console.debug(this.messages);
+    this.messages = this.recieveMessage(this.frameId,10);
+    for (var message in this.messages){
+      this.getUserById(self.message.userId).then((user) => {
+      this.isAuthor = message.isAuthor
+      });
+      if(isAuthor){
+        author_mes.push(self.message);
+      }
+      else{
+        user_mes.push(self.message);
+      }
+
+    }
+
+    console.log(this.messag);
+
   },
+  
 
   methods: {
     submitMessage() {
@@ -69,18 +99,45 @@ export default {
       this.$emit("fromAgora");
     },
 
+    onClickGood(messageid) {
+
+      this.goodMessage(messageid,this.userId);
+    },
+
+    goodColor(messageid) {
+      var fav = true;
+      this.db
+      .collection("users")
+      .doc(this.userId)
+      .get()
+      .then((user) => {
+        fav = user.data().messages.includes(messageid) ? true : false;
+        console.log(fav)
+        if (fav) {
+        return { clickedGood: true };
+      } else {
+        return { clickedGood: false };
+      }
+        
+      });
+
+    },
+
+
+
   },
 
   computed: {
     isMessageExist() {
       return this.messages.length > 0;
     },
+
   },
 
   mounted(){
-    this.db.collection("messages").onSnapshot(()=>{
-      this.messages = this.recieveMessage(this.frameId,10);
-    })
+    /*this.db.collection("messages").onSnapshot(()=>{
+      this.messages = this.recieveMessage(this.frameId,20);
+    })*/
   }
 };
 </script>
@@ -99,4 +156,9 @@ export default {
 .submit-button {
   background-color: #af3d3d;
 }
+
+.clickedGood {
+  color: blue;
+}
+
 </style>
