@@ -324,6 +324,7 @@ export default {
         .then( user => {
           lists = user.data().lists;
         });
+        
 
         return (lists.includes(list_id));
       },

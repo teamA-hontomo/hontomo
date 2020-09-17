@@ -51,7 +51,7 @@ export default {
   },
   computed: {
     filteredLists() {
-      console.log(this.lists);
+      // console.log('hoge');
       return this.lists.filter((list) => {
         return list.name.indexOf(this.searchWord) !== -1;
       });
@@ -63,8 +63,7 @@ export default {
   async created() {
     // this.db = firebase.firestore();
     console.log("fetch lists");
-    this.lists = this.getListsOrderByRating();
-    
+    this.lists = await this.getListsOrderByRating();
     console.log("this.lists", this.lists);
     // this.frames = this.getFramesFromList(this.id);
   },
