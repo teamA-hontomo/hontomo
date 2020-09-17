@@ -7,8 +7,20 @@
     <ContentsBox class="mt-3">
       <h2 class="my-3">人気のリスト一覧</h2>
       <ul id="v-for-object" class="cards-list">
-        <li v-for="list in filteredLists" :key="list.id">
-          <router-link :to='{ name: "List", params: { id: list.id } }' class='nav-link'>
+        <li
+          v-for="list in filteredLists.sort(function(a, b) {
+            if (a.rating > b.rating) {
+              return -1;
+            } else {
+              return 1;
+            }
+          })"
+          :key="list.id"
+        >
+          <router-link
+            :to="{ name: 'List', params: { id: list.id } }"
+            class="nav-link"
+          >
             <div class="list-card mt-3">
               <img :src="'../../' + list.cover_path" />
               <p class="ttl" v-text="list.name"></p>
