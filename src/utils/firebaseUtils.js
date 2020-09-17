@@ -79,7 +79,7 @@ export default {
       this.db
         .collection("lists")
         .where("ownerId", "==", userId)
-        .where("open","==",true)
+        .where("open", "==", true)
         .get()
         .then(lists => {
           lists.forEach(list => {
@@ -258,7 +258,7 @@ export default {
 
     // 公開リストをレーティング順に取得する
     async getListsOrderByRating() {
-      const returnLists =[];
+      const returnLists = [];
 
       await this.db
         .collection("lists")
@@ -270,8 +270,8 @@ export default {
             returnLists.push(list.data());
           });
         });
-        return returnLists;
-        
+      return returnLists;
+
     },
     //ユーザー情報をIDから取得
     //@param userId
@@ -305,7 +305,7 @@ export default {
           report: 0,
           good: 0,
           frame_id: frameId,
-          flameId: flameId
+          frameId: frameId
         }).catch((err) => {
           alert("メッセージの送信でエラーが発生しました")
           console.warn("errorFU13", err)
@@ -331,7 +331,7 @@ export default {
           alert("メッセージの取得でエラーが発生しました")
           console.warn("errorFU14", err)
         });
-        return returnMessages;
+      return returnMessages;
     },
 
     // ユーザがいいねしたリストであれば true を返す。　要でばltぐ
@@ -341,14 +341,14 @@ export default {
         .collection("users")
         .doc(user_id)
         .get()
-        .then( user => {
+        .then(user => {
           lists = user.data().lists;
         });
-        
 
-        return (lists.includes(list_id));
-      },
-      
+
+      return (lists.includes(list_id));
+    },
+
     //メッセージを通報、reportの値を1増やす
     //@param messageId
     //@return null
