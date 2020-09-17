@@ -36,7 +36,9 @@
           <div v-for="work in author.works" class="col-md-3" :key="work">
             <div class="card">
               <div class="card-body">
-                <p class="card-title">{{work}}</p>
+                <img :src="'/static/'+work.thumbnailPath" class="card-img-top" />
+                <p class="card-title">{{work.title}}</p>
+                <p>{{work.description}}</p>
               </div>
             </div>
           </div>
@@ -117,7 +119,7 @@ export default {
     this.getUserById(this.id).then((user) => (this.author = user));
     this.interviews = this.getInterviewsByUserId(this.id);
     this.lists = this.getOwnedOpenListsFromUserId(this.id);
-    this.messages =this.getMessagesByUserId(this.id)
+    this.messages = this.getMessagesByUserId(this.id);
   },
 };
 </script>
