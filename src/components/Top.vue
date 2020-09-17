@@ -43,10 +43,7 @@
         <div class="card mx-auto">
           <div class="row no-gutters">
             <div class="col-md-6">
-              <img
-                :src="openingImgPath"
-                class="card-img-top mx-auto my-auto"
-              />
+              <img :src="openingImgPath" class="card-img-top mx-auto my-auto" />
             </div>
             <div class="col-md-6 my-auto mx-auto">
               <p>{{ openingImg.title }} {{ openingImg.volume }}巻</p>
@@ -75,39 +72,39 @@ export default {
       userComics: [
         {
           id: 1,
-          title: "鬼滅の刃",
+          title: "ブラックジャックによろしく",
           volume: "1",
-          publisher: "集英社",
-          author: "吾峠呼世晴",
-          coverPath: "/static/covers/id_1_kimetu_no_yaiba_1.jpg",
-          xml_src: "test_xml"
+          publisher: "モーニングKC",
+          author: "佐藤秀峰",
+          coverPath: "/static/covers/id_1_bj_1.jpg",
+          xml_src: "bj_xml"
         },
         {
           id: 2,
-          title: "鬼滅の刃",
+          title: "ブラックジャックによろしく",
           volume: "2",
-          publisher: "集英社",
-          author: "吾峠呼世晴",
-          coverPath: "/static/covers/id_2_kimetu_no_yaiba_2.jpg",
-          xml_src: "test_xml"
+          publisher: "モーニングKC",
+          author: "佐藤秀峰",
+          coverPath: "/static/covers/id_2_bj_2.jpg",
+          xml_src: "bj_xml"
         },
         {
           id: 3,
-          title: "鬼滅の刃",
+          title: "ブラックジャックによろしく",
           volume: "3",
-          publisher: "集英社",
-          author: "吾峠呼世晴",
-          coverPath: "/static/covers/id_3_kimetu_no_yaiba_3.jpg",
-          xml_src: "test_xml"
+          publisher: "モーニングKC",
+          author: "佐藤秀峰",
+          coverPath: "/static/covers/id_3_bj_3.jpg",
+          xml_src: "bj_xml"
         },
         {
           id: 4,
-          title: "鬼滅の刃",
+          title: "ブラックジャックによろしく",
           volume: "4",
-          publisher: "集英社",
-          author: "吾峠呼世晴",
-          coverPath: "/static/covers/id_4_kimetu_no_yaiba_4.jpg",
-          xml_src: "test_xml"
+          publisher: "モーニングKC",
+          author: "佐藤秀峰",
+          coverPath: "/static/covers/id_4_bj_4.jpg",
+          xml_src: "bj_xml"
         }
       ],
       showDetail: false,
