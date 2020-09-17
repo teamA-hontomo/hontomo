@@ -44,16 +44,16 @@
           <div class="row no-gutters">
             <div class="col-md-6">
               <img
-                :src="this.openingImgPath"
+                :src="openingImgPath"
                 class="card-img-top mx-auto my-auto"
               />
             </div>
             <div class="col-md-6 my-auto mx-auto">
-              <p>{{ this.openingImg.title }} {{ this.openingImg.volume }}巻</p>
-              <p>著者 : {{ this.openingImg.author }}</p>
-              <p>出版社: {{ this.openingImg.publisher }}</p>
+              <p>{{ openingImg.title }} {{ openingImg.volume }}巻</p>
+              <p>著者 : {{ openingImg.author }}</p>
+              <p>出版社: {{ openingImg.publisher }}</p>
               <button
-                v-on:click="openViewer(this.openingImg.id)"
+                v-on:click="openViewer(openingImg.id)"
                 class="btn btn-danger mt-3"
               >
                 読む
@@ -116,6 +116,7 @@ export default {
       xml_src: ""
     };
   },
+
   methods: {
     openDetail: function(event) {
       this.showDetail = true;
@@ -129,9 +130,9 @@ export default {
     },
     openViewer: function(comicId) {
       this.$router.push({ name: "View", params: { xml_src: this.xml_src } });
-      return true;
     }
   },
+
   components: {
     TitleBox,
     ContentsBox,
