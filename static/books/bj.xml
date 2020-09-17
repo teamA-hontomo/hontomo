@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document>
+    <book>
+        <meta></meta>
+        <pages>
+            <page>
+                <frame src="bj1-1.png">
+                    <position top="0" right="0" width="500" height="225">
+                    </position>
+                </frame>
+                <frame src="bj1-2.png">
+                    <position top="250" right="0" width="500" height="245">
+                    </position>
+                </frame>
+                <frame src="bj1-3.png">
+                    <position top="540" right="0" width="500" height="138">
+                    </position>
+                </frame>
+            </page>
+            <page>
+                <frame src="bj2-1.png">
+                    <position top="0" right="0" width="500" height="700">
+                    </position>
+                </frame>
+            </page>
+            <page>
+                <frame src="bj3-1.png">
+                    <position top="0" right="0" width="500" height="700">
+                    </position>
+                </frame>
+            </page>
+            <page>
+                <frame src="bj4-1.png">
+                    <position top="0" right="0" width="500" height="700">
+                    </position>
+                </frame>
+            </page>
+        </pages>
+    </book>
+</Document>

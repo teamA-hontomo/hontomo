@@ -59,11 +59,11 @@ export default {
   },
   mounted() {
     this.viewer = new Viewer({
-      xml_src: "/static/books/test.xml",
+      xml_src: "/static/books/bj.xml",
       listClick: this.listClick,
       agoraClick: this.agoraClick,
       canvas_width: 500,
-      canvas_height: 750
+      canvas_height: 700
     });
 
     this.viewer.show();
