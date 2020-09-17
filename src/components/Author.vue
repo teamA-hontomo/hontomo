@@ -1,18 +1,20 @@
 <template>
   <div>
     <TitleBox>
-      <h1 class="mx-auto my-auto">{{author.name}}の詳細ページ</h1>
+      <h1 class="mx-auto my-auto">
+        <UserIcon ::is_author="true" :num="author.num" />
+        {{author.name}}
+      </h1>
     </TitleBox>
     <div>
       <div>
         <h1>記事一覧</h1>
-        <div v-show="interviews">
+        <div v-show="interviews.length!=0">
           <ContentsBox>
             <div v-for="interview in interviews" class="col-md-3" :key="interview.id">
               <div class="card">
                 <div class="card-body">
                   <p class="card-title">{{interview.title}}</p>
-                  <p>{{interview.id}}</p>
                 </div>
               </div>
             </div>
@@ -38,17 +40,24 @@
       </div>
       <div>
         <h1>リスト</h1>
-        <ContentsBox>
-          <div v-for="list in lists" class="col-md-3" :key="list.id">
-            <div class="card">
-              <div class="card-body">
-                <p class="card-title">
-                  <router-link :to="'/list/'+list.id">{{list.name}}</router-link>
-                </p>
+        <div v-show="lists.length!=0">
+          <ContentsBox>
+            <div v-for="list in lists" class="col-md-3" :key="list.id">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title">
+                    <router-link :to="'/list/'+list.id">{{list.name}}</router-link>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </ContentsBox>
+          </ContentsBox>
+        </div>
+        <div v-show="lists.length==0">
+          <ContentsBox>
+            <p>まだリストがありません</p>
+          </ContentsBox>
+        </div>
       </div>
     </div>
   </div>
@@ -57,6 +66,7 @@
 <script>
 import TitleBox from "./shared/TitleBox.vue";
 import ContentsBox from "./shared/ContentsBox.vue";
+import UserIcon from "./shared/UserIcon.vue";
 
 export default {
   name: "Author",
@@ -64,6 +74,7 @@ export default {
   components: {
     TitleBox,
     ContentsBox,
+    UserIcon,
   },
 
   data() {
