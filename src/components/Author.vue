@@ -13,19 +13,14 @@
         <h1 class="mt-3">記事一覧</h1>
         <div v-show="interviews.length != 0">
           <ContentsBox>
-            <div
-              v-for="interview in interviews"
-              class="col-md-3"
-              :key="interview.id"
-            >
+            <div v-for="interview in interviews" class="col-md-3" :key="interview.id">
               <div class="card">
                 <div class="card-body">
                   <p class="card-title">
                     <router-link
                       :to="'/authors/' + id + '/interview/' + interview.id"
                       class="link"
-                      >{{ interview.title }}</router-link
-                    >
+                    >{{ interview.title }}</router-link>
                   </p>
                 </div>
               </div>
@@ -41,13 +36,10 @@
       <div>
         <h1 class="mt-3">作品</h1>
         <ContentsBox>
-          <div v-for="work in author.works" class="col-md-3" :key="work">
+          <div v-for="work in author.works" class="col-md-3" :key="work.title">
             <div class="card">
               <div class="card-body">
-                <img
-                  :src="'/static/' + work.thumbnailPath"
-                  class="card-img-top"
-                />
+                <img :src="'/static/' + work.thumbnailPath" class="card-img-top" />
                 <p class="card-title">{{ work.title }}</p>
                 <p class="description">{{ work.description }}</p>
               </div>
@@ -63,9 +55,11 @@
               <div class="card">
                 <div class="card-body">
                   <p class="card-title">
-                    <router-link :to="'/list/' + list.id">{{
+                    <router-link :to="'/list/' + list.id">
+                      {{
                       list.name
-                    }}</router-link>
+                      }}
+                    </router-link>
                   </p>
                 </div>
               </div>
@@ -82,18 +76,17 @@
         <h1 class="mt-3">コメント</h1>
         <div v-show="messages.length != 0">
           <ContentsBox>
-            <div
-              v-for="interview in interviews"
-              class="col-md-3"
-              :key="interview.id"
-            >
+            <div v-for="message in messages" class="col-md-3" :key="message.id">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-title">
-                    <router-link
-                      :to="'/authors/' + id + '/interview/' + interview.id"
-                      >{{ interview.title }}</router-link
-                    >
+                  <img :src="'/static/frames/' + message.frame_id" class="card-img-top" />
+                  <p class="card-title">{{ message.text }}</p>
+                  <p>
+                    {{String(message.created.toDate().getFullYear()) +
+                    "/" +
+                    String(message.created.toDate().getMonth() + 1) +
+                    "/" +
+                    String(message.created.toDate().getDate())}}
                   </p>
                 </div>
               </div>
@@ -121,7 +114,7 @@ export default {
   components: {
     TitleBox,
     ContentsBox,
-    UserIcon
+    UserIcon,
   },
 
   data() {
@@ -130,17 +123,17 @@ export default {
       author: {},
       interviews: [],
       lists: [],
-      messages: []
+      messages: [],
     };
   },
 
   created() {
     this.id = this.$route.params.id;
-    this.getUserById(this.id).then(user => (this.author = user));
+    this.getUserById(this.id).then((user) => (this.author = user));
     this.interviews = this.getInterviewsByUserId(this.id);
     this.lists = this.getOwnedOpenListsFromUserId(this.id);
     this.messages = this.getMessagesByUserId(this.id);
-  }
+  },
 };
 </script>
 
