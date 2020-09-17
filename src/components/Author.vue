@@ -3,7 +3,6 @@
     <TitleBox>
       <h1 class="mx-auto my-auto">{{author.name}}の詳細ページ</h1>
     </TitleBox>
-    id:{{id}}
     <div>
       <div>
         <h1>記事一覧</h1>
@@ -26,12 +25,26 @@
         </div>
       </div>
       <div>
-        <h1>この作者の作品</h1>
+        <h1>作品</h1>
         <ContentsBox>
           <div v-for="work in author.works" class="col-md-3" :key="work">
             <div class="card">
               <div class="card-body">
                 <p class="card-title">{{work}}</p>
+              </div>
+            </div>
+          </div>
+        </ContentsBox>
+      </div>
+      <div>
+        <h1>リスト</h1>
+        <ContentsBox>
+          <div v-for="list in lists" class="col-md-3" :key="list.id">
+            <div class="card">
+              <div class="card-body">
+                <p class="card-title">
+                  <router-link :to="'/list/'+list.id">{{list.name}}</router-link>
+                </p>
               </div>
             </div>
           </div>
@@ -58,6 +71,7 @@ export default {
       id: "",
       author: {},
       interviews: [],
+      lists: [],
     };
   },
 
@@ -65,6 +79,7 @@ export default {
     this.id = this.$route.params.id;
     this.getUserById(this.id).then((user) => (this.author = user));
     this.interviews = this.getInterviewsByUserId(this.id);
+    this.lists = this.getOwnedOpenListsFromUserId(this.id);
   },
 };
 </script>

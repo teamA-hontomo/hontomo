@@ -68,7 +68,27 @@ export default {
           alert("リストの取得でエラーが発生しました")
           console.warn("errorFU3", err)
         });
+      return returnLists;
+    },
 
+    //ユーザーIDからそのユーザーがオーナーの公開リストを持ってくる
+    //@param userId
+    //@return Object ListのArray
+    getOwnedOpenListsFromUserId(userId) {
+      var returnLists = [];
+      this.db
+        .collection("lists")
+        .where("ownerId", "==", userId)
+        .where("open","==",true)
+        .get()
+        .then(lists => {
+          lists.forEach(list => {
+            returnLists.push(list.data());
+          });
+        }).catch((err) => {
+          alert("リストの取得でエラーが発生しました")
+          console.warn("errorFU3.1 : ", err)
+        });
       return returnLists;
     },
 
