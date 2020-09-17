@@ -5,19 +5,25 @@
     </TitleBox>
     id:{{id}}
     <div>
-      <h1>作品</h1>
       <div>
         <h1>記事一覧</h1>
-        <ContentsBox>
-          <div v-for="interview in interviews" class="col-md-3" :key="interview.id">
-            <div class="card">
-              <div class="card-body">
-                <p class="card-title">{{interview.title}}</p>
-                <p>{{interview.ids}}</p>
+        <div v-show="interviews">
+          <ContentsBox>
+            <div v-for="interview in interviews" class="col-md-3" :key="interview.id">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-title">{{interview.title}}</p>
+                  <p>{{interview.id}}</p>
+                </div>
               </div>
             </div>
+          </ContentsBox>
+          <div v-show="interviews.length==0">
+            <ContentsBox>
+              <p>まだインタビューがありません</p>
+            </ContentsBox>
           </div>
-        </ContentsBox>
+        </div>
       </div>
       <div>
         <h1>この作者の作品</h1>
@@ -64,7 +70,7 @@ export default {
 </script>
 
 <style scoped>
-.card-title {
+.card-body {
   color: black;
 }
 </style>
