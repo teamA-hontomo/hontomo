@@ -338,7 +338,7 @@ export default {
 
     //firebaseのタイムスタンプを文字列にする
     //@param FirebaseTimestamp
-    //return String
+    //@return String
     formatDate(firebaseTimestamp) {
       var date = firebaseTimestamp.toDate()
       return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
@@ -368,6 +368,8 @@ export default {
     },
 
     //ユーザーidからその作者のインタビューをすべて取得
+    //@param userId
+    //@return Array
     getInterviewsByUserId(userId) {
       var target = []
       this.db
