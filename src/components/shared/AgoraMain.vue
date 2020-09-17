@@ -30,22 +30,19 @@ import firebase from "firebase";
 import "firebase/firestore";
 export default {
   components: { Message },
-
   name: "AgoraMain",
-
   props:["frameId"],
-
   data() {
     return {
       newMessage: "",
       // frameId: "BDyb4dA26stiHHaMuPhM",
-      userId: "4oFo1QKy3X8wGwuGx98h",
+      //userId: "4oFo1QKy3X8wGwuGx98h",
+      userId:"1i9prr2zr9XYQtSQjgbM",
       // userId: "public",
       db: null,
       messages: [],
     };
   },
-
   methods: {
     submitMessage() {
       if (this.newMessage.length == 0) {
@@ -57,18 +54,15 @@ export default {
       //メッセージボックスを空にする
       this.newMessage = "";
     },
-
     closeAgora() {
       this.$emit("fromAgora");
     },
   },
-
   computed: {
     isMessageExist() {
       return this.messages.length > 0;
     },
   },
-
   mounted() {
     this.db.collection("messages").onSnapshot(() => {
       this.messages = this.recieveMessage(this.frameId, 10);
@@ -88,11 +82,9 @@ export default {
   overflow-y: scroll;
   background-color: #656565;
 }
-
 .agora-title {
   margin: 0.5em;
 }
-
 .submit-button {
   background-color: #af3d3d;
 }
