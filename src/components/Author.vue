@@ -41,7 +41,7 @@
       <div>
         <h1 class="mt-3">作品</h1>
         <ContentsBox>
-          <div v-for="work in author.works" class="col-md-3" :key="work">
+          <div v-for="work in author.works" class="col-md-3" :key="work.title">
             <div class="card">
               <div class="card-body">
                 <img

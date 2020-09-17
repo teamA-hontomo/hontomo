@@ -379,7 +379,7 @@ export default {
     //@return String
     formatDateOnlyDate(firebaseTimestamp) {
       var date = firebaseTimestamp.toDate()
-      return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() 
+      return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate()
     },
 
     //作者一覧をcount件とってくる
@@ -419,6 +419,26 @@ export default {
             var interviewOBJ = interview.data()
             interviewOBJ.id = interview.id
             target.push(interviewOBJ);
+          });
+        }).catch((err) => {
+          alert("インタビュー取得でエラーが発生しました")
+          console.warn("errorFU18", err)
+        });
+      return target;
+    },
+
+
+    getMessagesByUserId(userId) {
+      var target = []
+      this.db
+        .collection("messages")
+        .where("userId", "==", userId)
+        .get()
+        .then(messages => {
+          messages.forEach(message => {
+            var messageOBJ = message.data()
+            messageOBJ.id = message.id
+            target.push(messageOBJ);
           });
         }).catch((err) => {
           alert("インタビュー取得でエラーが発生しました")
