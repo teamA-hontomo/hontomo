@@ -2,15 +2,25 @@
   <div class="agora">
     <div class="row">
       <div class="col-1">
-        <font-awesome-icon icon="times" class="fa-2x mx-auto my-auto" v-on:click="closeAgora" />
+        <font-awesome-icon
+          icon="times"
+          class="fa-2x mx-auto my-auto"
+          v-on:click="closeAgora"
+        />
       </div>
       <div class="col-11">
         <h3 class="agora-title">Agora</h3>
       </div>
     </div>
     <div class="input-group">
-      <textarea class="form-control" v-model="newMessage" placeholder="メッセージを追加"></textarea>
-      <button type="button" class="btn submit-button" @click="submitMessage()">送信</button>
+      <textarea
+        class="form-control"
+        v-model="newMessage"
+        placeholder="メッセージを追加"
+      ></textarea>
+      <button type="button" class="btn submit-button" @click="submitMessage()">
+        送信
+      </button>
     </div>
     <div v-show="isMessageExist">
       <div v-for="message in messages" :key="message.id">
@@ -31,16 +41,16 @@ import "firebase/firestore";
 export default {
   components: { Message },
   name: "AgoraMain",
-  props:["frameId"],
+  props: ["frameId"],
   data() {
     return {
       newMessage: "",
       // frameId: "BDyb4dA26stiHHaMuPhM",
       //userId: "4oFo1QKy3X8wGwuGx98h",
-      userId:"1i9prr2zr9XYQtSQjgbM",
+      userId: "4oFo1QKy3X8wGwuGx98h",
       // userId: "public",
       db: null,
-      messages: [],
+      messages: []
     };
   },
   methods: {
@@ -56,12 +66,12 @@ export default {
     },
     closeAgora() {
       this.$emit("fromAgora");
-    },
+    }
   },
   computed: {
     isMessageExist() {
       return this.messages.length > 0;
-    },
+    }
   },
   mounted() {
     this.db.collection("messages").onSnapshot(() => {
