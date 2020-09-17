@@ -286,7 +286,7 @@ export default {
       this.db
         .collection("messages")
         .where("frame_id", "==", frameId)
-        .orderBy("created","desc")
+        .orderBy("created", "desc")
         .limit(count)
         .get()
         .then(messages => {
@@ -343,6 +343,26 @@ export default {
         }).catch((err) => {
           alert("作者一覧取得でエラーが発生しました")
           console.warn("errorFU17", err)
+        });
+      return target;
+    },
+
+    //ユーザーidからその作者のインタビューをすべて取得
+    getInterviewsByUserId(userId) {
+      var target = []
+      this.db
+        .collection("users").doc(userId)
+        .collection("interview")
+        .get()
+        .then(interviews => {
+          interviews.forEach(interview => {
+            var interviewOBJ = interview.data()
+            interviewOBJ.id = interview.id
+            target.push(interviewOBJ);
+          });
+        }).catch((err) => {
+          alert("インタビュー取得でエラーが発生しました")
+          console.warn("errorFU18", err)
         });
       return target;
     }

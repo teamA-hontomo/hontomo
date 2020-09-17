@@ -1,9 +1,37 @@
 <template>
   <div>
     <TitleBox>
-      <span class="mx-auto my-auto">作者詳細</span>
+      <h1 class="mx-auto my-auto">{{author.name}}の詳細ページ</h1>
     </TitleBox>
     id:{{id}}
+    <div>
+      <h1>作品</h1>
+      <div>
+        <h1>記事一覧</h1>
+        <ContentsBox>
+          <div v-for="interview in interviews" class="col-md-3" :key="interview.id">
+            <div class="card">
+              <div class="card-body">
+                <p class="card-title">{{interview.title}}</p>
+                <p>{{interview.ids}}</p>
+              </div>
+            </div>
+          </div>
+        </ContentsBox>
+      </div>
+      <div>
+        <h1>この作者の作品</h1>
+        <ContentsBox>
+          <div v-for="work in author.works" class="col-md-3" :key="work">
+            <div class="card">
+              <div class="card-body">
+                <p class="card-title">{{work}}</p>
+              </div>
+            </div>
+          </div>
+        </ContentsBox>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -20,14 +48,23 @@ export default {
   },
 
   data() {
-    id: "";
+    return {
+      id: "",
+      author: {},
+      interviews: [],
+    };
   },
 
   created() {
     this.id = this.$route.params.id;
+    this.getUserById(this.id).then((user) => (this.author = user));
+    this.interviews = this.getInterviewsByUserId(this.id);
   },
 };
 </script>
 
-<style>
+<style scoped>
+.card-title {
+  color: black;
+}
 </style>
