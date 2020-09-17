@@ -9,7 +9,6 @@
     </p>
     <p>
       <font-awesome-icon icon="star" class="fa-lg" />
-      <!-- v-on:click="onClickStar(list.id)" -->
       {{ list.rating }}
     </p>
     <p>
