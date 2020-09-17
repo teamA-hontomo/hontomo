@@ -31,7 +31,7 @@ export default {
       show_input: false,
     };
   },
-  props: ['frame_src'],
+  props: ['frame_src', 'frame_page'],
   components: { "b-modal": BModal, "b-button": BButton, 'b-form-input': BFormInput},
   directives: {
     "b-modal": VBModal
@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     saveFrame(list_id) {
-      this.setFrameToList(list_id, 'frames/' + this.frame_src);
+      this.setFrameToList(list_id, 'frames/' + this.frame_src, this.frame_page, 'ブラックジャックによろしく', '1');
       this.$bvModal.hide('modal');
     },
     show() {
