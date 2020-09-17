@@ -9,6 +9,7 @@ import View from "../components/View";
 import Author from "../components/Author";
 import AuthorIndex from "../components/AuthorIndex";
 import Sample from "../components/Sample";
+import Interview from "../components/Interview"
 
 
 Vue.use(Router);
@@ -59,5 +60,10 @@ export default new Router({
       name: "AuthorIndex",
       component: AuthorIndex
     },
+    {
+      path: "/authors/:id/interview/:interview_id",
+      name: "Interview",
+      component: Interview
+    }
   ]
 });
