@@ -12,5 +12,6 @@ export default {
 <style scoped>
 .contents-box {
   background-color: #656565;
+  padding: 25px;
 }
 </style>
