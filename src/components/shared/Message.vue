@@ -1,10 +1,17 @@
 <template>
-  <div class="card" :class="{'bg-success':isAuthor}">
+  <div :class="{'myMessage':isMyMessage, 'card': true, 'authorMessage': isAuthor}">
 
     <div class="card-body">
       <h5 class="card-title">{{writerName}}</h5>
       <p>{{message.text}}</p>
       <span>{{getDate}}</span>
+      <div v-if=isAuthor>
+      <router-link
+          :to="{ name: 'Author', params: { id: message.userId } }"
+          class="btn btn-primary"
+          >詳しく見る</router-link
+        >
+      </div>
       <slot></slot>
     </div>
   </div>
@@ -23,8 +30,8 @@ export default {
       userdata:{},
       currentUser: {
         //id: "YJvLYXKuOw2hMddumjL7",
-        //id:"4oFo1QKy3X8wGwuGx98h",
-        id:"70fMKGbfmGdqMOnpZwwv"
+        id:"4oFo1QKy3X8wGwuGx98h",
+        //id:"70fMKGbfmGdqMOnpZwwv"
       },
       followed: false,
       good: 0,
@@ -37,8 +44,7 @@ export default {
       this.isAuthor = user.isAuthor
     });
     this.isMyMessage = this.message.userId == this.currentUser.id;
-    console.log("debugだよ"+this.isAuthor)
-
+    console.log("debug"+this.isAuthor)
 
   },
 
@@ -58,11 +64,11 @@ export default {
   color: black;
   text-align: left;
 }
-.my-message {
+.myMessage {
   margin-right: 0.5em;
   margin-left: 3em;
 }
-.author-message{
-
+.authorMessage{
+  background-color:lightgreen
 }
 </style>

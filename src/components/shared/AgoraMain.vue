@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       newMessage: "",
-      frameId: "BDyb4dA26stiHHaMuPhM",
+      frameId: "1.png",
       userId: "4oFo1QKy3X8wGwuGx98h",
       //userId: "public",
       db: null,
@@ -76,7 +76,7 @@ export default {
 
     }
 
-    console.log(this.messag);
+    console.log(this.message);
 
   },
   
@@ -133,9 +133,9 @@ export default {
   },
 
   mounted(){
-    /*this.db.collection("messages").onSnapshot(()=>{
+    this.db.collection("messages").onSnapshot(()=>{
       this.messages = this.recieveMessage(this.frameId,20);
-    })*/
+    })
   }
 };
 </script>
