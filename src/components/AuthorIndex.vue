@@ -6,7 +6,7 @@
     <div v-for="author in authors" :key="author.id">
       <ContentsBox>
         <p>{{author.name}}</p>
-        <p>代表作:{{author.works[0]}}</p>
+        <p>代表作:{{author.works[0].title}}</p>
         <router-link
           :to="{ name:'Author', params: { id: author.id } }"
           class="btn btn-primary"
