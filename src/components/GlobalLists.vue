@@ -11,9 +11,21 @@
           <div class="list-card mt-3">
             <img :src="'../../' + list.cover_path" />
             <p class="ttl" v-text="list.name"></p>
-            <p>登録日：{{ list.created.toDate() }}</p>
+            <p>
+              登録日：{{
+                String(list.created.toDate().getFullYear()) +
+                  "/" +
+                  String(list.created.toDate().getMonth() + 1) +
+                  "/" +
+                  String(list.created.toDate().getDate())
+              }}
+            </p>
             <div slot="button">
-              <font-awesome-icon icon="star" class="fa-lg" v-bind:class="starColor(list.id)" />
+              <font-awesome-icon
+                icon="star"
+                class="fa-lg"
+                v-bind:class="starColor(list.id)"
+              />
               <!-- v-on:click="onClickStar(list.id)" -->
               {{ list.rating }}
             </div>
@@ -36,7 +48,7 @@ export default {
       open: true,
       searchWord: "",
       ito: {
-        followLists: [1, 3],
+        followLists: [1, 3]
       },
       // followInfos: {
       //   1: {
@@ -46,29 +58,30 @@ export default {
       // },
       lists: [],
       frames: [],
-      db: "",
+      db: ""
     };
   },
   computed: {
     filteredLists() {
       // console.log('hoge');
-      return this.lists.filter((list) => {
+      return this.lists.filter(list => {
         return list.name.indexOf(this.searchWord) !== -1;
       });
-    },
+    }
     // getDate() {
     //   return this.formatDate(this.lists.created);
     // },
   },
   async created() {
     // this.db = firebase.firestore();
-    console.log("fetch lists");
+    //console.log("fetch lists");
     this.lists = await this.getListsOrderByRating();
-    console.log("this.lists", this.lists);
+    //console.log("this.lists", this.lists);
+
     // this.frames = this.getFramesFromList(this.id);
   },
   components: {
-    ContentsBox,
+    ContentsBox
   },
   methods: {
     // starColor: function(list) {
@@ -78,7 +91,7 @@ export default {
     //     return { yellowStar: false };
     //   }
     // },
-    starColor: async function (list_id) {
+    starColor: async function(list_id) {
       const bool = await this.isListStared(list_id);
       if (true) {
         console.log("yellow");
@@ -87,7 +100,7 @@ export default {
         console.log("not yellow");
         return { yellowStar: false };
       }
-    },
+    }
     // onClickStar: function(list) {
     //   if (list.followed) {
     //     this.lists[id].followed = false;
@@ -97,7 +110,7 @@ export default {
     //     this.lists[id].rating++;
     //   }
     // }
-  },
+  }
 };
 </script>
 
