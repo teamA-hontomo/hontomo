@@ -1,7 +1,7 @@
 <template>
   <div id='list'>
     <TitleBox>
-      <span class='mx-auto my-auto'>{{ list.name }}</span>
+      <span class='mx-auto my-auto' style="font-size:24px;">{{ list.name }}</span>
       <div class='my-auto mr-2'>
         <div v-if='ownerId != userId'>
           <span v-if='!followed'>フォローする</span>
