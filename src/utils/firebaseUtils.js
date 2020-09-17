@@ -26,17 +26,17 @@ export default {
       var newId = this.db.collection("lists").doc().id; //複数箇所でつかうので事前に取得。
       listData.id = newId;
       (listData.created = firebase.firestore.FieldValue.serverTimestamp()), //firebaseのサーバー時間を取得。
-      //listに追加
-      this.db
-        .collection("lists")
-        .doc(newId)
-        .set(listData)
-        .then(() => {
-          alert(listData.name + "を新規作成しました。");
-        })
-        .catch(() => {
-          alert(listData.name + "を作成するときにエラーが発生しました。");
-        });
+        //listに追加
+        this.db
+          .collection("lists")
+          .doc(newId)
+          .set(listData)
+          .then(() => {
+            alert(listData.name + "を新規作成しました。");
+          })
+          .catch(() => {
+            alert(listData.name + "を作成するときにエラーが発生しました。");
+          });
 
       //users/<currentUser>/listsのarrayに追加
       this.db
@@ -106,11 +106,14 @@ export default {
       this.db
         .collection("lists")
         .doc(listId)
-        .set({
-          name: newName
-        }, {
-          merge: true
-        })
+        .set(
+          {
+            name: newName
+          },
+          {
+            merge: true
+          }
+        )
         .then(() => {});
     },
 
@@ -133,12 +136,8 @@ export default {
         .collection("lists")
         .doc(listId)
         .collection("frames")
-        .doc(newId)
-        .set({
+        .add({
           path: framePath,
-          page: page,
-          title: title,
-          volume: volume,
           addedTime: firebase.firestore.FieldValue.serverTimestamp()
         })
         .then(() => {});
@@ -192,6 +191,22 @@ export default {
         });
     },
 
+    // 公開リストをレーティング順に取得する
+    async getListsOrderByRating() {
+      const returnLists =[];
+
+      await this.db
+        .collection("lists")
+        .where("open", "==", true)
+        .orderBy("rating", "desc")
+        .get()
+        .then(qs => {
+          qs.forEach(list => {
+            returnLists.push(list.data());
+          });
+        });
+        return returnLists;
+    },
     getUserById(userId) {
       return this.db.collection("users")
         .doc(userId)
@@ -227,23 +242,26 @@ export default {
         .orderBy("created")
         .limit(count)
         .get()
-        .then(messages => {
-          messages.forEach(message => {
-            returnMessages.push(message.data());
+        .then(qs => {
+          qs.forEach(list => {
+            returnLists.push(list.data());
           });
         });
-
-      return returnMessages;
+        return returnLists;
     },
 
-    //メッセージを通報、reportの値を1増やす
-    reportMessage(messageId) {
-      this.db
-        .collection("messages")
-        .doc(messageId)
-        .update({
-          report: firebase.firestore.FieldValue.increment(1)
+    // ユーザがいいねしたリストであれば true を返す。　要でばltぐ
+    async isListStared(list_id, user_id = '4oFo1QKy3X8wGwuGx98h') {
+      let lists = [];
+      await this.db
+        .collection("users")
+        .doc(user_id)
+        .get()
+        .then( user => {
+          lists = user.data().lists;
         });
+
+      return (lists.includes(list_id));
     },
 
     //firebaseのタイムスタンプを文字列にする
@@ -273,5 +291,5 @@ export default {
         });
       return target;
     }
-  }
+},
 };
