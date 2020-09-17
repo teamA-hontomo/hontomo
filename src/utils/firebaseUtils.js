@@ -365,6 +365,37 @@ export default {
 
       return (lists.includes(list_id));
     },
+    //メッセージのいいねを1増やし、userにmessageを追加
+    goodMessage(messageId,userId) {
+      this.db
+        .collection("messages")
+        .doc(messageId)
+        .update({
+          good: firebase.firestore.FieldValue.increment(1)
+        });
+
+        this.db
+        .collection("users")
+        .doc(userId)
+        .update({
+          messages: firebase.firestore.FieldValue.arrayUnion(messageId)
+        });
+    },
+    //メッセージのいいねを1減らし、userからmessageを削除
+    removeGood(messageId,userId) {
+      this.db
+        .collection("messages")
+        .doc(messageId)
+        .update({
+          good: firebase.firestore.FieldValue.increment(-1)
+        });
+      this.db
+        .collection("users")
+        .doc(userId)
+        .update({
+          messages: firebase.firestore.FieldValue.arrayRemove(messageId)
+        });
+    },
 
     //firebaseのタイムスタンプを文字列にする
     //@param FirebaseTimestamp
@@ -447,5 +478,7 @@ export default {
       return target;
     }
   },
+
+
 
 };
