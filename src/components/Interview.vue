@@ -117,6 +117,7 @@ export default {
   border-radius: 10px;
   position: relative;
   max-width: 80%;
+  text-align: left;
 }
 
 .balloon:not(.author) .body {
