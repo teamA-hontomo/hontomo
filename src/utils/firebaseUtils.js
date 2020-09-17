@@ -68,7 +68,27 @@ export default {
           alert("リストの取得でエラーが発生しました")
           console.warn("errorFU3", err)
         });
+      return returnLists;
+    },
 
+    //ユーザーIDからそのユーザーがオーナーの公開リストを持ってくる
+    //@param userId
+    //@return Object ListのArray
+    getOwnedOpenListsFromUserId(userId) {
+      var returnLists = [];
+      this.db
+        .collection("lists")
+        .where("ownerId", "==", userId)
+        .where("open","==",true)
+        .get()
+        .then(lists => {
+          lists.forEach(list => {
+            returnLists.push(list.data());
+          });
+        }).catch((err) => {
+          alert("リストの取得でエラーが発生しました")
+          console.warn("errorFU3.1 : ", err)
+        });
       return returnLists;
     },
 
@@ -300,18 +320,18 @@ export default {
       this.db
         .collection("messages")
         .where("frame_id", "==", frameId)
-        .orderBy("created","desc")
+        .orderBy("created", "desc")
         .limit(count)
         .get()
         .then(qs => {
           qs.forEach(list => {
-            returnLists.push(list.data());
+            returnMessages.push(list.data());
           });
         }).catch((err) => {
           alert("メッセージの取得でエラーが発生しました")
           console.warn("errorFU14", err)
         });
-        return returnLists;
+        return returnMessages;
     },
 
     // ユーザがいいねしたリストであれば true を返す。　要でばltぐ
@@ -348,7 +368,7 @@ export default {
 
     //firebaseのタイムスタンプを文字列にする
     //@param FirebaseTimestamp
-    //return String
+    //@return String
     formatDate(firebaseTimestamp) {
       var date = firebaseTimestamp.toDate()
       return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
@@ -373,6 +393,28 @@ export default {
         }).catch((err) => {
           alert("作者一覧取得でエラーが発生しました")
           console.warn("errorFU17", err)
+        });
+      return target;
+    },
+
+    //ユーザーidからその作者のインタビューをすべて取得
+    //@param userId
+    //@return Array
+    getInterviewsByUserId(userId) {
+      var target = []
+      this.db
+        .collection("users").doc(userId)
+        .collection("interview")
+        .get()
+        .then(interviews => {
+          interviews.forEach(interview => {
+            var interviewOBJ = interview.data()
+            interviewOBJ.id = interview.id
+            target.push(interviewOBJ);
+          });
+        }).catch((err) => {
+          alert("インタビュー取得でエラーが発生しました")
+          console.warn("errorFU18", err)
         });
       return target;
     }
