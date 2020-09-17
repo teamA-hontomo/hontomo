@@ -14,15 +14,7 @@
     </div>
     <div v-show="isMessageExist">
       <div v-for="message in messages" :key="message.id">
-        <Message :message="message"> 
-         <!-- <font-awesome-icon
-            icon='thumbs-up'
-            class='fa-lg'
-            v-on:click='onClickGood(message.id)'
-          />
-           <span>{{ message.good }}</span>
-           -->
-          </Message>
+        <Message :message="message" />
       </div>
     </div>
     <div v-show="!isMessageExist">
@@ -38,49 +30,19 @@ import firebase from "firebase";
 import "firebase/firestore";
 export default {
   components: { Message },
-
   name: "AgoraMain",
-
   props:["frameId"],
-
   data() {
     return {
       newMessage: "",
-      frameId: "1.png",
-      userId: "4oFo1QKy3X8wGwuGx98h",
-      //userId: "public",
+      // frameId: "BDyb4dA26stiHHaMuPhM",
+      //userId: "4oFo1QKy3X8wGwuGx98h",
+      userId:"1i9prr2zr9XYQtSQjgbM",
+      // userId: "public",
       db: null,
-      isAuthor : false,
-      messages: [
-      ],
-      author_mes:[
-      ],
-      user_mes:[
-      ]
-
+      messages: [],
     };
   },
-
-  created() {
-    this.messages = this.recieveMessage(this.frameId,10);
-    for (var message in this.messages){
-      this.getUserById(self.message.userId).then((user) => {
-      this.isAuthor = message.isAuthor
-      });
-      if(isAuthor){
-        author_mes.push(self.message);
-      }
-      else{
-        user_mes.push(self.message);
-      }
-
-    }
-
-    console.log(this.message);
-
-  },
-  
-
   methods: {
     submitMessage() {
       if (this.newMessage.length == 0) {
@@ -92,46 +54,19 @@ export default {
       //メッセージボックスを空にする
       this.newMessage = "";
     },
-
     closeAgora() {
       this.$emit("fromAgora");
     },
-
-    onClickGood(messageid) {
-
-      this.goodMessage(messageid,this.userId);
-    },
-
-    /*
-    goodColor(messageid) {
-      var fav = true;
-      this.db
-      .collection("users")
-      .doc(this.userId)
-      .get()
-      .then((user) => {
-        fav = user.data().messages.includes(messageid) ? true : false;
-        console.log(fav)
-        if (fav) {
-        return { clickedGood: true };
-      } else {
-        return { clickedGood: false };
-      }
-        
-      });
-
-    },
-    */
-
-
-
   },
-
   computed: {
     isMessageExist() {
       return this.messages.length > 0;
     },
-
+  },
+  mounted() {
+    this.db.collection("messages").onSnapshot(() => {
+      this.messages = this.recieveMessage(this.frameId, 10);
+    });
   },
   watch: {
     frameId: function() {
@@ -147,17 +82,10 @@ export default {
   overflow-y: scroll;
   background-color: #656565;
 }
-
 .agora-title {
   margin: 0.5em;
 }
-
 .submit-button {
   background-color: #af3d3d;
 }
-
-.clickedGood {
-  color: blue;
-}
-
 </style>
