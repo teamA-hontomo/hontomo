@@ -1,10 +1,12 @@
 <template>
   <div>
     <TitleBox>
-      <h1 class="mx-auto my-auto">
+      <div class="col-2">
         <UserIcon ::is_author="true" :num="author.num" />
-        {{author.name}}
-      </h1>
+      </div>
+      <div class="col py-auto">
+        <h1 class="mx-auto my-auto">{{author.name}}</h1>
+      </div>
     </TitleBox>
     <div>
       <div>
@@ -14,16 +16,18 @@
             <div v-for="interview in interviews" class="col-md-3" :key="interview.id">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-title">{{interview.title}}</p>
+                  <p class="card-title">
+                    <router-link :to="'/authors/'+id+'/interview/'+interview.id">{{interview.title}}</router-link>
+                  </p>
                 </div>
               </div>
             </div>
           </ContentsBox>
-          <div v-show="interviews.length==0">
-            <ContentsBox>
-              <p>まだインタビューがありません</p>
-            </ContentsBox>
-          </div>
+        </div>
+        <div v-show="interviews.length==0">
+          <ContentsBox>
+            <p>まだインタビューがありません</p>
+          </ContentsBox>
         </div>
       </div>
       <div>
