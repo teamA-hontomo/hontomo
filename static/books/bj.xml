@@ -31,7 +31,37 @@
             </page>
             <page>
                 <frame src="bj4-1.png">
-                    <position top="0" right="0" width="500" height="700">
+                    <position top="0" right="0" width="500" height="250">
+                    </position>
+                </frame>
+                <frame src="bj4-2.png">
+                    <position top="260" right="0" width="220" height="440">
+                    </position>
+                </frame>
+                <frame src="bj4-3.png">
+                    <position top="260" right="230" width="270" height="230">
+                    </position>
+                </frame>
+                <frame src="bj4-4.png">
+                    <position top="500" right="230" width="270" height="200">
+                    </position>
+                </frame>
+            </page>
+            <page>
+                <frame src="bj5-1.png">
+                    <position top="0" right="0" width="300" height="350">
+                    </position>
+                </frame>
+                <frame src="bj5-2.png">
+                    <position top="0" right="305" width="195" height="180">
+                    </position>
+                </frame>
+                <frame src="bj5-3.png">
+                    <position top="226" right="305" width="195" height="125">
+                    </position>
+                </frame>
+                <frame src="bj5-4.png">
+                    <position top="360" right="0" width="500" height="350">
                     </position>
                 </frame>
             </page>
