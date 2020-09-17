@@ -55,7 +55,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .card {
   background-color: #3e3e3e;
 }
