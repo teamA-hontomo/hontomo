@@ -417,6 +417,28 @@ export default {
           console.warn("errorFU18", err)
         });
       return target;
+    },
+
+    //ユーザーidからそのユーザーがしたコメントをすべて取得
+    //@param userId
+    //@return Array
+    getMessagesByUserId(userId) {
+      var target = []
+      this.db
+        .collection("messages")
+        .where("userId", "==",userId)
+        .get()
+        .then(messages => {
+          messages.forEach(message => {
+            var messageOBJ = message.data()
+            messageOBJ.id = message.id
+            target.push(messageOBJ);
+          });
+        }).catch((err) => {
+          alert("メッセージ取得でエラーが発生しました")
+          console.warn("errorFU19", err)
+        });
+      return target;
     }
   },
 
