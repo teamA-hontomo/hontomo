@@ -38,7 +38,7 @@
     <div class="col-4" v-show="showAgora">
       <AgoraMain @fromAgora="closeAgora" :frameId="selected_frame"></AgoraMain>
     </div>
-    <FrameSaveModal :frame_src="selected_frame" ref="modal"></FrameSaveModal>
+    <FrameSaveModal :frame_src="selected_frame" :frame_page="selected_page" ref="modal"></FrameSaveModal>
   </div>
 </template>
 
@@ -54,6 +54,7 @@ export default {
     return {
       viewer: {},
       selected_frame: "",
+      selected_page: "",
       showAgora: false
     };
   },
@@ -76,9 +77,9 @@ export default {
       this.viewer.back();
     },
     listClick(e) {
-      this.selected_frame = e.currentTarget.parentElement.getAttribute(
-        "frame_src"
-      );
+      const p_elm = e.currentTarget.parentElement;
+      this.selected_frame = p_elm.getAttribute('frame_src');
+      this.selected_page = p_elm.getAttribute('page')
       this.$refs.modal.show();
     },
     agoraClick(e) {

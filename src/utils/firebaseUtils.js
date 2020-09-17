@@ -157,9 +157,9 @@ export default {
     setFrameToList(
       listId,
       framePath,
+      page = "ページが設定されていません",
       title = "タイトルが設定されていません",
       volume = "巻数が設定されていません",
-      page = "ページが設定されていません"
     ) {
       var newId = this.db
         .collection("lists")
@@ -174,7 +174,10 @@ export default {
         .set({
           id: newId,
           path: framePath,
-          addedTime: firebase.firestore.FieldValue.serverTimestamp()
+          addedTime: firebase.firestore.FieldValue.serverTimestamp(),
+          page: page,
+          title: title,
+          volume: volume
         })
         .then(() => {})
         .catch((err) => {
