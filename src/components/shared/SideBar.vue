@@ -87,6 +87,11 @@ export default {
 
 
 <style scoped>
+.nav-brand img {
+  height: 100%;
+  padding: 20px 0;
+  width: 65%;
+}
 hr {
   border-top: 1px solid #eeeeee;
 }
