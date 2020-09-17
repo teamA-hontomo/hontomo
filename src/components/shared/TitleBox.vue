@@ -11,5 +11,6 @@ export default {
 <style scoped>
 .title-box {
   background-color: #656565;
+  padding: 15px;
 }
 </style>

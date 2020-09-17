@@ -2,85 +2,98 @@
   <div>
     <TitleBox>
       <div class="col-2">
-        <UserIcon :is_author="true" :num="author.num" />
+        <UserIcon :is_author="false" :num="author.num" />
       </div>
-      <div class="col py-auto">
-        <h1 class="mx-auto my-auto">{{author.name}}</h1>
+      <div class="col my-auto">
+        <h1 class="mx-auto my-auto">{{ author.name }}</h1>
       </div>
     </TitleBox>
     <div>
       <div>
-        <h1>記事一覧</h1>
-        <div v-show="interviews.length!=0">
+        <h1 class="mt-3">記事一覧</h1>
+        <div v-show="interviews.length != 0">
           <ContentsBox>
             <div v-for="interview in interviews" class="col-md-3" :key="interview.id">
               <div class="card">
                 <div class="card-body">
                   <p class="card-title">
-                    <router-link :to="'/authors/'+id+'/interview/'+interview.id">{{interview.title}}</router-link>
+                    <router-link
+                      :to="'/authors/' + id + '/interview/' + interview.id"
+                      class="link"
+                    >{{ interview.title }}</router-link>
                   </p>
                 </div>
               </div>
             </div>
           </ContentsBox>
         </div>
-        <div v-show="interviews.length==0">
+        <div v-show="interviews.length == 0">
           <ContentsBox>
             <p>まだインタビューがありません</p>
           </ContentsBox>
         </div>
       </div>
       <div>
-        <h1>作品</h1>
+        <h1 class="mt-3">作品</h1>
         <ContentsBox>
-          <div v-for="work in author.works" class="col-md-3" :key="work">
+          <div v-for="work in author.works" class="col-md-3" :key="work.title">
             <div class="card">
               <div class="card-body">
-                <img :src="'/static/'+work.thumbnailPath" class="card-img-top" />
-                <p class="card-title">{{work.title}}</p>
-                <p>{{work.description}}</p>
+                <img :src="'/static/' + work.thumbnailPath" class="card-img-top" />
+                <p class="card-title">{{ work.title }}</p>
+                <p class="description">{{ work.description }}</p>
               </div>
             </div>
           </div>
         </ContentsBox>
       </div>
       <div>
-        <h1>リスト</h1>
-        <div v-show="lists.length!=0">
+        <h1 class="mt-3">リスト</h1>
+        <div v-show="lists.length != 0">
           <ContentsBox>
             <div v-for="list in lists" class="col-md-3" :key="list.id">
               <div class="card">
                 <div class="card-body">
                   <p class="card-title">
-                    <router-link :to="'/list/'+list.id">{{list.name}}</router-link>
+                    <router-link :to="'/list/' + list.id">
+                      {{
+                      list.name
+                      }}
+                    </router-link>
                   </p>
                 </div>
               </div>
             </div>
           </ContentsBox>
         </div>
-        <div v-show="lists.length==0">
+        <div v-show="lists.length == 0">
           <ContentsBox>
             <p>まだリストがありません</p>
           </ContentsBox>
         </div>
       </div>
       <div>
-        <h1>コメント</h1>
-        <div v-show="messages.length!=0">
+        <h1 class="mt-3">コメント</h1>
+        <div v-show="messages.length != 0">
           <ContentsBox>
-            <div v-for="interview in interviews" class="col-md-3" :key="interview.id">
+            <div v-for="message in messages" class="col-md-3" :key="message.id">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-title">
-                    <router-link :to="'/authors/'+id+'/interview/'+interview.id">{{interview.title}}</router-link>
+                  <img :src="'/static/frames/' + message.frame_id" class="card-img-top" />
+                  <p class="card-title">{{ message.text }}</p>
+                  <p>
+                    {{String(message.created.toDate().getFullYear()) +
+                    "/" +
+                    String(message.created.toDate().getMonth() + 1) +
+                    "/" +
+                    String(message.created.toDate().getDate())}}
                   </p>
                 </div>
               </div>
             </div>
           </ContentsBox>
         </div>
-        <div v-show="messages.length==0">
+        <div v-show="messages.length == 0">
           <ContentsBox>
             <p>まだコメントがありません</p>
           </ContentsBox>
@@ -125,7 +138,19 @@ export default {
 </script>
 
 <style scoped>
+.card {
+  background-color: #3e3e3e;
+}
 .card-body {
-  color: black;
+  background-color: #3e3e3e;
+}
+.description {
+  color: #eeeeee;
+}
+.card-title {
+  color: #eeeeee;
+}
+.link {
+  color: #eeeeee;
 }
 </style>

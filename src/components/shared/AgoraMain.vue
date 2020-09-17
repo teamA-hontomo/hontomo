@@ -41,7 +41,7 @@ export default {
 
   name: "AgoraMain",
 
-  // props:["frameId"],
+  props:["frameId"],
 
   data() {
     return {
@@ -102,6 +102,7 @@ export default {
       this.goodMessage(messageid,this.userId);
     },
 
+    /*
     goodColor(messageid) {
       var fav = true;
       this.db
@@ -120,6 +121,7 @@ export default {
       });
 
     },
+    */
 
 
 
@@ -131,11 +133,10 @@ export default {
     },
 
   },
-
-  mounted(){
-    this.db.collection("messages").onSnapshot(()=>{
-      this.messages = this.recieveMessage(this.frameId,20);
-    })
+  watch: {
+    frameId: function() {
+      this.messages = this.recieveMessage(this.frameId);
+    }
   }
 };
 </script>

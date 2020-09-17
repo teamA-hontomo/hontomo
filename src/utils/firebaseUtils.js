@@ -405,6 +405,14 @@ export default {
       return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
     },
 
+    //firebaseのタイムスタンプを日付のみの文字列にする
+    //@param FirebaseTimestamp
+    //@return String
+    formatDateOnlyDate(firebaseTimestamp) {
+      var date = firebaseTimestamp.toDate()
+      return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate()
+    },
+
     //作者一覧をcount件とってくる
     //@param null
     //@return Array
@@ -450,14 +458,12 @@ export default {
       return target;
     },
 
-    //ユーザーidからそのユーザーがしたコメントをすべて取得
-    //@param userId
-    //@return Array
+
     getMessagesByUserId(userId) {
       var target = []
       this.db
         .collection("messages")
-        .where("userId", "==",userId)
+        .where("userId", "==", userId)
         .get()
         .then(messages => {
           messages.forEach(message => {
@@ -466,8 +472,8 @@ export default {
             target.push(messageOBJ);
           });
         }).catch((err) => {
-          alert("メッセージ取得でエラーが発生しました")
-          console.warn("errorFU19", err)
+          alert("インタビュー取得でエラーが発生しました")
+          console.warn("errorFU18", err)
         });
       return target;
     }
