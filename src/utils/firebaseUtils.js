@@ -251,6 +251,7 @@ export default {
           });
         });
         return returnLists;
+        
     },
     //ユーザー情報をIDから取得
     //@param userId
