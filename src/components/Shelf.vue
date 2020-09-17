@@ -90,6 +90,11 @@ export default {
 };
 </script>
 <style scoped>
+h1 {
+  padding: 20px 0;
+  font-size: 34px;
+  font-family: revert;
+}
 .card {
   background-color: #3e3e3e;
 }

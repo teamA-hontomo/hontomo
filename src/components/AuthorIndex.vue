@@ -5,12 +5,13 @@
     </TitleBox>
     <div v-for="author in authors" :key="author.id">
       <ContentsBox>
-        <p>{{author.name}}</p>
-        <p>代表作:{{author.works[0]}}</p>
+        <p>{{ author.name }}</p>
+        <p>代表作:{{ author.works[0].title }}</p>
         <router-link
-          :to="{ name:'Author', params: { id: author.id } }"
+          :to="{ name: 'Author', params: { id: author.id } }"
           class="btn btn-primary"
-        >詳しく見る</router-link>
+          >詳しく見る</router-link
+        >
       </ContentsBox>
     </div>
   </div>
@@ -25,20 +26,19 @@ export default {
 
   components: {
     TitleBox,
-    ContentsBox,
+    ContentsBox
   },
 
   data() {
     return {
-      authors: [],
+      authors: []
     };
   },
 
   created() {
     this.authors = this.getAllAuthors();
-  },
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>
