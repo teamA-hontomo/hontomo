@@ -30,12 +30,16 @@ export default {
   color: #2c3e50;
 }
 .sidebar {
-  position: sticky;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
   background-color: #656565;
 }
 .main {
   background-color: #3e3e3e;
   color: #ffffff;
+  margin-left: 16.666667%;
 }
 body {
   height: 100%;
