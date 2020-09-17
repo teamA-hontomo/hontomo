@@ -8,7 +8,10 @@
         <h3 class="agora-title">Agora</h3>
       </div>
     </div>
-
+    <div class="input-group">
+      <textarea class="form-control" v-model="newMessage" placeholder="メッセージを追加"></textarea>
+      <button type="button" class="btn submit-button" @click="submitMessage()">送信</button>
+    </div>
     <div v-show="isMessageExist">
       <div v-for="message in messages" :key="message.id">
         <Message :message="message"> 
@@ -24,10 +27,6 @@
     </div>
     <div v-show="!isMessageExist">
       <p>まだこのコマにはメッセージがありません</p>
-    </div>
-    <div class="input-group">
-      <textarea class="form-control" v-model="newMessage" placeholder="メッセージを追加"></textarea>
-      <button type="button" class="btn submit-button" @click="submitMessage()">送信</button>
     </div>
   </div>
 </template>
@@ -57,7 +56,6 @@ export default {
       author_mes:[
       ],
       user_mes:[
-
       ]
 
     };
@@ -92,7 +90,7 @@ export default {
         alert("メッセージを送信しました。");
       }
       //メッセージボックスを空にする
-      this.newMessage="";
+      this.newMessage = "";
     },
 
     closeAgora() {

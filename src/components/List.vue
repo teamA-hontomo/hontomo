@@ -22,18 +22,21 @@
     </TitleBox>
 
     <ContentsBox>
-      <div v-for='frame in frames' class='col-md-3' :key='frame.addedTime'>
-        <div class='card'>
-          <img :src='"/static/" + frame.path' class='card-img-top' v-on:click='openFrame' />
-          <div class='card-body'>
-            <p class='card-title'>{{frame.title}}</p>
-            <p class='card-title'>
-              {{frame.volume}}巻
-              /{{frame.page}}ページ
-            </p>
+      <div v-if="frames.length" class="y-frame">
+        <div v-for='frame in frames' class='col-md-3' :key='frame.id'>
+          <div class='card'>
+            <img :src='"/static/" + frame.path' class='card-img-top' v-on:click='openFrame' />
+            <div class='card-body'>
+              <p class='card-title'>{{frame.title}}</p>
+              <p class='card-title'>
+                {{frame.volume}}巻
+                /{{frame.page}}ページ
+              </p>
+            </div>
           </div>
         </div>
       </div>
+      <div v-else>コマはまだありません。</div>
     </ContentsBox>
     <ModalWindow v-show='showModal' v-on:fromModal='closeModal' :width='"20"' :height='"50"'>
       <div class='mt-5 mx-auto'>
@@ -209,5 +212,9 @@ export default {
 }
 .clickedHeart {
   color: pink;
+}
+.y-frame {
+  width: 100%;
+  display: flex;
 }
 </style>

@@ -35,8 +35,8 @@
         </div>
       </div>
     </div>
-    <div class="col-4">
-      <AgoraMain></AgoraMain>
+    <div class="col-4" v-show="showAgora">
+      <AgoraMain @fromAgora="closeAgora"></AgoraMain>
     </div>
     <FrameSaveModal :frame_src="selected_frame" ref="modal"></FrameSaveModal>
   </div>
@@ -53,7 +53,8 @@ export default {
   data() {
     return {
       viewer: {},
-      selected_frame: ""
+      selected_frame: "",
+      showAgora: false
     };
   },
   mounted() {
@@ -81,8 +82,11 @@ export default {
       this.$refs.modal.show();
     },
     agoraClick() {
-      alert("agoraClick!!!");
-    }
+      this.showAgora = true;
+    },
+    closeAgora() {
+      this.showAgora = false;
+    },
   }
 };
 </script>
