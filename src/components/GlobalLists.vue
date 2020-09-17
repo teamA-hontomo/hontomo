@@ -64,6 +64,7 @@ export default {
     // this.db = firebase.firestore();
     console.log("fetch lists");
     this.lists = await this.getListsOrderByRating();
+    debugger;
     console.log("this.lists", this.lists);
     // this.frames = this.getFramesFromList(this.id);
   },
