@@ -325,13 +325,13 @@ export default {
         .get()
         .then(qs => {
           qs.forEach(list => {
-            returnLists.push(list.data());
+            returnMessages.push(list.data());
           });
         }).catch((err) => {
           alert("メッセージの取得でエラーが発生しました")
           console.warn("errorFU14", err)
         });
-        return returnLists;
+        return returnMessages;
     },
 
     // ユーザがいいねしたリストであれば true を返す。　要でばltぐ
