@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-8">
+    <div class="col" :class="{'col-8':showAgora}">
       <div id="view-wrap">
         <div id="go" class="btn" @click="go">
           <svg
