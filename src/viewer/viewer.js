@@ -14,7 +14,8 @@ export default class Viewer {
     canvas_width = 500,
     canvas_height = 700
   }) {
-    this.setCanvas(canvas_id);
+    // ページを表示するためのDOMの登録
+    this.canvas = document.getElementById(canvas_id);
     this.canvas.style.width = canvas_width + "px";
     this.canvas.style.height = canvas_height + "px";
 
@@ -44,11 +45,6 @@ export default class Viewer {
     this.last_page = this.root.getElementsByTagName("page").length - 1;
   }
 
-  // ページを表示するためのDOMの登録
-  setCanvas(id) {
-    this.canvas = document.getElementById(id);
-  }
-
   // 現在のページを描画
   show() {
     this.clearView();
@@ -57,7 +53,6 @@ export default class Viewer {
     [...frames].forEach(elm => {
       this.arrangeFrame(elm);
     });
-    return this;
   }
 
   // コマの配置
