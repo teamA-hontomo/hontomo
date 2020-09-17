@@ -11,16 +11,16 @@ export default class Viewer {
     listClick,
     agoraClick,
     canvas_id = "view",
-    canvas_width = 200,
-    canvas_height = 300
+    canvas_width = 500,
+    canvas_height = 700
   }) {
     this.setCanvas(canvas_id);
     this.canvas.style.width = canvas_width + "px";
     this.canvas.style.height = canvas_height + "px";
 
-    // 基準値　横幅200px 縦幅300px とする。この値にそってxmlは記述されているものとする
-    this.ratio_width = canvas_width / 200;
-    this.ratio_height = canvas_height / 300;
+    // 基準値　横幅500px 縦幅700px とする。この値にそってxmlは記述されているものとする
+    this.ratio_width = canvas_width / 500;
+    this.ratio_height = canvas_height / 700;
 
     this.xml_src = xml_src;
     this.listClick = listClick;
