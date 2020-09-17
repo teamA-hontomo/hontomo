@@ -18,8 +18,8 @@ export default {
       writerName: "",
       isMyMessage: false,
       currentUser: {
-        id: "YJvLYXKuOw2hMddumjL7",
-        //id:"4oFo1QKy3X8wGwuGx98h"
+        //id: "YJvLYXKuOw2hMddumjL7",
+        id:"4oFo1QKy3X8wGwuGx98h"
       },
     };
   },

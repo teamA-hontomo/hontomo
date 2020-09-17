@@ -27,6 +27,8 @@
 <script>
 import { BIconAlarm } from "bootstrap-vue";
 import Message from "./Message";
+import firebase from "firebase";
+import "firebase/firestore";
 export default {
   components: { Message },
 
@@ -38,14 +40,16 @@ export default {
     return {
       newMessage: "",
       frameId: "BDyb4dA26stiHHaMuPhM",
-      // userId: "4oFo1QKy3X8wGwuGx98h",
-      userId: "YJvLYXKuOw2hMddumjL7",
-      messages: [],
+      //userId: "4oFo1QKy3X8wGwuGx98h",
+      userId: "public",
+      db: null,
+      messages: [
+      ],
     };
   },
 
   created() {
-    this.messages = this.recieveMesage(this.frameId);
+    this.messages = this.recieveMessage(this.frameId);
     console.debug(this.messages);
   },
 
@@ -57,11 +61,14 @@ export default {
         this.sendMessage(this.userId, this.newMessage, this.frameId);
         alert("メッセージを送信しました。");
       }
+      //メッセージボックスを空にする
+      this.newMessage="";
     },
 
     closeAgora() {
       this.$emit("fromAgora");
     },
+
   },
 
   computed: {
@@ -69,6 +76,12 @@ export default {
       return this.messages.length > 0;
     },
   },
+
+  mounted(){
+    this.db.collection("messages").onSnapshot(()=>{
+      this.messages = this.recieveMessage(this.frameId,10);
+    })
+  }
 };
 </script>
 

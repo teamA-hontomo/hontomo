@@ -26,17 +26,18 @@ export default {
       var newId = this.db.collection("lists").doc().id; //複数箇所でつかうので事前に取得。
       listData.id = newId;
       (listData.created = firebase.firestore.FieldValue.serverTimestamp()), //firebaseのサーバー時間を取得。
-        //listに追加
-        this.db
-          .collection("lists")
-          .doc(newId)
-          .set(listData)
-          .then(() => {
-            alert(listData.name + "を新規作成しました。");
-          })
-          .catch(() => {
-            alert(listData.name + "を作成するときにエラーが発生しました。");
-          });
+      //listに追加
+      this.db
+        .collection("lists")
+        .doc(newId)
+        .set(listData)
+        .then(() => {
+          alert(listData.name + "を新規作成しました。");
+        })
+        .catch((err) => {
+          alert(listData.name + "を作成するときにエラーが発生しました。");
+          console.warn("リスト作成でエラーが発生しました。errorFU1", err);
+        });
 
       //users/<currentUser>/listsのarrayに追加
       this.db
@@ -44,6 +45,9 @@ export default {
         .doc(listData.ownerId)
         .update({
           lists: firebase.firestore.FieldValue.arrayUnion(newId)
+        }).catch((err) => {
+          alert(listData.name + "を作成するときにエラーが発生しました。");
+          console.warn("リスト作成でエラーが発生しました。errorFU2", err);
         });
     },
 
@@ -60,6 +64,9 @@ export default {
           lists.forEach(list => {
             returnLists.push(list.data());
           });
+        }).catch((err) => {
+          alert("リストの取得でエラーが発生しました")
+          console.warn("errorFU3", err)
         });
 
       return returnLists;
@@ -76,6 +83,9 @@ export default {
         .get()
         .then(list => {
           returnList = list.data();
+        }).catch((err) => {
+          alert("リストの取得でエラーが発生しました")
+          console.warn("errorFU4", err)
         });
       return returnList;
     },
@@ -95,6 +105,9 @@ export default {
               returnLists.push(list);
             });
           });
+        }).catch((err) => {
+          alert("リストの取得でエラーが発生しました")
+          console.warn("errorFU4", err)
         });
       return returnLists;
     },
@@ -106,15 +119,16 @@ export default {
       this.db
         .collection("lists")
         .doc(listId)
-        .set(
-          {
-            name: newName
-          },
-          {
-            merge: true
-          }
-        )
-        .then(() => {});
+        .set({
+          name: newName
+        }, {
+          merge: true
+        })
+        .then(() => {})
+        .catch((err) => {
+          alert("リスト名の変更に失敗しました")
+          console.warn("errorFU5", err)
+        });
     },
 
     //リストにコマを追加
@@ -136,13 +150,22 @@ export default {
         .collection("lists")
         .doc(listId)
         .collection("frames")
-        .add({
+        .doc(newId)
+        .set({
+          id: newId,
           path: framePath,
           addedTime: firebase.firestore.FieldValue.serverTimestamp()
         })
-        .then(() => {});
+        .then(() => {})
+        .catch((err) => {
+          alert("コマの追加でエラーが発生しました")
+          console.warn("errorFU6", err)
+        });
     },
 
+    //リストからコマを取得
+    //@param リストID
+    //@return Array
     getFramesFromList(listId) {
       const frames = [];
       this.db
@@ -152,19 +175,29 @@ export default {
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(frame => {
-            frames.push(frame.data());
+            var frameData = frame.data();
+            frameData.id = frame.id
+            frames.push(frameData);
           });
+        }).catch((err) => {
+          alert("コマの取得でエラーが発生しました")
+          console.warn("errorFU7", err)
         });
       return frames;
     },
 
     //リストのratingを1増やし、user/listに追加。
+    //@param listId, userId
+    //@return null
     addStarToList(listId, userId) {
       this.db
         .collection("lists")
         .doc(listId)
         .update({
           rating: firebase.firestore.FieldValue.increment(1)
+        }).catch((err) => {
+          alert("フォローでエラーが発生しました")
+          console.warn("errorFU8", err)
         });
 
       this.db
@@ -172,22 +205,34 @@ export default {
         .doc(userId)
         .update({
           lists: firebase.firestore.FieldValue.arrayUnion(listId)
+        }).catch((err) => {
+          alert("フォローでエラーが発生しました")
+          console.warn("errorFU9", err)
         });
     },
 
     //リストのratingを１減らし、user/listからlistIdを削除。
+    //@param listId, userId
+    //@return null
     removeStarFromList(listId, userId) {
       this.db
         .collection("lists")
         .doc(listId)
         .update({
           rating: firebase.firestore.FieldValue.increment(-1)
+        }).catch((err) => {
+          alert("アンフォローでエラーが発生しました")
+          console.warn("errorFU10", err)
         });
+
       this.db
         .collection("users")
         .doc(userId)
         .update({
           lists: firebase.firestore.FieldValue.arrayRemove(listId)
+        }).catch((err) => {
+          alert("アンフォローでエラーが発生しました")
+          console.warn("errorFU11", err)
         });
     },
 
@@ -207,18 +252,26 @@ export default {
         });
         return returnLists;
     },
+    //ユーザー情報をIDから取得
+    //@param userId
+    //@return Object
     getUserById(userId) {
       return this.db.collection("users")
         .doc(userId)
         .get().then((user) => {
-          var userData=user.data();
-          userData.id=user.id
+          var userData = user.data();
+          userData.id = user.id
           return userData;
+        }).catch((err) => {
+          alert("ユーザー情報取得でエラーが発生しました")
+          console.warn("errorFU12", err)
         })
     },
 
     //メッセージの送信
-    sendMessage(userId, Message, frame_id) {
+    //@param userId,String,frameId
+    //@return null
+    sendMessage(userId, Message, frameId) {
       var newId = this.db.collection("messages").doc().id;
       this.db
         .collection("messages")
@@ -229,23 +282,33 @@ export default {
           created: firebase.firestore.FieldValue.serverTimestamp(),
           id: newId,
           report: 0,
-          frame_id: frame_id
+          good: 0,
+          frame_id: frameId,
+          flameId: flameId
+        }).catch((err) => {
+          alert("メッセージの送信でエラーが発生しました")
+          console.warn("errorFU13", err)
         });
     },
 
     //コマを指定してそのコマに対するメッセージの取得、ちゃんと動くか分かりません
-    recieveMesage(frame_id,count=10) {
+    //@param flameId,int
+    //@return Array
+    recieveMessage(frameId, count = 10) {
       var returnMessages = [];
       this.db
         .collection("messages")
-        .where("frame_id", "==", frame_id)
-        .orderBy("created")
+        .where("frame_id", "==", frameId)
+        .orderBy("created","desc")
         .limit(count)
         .get()
         .then(qs => {
           qs.forEach(list => {
             returnLists.push(list.data());
           });
+        }).catch((err) => {
+          alert("メッセージの取得でエラーが発生しました")
+          console.warn("errorFU14", err)
         });
         return returnLists;
     },
@@ -259,6 +322,23 @@ export default {
         .get()
         .then( user => {
           lists = user.data().lists;
+        });
+
+        return (lists.includes(list_id));
+      },
+      
+    //メッセージを通報、reportの値を1増やす
+    //@param messageId
+    //@return null
+    reportMessage(messageId) {
+      this.db
+        .collection("messages")
+        .doc(messageId)
+        .update({
+          report: firebase.firestore.FieldValue.increment(1)
+        }).catch((err) => {
+          alert("通報処理でエラーが発生しました")
+          console.warn("errorFU16", err)
         });
 
       return (lists.includes(list_id));
@@ -288,8 +368,12 @@ export default {
             authorObj.id = author.id
             target.push(authorObj);
           });
+        }).catch((err) => {
+          alert("作者一覧取得でエラーが発生しました")
+          console.warn("errorFU17", err)
         });
       return target;
     }
-},
+  },
+
 };
