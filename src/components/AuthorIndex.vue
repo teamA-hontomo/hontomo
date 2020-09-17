@@ -1,32 +1,46 @@
 <template>
   <div>
     <TitleBox>
-      <span class="mx-auto my-auto">作者一覧</span>
+      <h2 class="mx-auto my-auto">作者一覧</h2>
     </TitleBox>
-    <div v-for="author in authors" :key="author.id">
-      <ContentsBox>
-        <p>{{ author.name }}</p>
-        <p>代表作:{{ author.works[0].title }}</p>
-        <router-link
-          :to="{ name: 'Author', params: { id: author.id } }"
-          class="btn btn-primary"
-          >詳しく見る</router-link
-        >
-      </ContentsBox>
-    </div>
+
+    <ContentsBox>
+      <div v-for="author in authors" :key="author.id" class="col-md-3">
+        <div class="card">
+          <div class="card-img-top">
+            <UserIcon :is_author="false" :num="author.num" />
+          </div>
+          <div class="card-body">
+            <div class="card-title mx-auto my-auto">
+              <p>{{ author.name }}</p>
+            </div>
+            <div class="card-title mx-auto my-aut">
+              代表作 : {{ author.works[0].title }}
+            </div>
+            <router-link
+              :to="{ name: 'Author', params: { id: author.id } }"
+              class="btn btn-primary"
+              >詳しく見る</router-link
+            >
+          </div>
+        </div>
+      </div>
+    </ContentsBox>
   </div>
 </template>
 
 <script>
 import TitleBox from "./shared/TitleBox.vue";
 import ContentsBox from "./shared/ContentsBox.vue";
+import UserIcon from "./shared/UserIcon.vue";
 
 export default {
   name: "Author",
 
   components: {
     TitleBox,
-    ContentsBox
+    ContentsBox,
+    UserIcon
   },
 
   data() {
@@ -41,4 +55,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.card {
+  background-color: #3e3e3e;
+}
+</style>

@@ -33,22 +33,17 @@ export default {
 
   name: "AgoraMain",
 
-  // props:["frameId"],
+  props:["frameId"],
 
   data() {
     return {
       newMessage: "",
-      frameId: "BDyb4dA26stiHHaMuPhM",
-      //userId: "4oFo1QKy3X8wGwuGx98h",
-      userId: "public",
+      // frameId: "BDyb4dA26stiHHaMuPhM",
+      userId: "4oFo1QKy3X8wGwuGx98h",
+      // userId: "public",
       db: null,
       messages: [],
     };
-  },
-
-  created() {
-    this.messages = this.recieveMessage(this.frameId);
-    console.debug(this.messages);
   },
 
   methods: {
@@ -79,6 +74,11 @@ export default {
       this.messages = this.recieveMessage(this.frameId, 10);
     });
   },
+  watch: {
+    frameId: function() {
+      this.messages = this.recieveMessage(this.frameId);
+    }
+  }
 };
 </script>
 
