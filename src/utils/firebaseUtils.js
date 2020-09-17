@@ -68,7 +68,27 @@ export default {
           alert("リストの取得でエラーが発生しました")
           console.warn("errorFU3", err)
         });
+      return returnLists;
+    },
 
+    //ユーザーIDからそのユーザーがオーナーの公開リストを持ってくる
+    //@param userId
+    //@return Object ListのArray
+    getOwnedOpenListsFromUserId(userId) {
+      var returnLists = [];
+      this.db
+        .collection("lists")
+        .where("ownerId", "==", userId)
+        .where("open","==",true)
+        .get()
+        .then(lists => {
+          lists.forEach(list => {
+            returnLists.push(list.data());
+          });
+        }).catch((err) => {
+          alert("リストの取得でエラーが発生しました")
+          console.warn("errorFU3.1 : ", err)
+        });
       return returnLists;
     },
 
@@ -154,9 +174,6 @@ export default {
         .set({
           id: newId,
           path: framePath,
-          page: page,
-          title: title,
-          volume: volume,
           addedTime: firebase.firestore.FieldValue.serverTimestamp()
         })
         .then(() => {})
@@ -239,6 +256,23 @@ export default {
         });
     },
 
+    // 公開リストをレーティング順に取得する
+    async getListsOrderByRating() {
+      const returnLists =[];
+
+      await this.db
+        .collection("lists")
+        .where("open", "==", true)
+        .orderBy("rating", "desc")
+        .get()
+        .then(qs => {
+          qs.forEach(list => {
+            returnLists.push(list.data());
+          });
+        });
+        return returnLists;
+        
+    },
     //ユーザー情報をIDから取得
     //@param userId
     //@return Object
@@ -286,21 +320,35 @@ export default {
       this.db
         .collection("messages")
         .where("frame_id", "==", frameId)
-        .orderBy("created","desc")
+        .orderBy("created", "desc")
         .limit(count)
         .get()
-        .then(messages => {
-          messages.forEach(message => {
-            returnMessages.push(message.data());
+        .then(qs => {
+          qs.forEach(list => {
+            returnMessages.push(list.data());
           });
         }).catch((err) => {
           alert("メッセージの取得でエラーが発生しました")
           console.warn("errorFU14", err)
         });
-
-      return returnMessages;
+        return returnMessages;
     },
 
+    // ユーザがいいねしたリストであれば true を返す。　要でばltぐ
+    async isListStared(list_id, user_id = '4oFo1QKy3X8wGwuGx98h') {
+      let lists = [];
+      await this.db
+        .collection("users")
+        .doc(user_id)
+        .get()
+        .then( user => {
+          lists = user.data().lists;
+        });
+        
+
+        return (lists.includes(list_id));
+      },
+      
     //メッセージを通報、reportの値を1増やす
     //@param messageId
     //@return null
@@ -314,11 +362,13 @@ export default {
           alert("通報処理でエラーが発生しました")
           console.warn("errorFU16", err)
         });
+
+      return (lists.includes(list_id));
     },
 
     //firebaseのタイムスタンプを文字列にする
     //@param FirebaseTimestamp
-    //return String
+    //@return String
     formatDate(firebaseTimestamp) {
       var date = firebaseTimestamp.toDate()
       return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
@@ -343,6 +393,28 @@ export default {
         }).catch((err) => {
           alert("作者一覧取得でエラーが発生しました")
           console.warn("errorFU17", err)
+        });
+      return target;
+    },
+
+    //ユーザーidからその作者のインタビューをすべて取得
+    //@param userId
+    //@return Array
+    getInterviewsByUserId(userId) {
+      var target = []
+      this.db
+        .collection("users").doc(userId)
+        .collection("interview")
+        .get()
+        .then(interviews => {
+          interviews.forEach(interview => {
+            var interviewOBJ = interview.data()
+            interviewOBJ.id = interview.id
+            target.push(interviewOBJ);
+          });
+        }).catch((err) => {
+          alert("インタビュー取得でエラーが発生しました")
+          console.warn("errorFU18", err)
         });
       return target;
     }
