@@ -286,7 +286,7 @@ export default {
       this.db
         .collection("messages")
         .where("frame_id", "==", frameId)
-        .orderBy("created")
+        .orderBy("created","desc")
         .limit(count)
         .get()
         .then(messages => {
@@ -300,30 +300,6 @@ export default {
 
       return returnMessages;
     },
-
-
-    newrecieveMessage(frame_id, count = 10) {
-      var returnMessages = [];
-      this.db
-        .collection("messages")
-        .where("frame_id", "==", frame_id)
-        .orderBy("created", "desc")
-        .limit(count)
-        .get()
-        .then(messages => {
-          messages.forEach(message => {
-            returnMessages.push(message.data());
-          });
-        }).catch((err) => {
-          alert("エラーが発生しました")
-          console.warn("errorFU15", err)
-        });
-
-      return returnMessages;
-    },
-
-
-
 
     //メッセージを通報、reportの値を1増やす
     //@param messageId
