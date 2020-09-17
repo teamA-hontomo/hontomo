@@ -34,8 +34,9 @@ export default {
         .then(() => {
           alert(listData.name + "を新規作成しました。");
         })
-        .catch(() => {
+        .catch((err) => {
           alert(listData.name + "を作成するときにエラーが発生しました。");
+          console.warn("リスト作成でエラーが発生しました。errorFU1", err);
         });
 
       //users/<currentUser>/listsのarrayに追加
@@ -44,6 +45,9 @@ export default {
         .doc(listData.ownerId)
         .update({
           lists: firebase.firestore.FieldValue.arrayUnion(newId)
+        }).catch((err) => {
+          alert(listData.name + "を作成するときにエラーが発生しました。");
+          console.warn("リスト作成でエラーが発生しました。errorFU2", err);
         });
     },
 
@@ -60,6 +64,9 @@ export default {
           lists.forEach(list => {
             returnLists.push(list.data());
           });
+        }).catch((err) => {
+          alert("リストの取得でエラーが発生しました")
+          console.warn("errorFU3", err)
         });
 
       return returnLists;
@@ -76,6 +83,9 @@ export default {
         .get()
         .then(list => {
           returnList = list.data();
+        }).catch((err) => {
+          alert("リストの取得でエラーが発生しました")
+          console.warn("errorFU4", err)
         });
       return returnList;
     },
@@ -95,6 +105,9 @@ export default {
               returnLists.push(list);
             });
           });
+        }).catch((err) => {
+          alert("リストの取得でエラーが発生しました")
+          console.warn("errorFU4", err)
         });
       return returnLists;
     },
@@ -111,7 +124,11 @@ export default {
         }, {
           merge: true
         })
-        .then(() => {});
+        .then(() => {})
+        .catch((err) => {
+          alert("リスト名の変更に失敗しました")
+          console.warn("errorFU5", err)
+        });
     },
 
     //リストにコマを追加
@@ -142,9 +159,16 @@ export default {
           volume: volume,
           addedTime: firebase.firestore.FieldValue.serverTimestamp()
         })
-        .then(() => {});
+        .then(() => {})
+        .catch((err) => {
+          alert("コマの追加でエラーが発生しました")
+          console.warn("errorFU6", err)
+        });
     },
 
+    //リストからコマを取得
+    //@param リストID
+    //@return Array
     getFramesFromList(listId) {
       const frames = [];
       this.db
@@ -153,150 +177,199 @@ export default {
         .collection("frames")
         .get()
         .then(querySnapshot => {
-            querySnapshot.forEach(frame => {
-                var frameData = frame.data();
-                frameData.id = frame.id
-                frames.push(frameData);
-                });
-            });
-          return frames;
-        },
-
-        //リストのratingを1増やし、user/listに追加。
-        addStarToList(listId, userId) {
-          this.db
-            .collection("lists")
-            .doc(listId)
-            .update({
-              rating: firebase.firestore.FieldValue.increment(1)
-            });
-
-          this.db
-            .collection("users")
-            .doc(userId)
-            .update({
-              lists: firebase.firestore.FieldValue.arrayUnion(listId)
-            });
-        },
-
-        //リストのratingを１減らし、user/listからlistIdを削除。
-        removeStarFromList(listId, userId) {
-          this.db
-            .collection("lists")
-            .doc(listId)
-            .update({
-              rating: firebase.firestore.FieldValue.increment(-1)
-            });
-          this.db
-            .collection("users")
-            .doc(userId)
-            .update({
-              lists: firebase.firestore.FieldValue.arrayRemove(listId)
-            });
-        },
-
-        getUserById(userId) {
-          return this.db.collection("users")
-            .doc(userId)
-            .get().then((user) => {
-              var userData = user.data();
-              userData.id = user.id
-              return userData;
-            })
-        },
-
-        //メッセージの送信
-        sendMessage(userId, Message, frame_id) {
-          var newId = this.db.collection("messages").doc().id;
-          this.db
-            .collection("messages")
-            .doc(newId)
-            .set({
-              text: Message,
-              userId: userId,
-              created: firebase.firestore.FieldValue.serverTimestamp(),
-              id: newId,
-              report: 0,
-              good: 0,
-              frame_id: frame_id
-            });
-        },
-
-        //コマを指定してそのコマに対するメッセージの取得、ちゃんと動くか分かりません
-        recieveMessage(frame_id, count = 10) {
-          var returnMessages = [];
-          this.db
-            .collection("messages")
-            .where("frame_id", "==", frame_id)
-            .orderBy("created")
-            .limit(count)
-            .get()
-            .then(messages => {
-              messages.forEach(message => {
-                returnMessages.push(message.data());
-              });
-            });
-
-          return returnMessages;
-        },
-
-        newrecieveMessage(frame_id, count = 10) {
-          var returnMessages = [];
-          this.db
-            .collection("messages")
-            .where("frame_id", "==", frame_id)
-            .orderBy("created", "desc")
-            .limit(count)
-            .get()
-            .then(messages => {
-              messages.forEach(message => {
-                returnMessages.push(message.data());
-              });
-            });
-
-          return returnMessages;
-        },
-
-
-
-
-        //メッセージを通報、reportの値を1増やす
-        reportMessage(messageId) {
-          this.db
-            .collection("messages")
-            .doc(messageId)
-            .update({
-              report: firebase.firestore.FieldValue.increment(1)
-            });
-        },
-
-        //firebaseのタイムスタンプを文字列にする
-        //@param FirebaseTimestamp
-        //return String
-        formatDate(firebaseTimestamp) {
-          var date = firebaseTimestamp.toDate()
-          return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
-        },
-
-        //作者一覧をcount件とってくる
-        //@param null
-        //@return Array
-        getAllAuthors(count = 20) {
-          var target = []
-          this.db
-            .collection("users")
-            .where("isAuthor", "==", true)
-            .limit(count)
-            .get()
-            .then(authors => {
-              authors.forEach(author => {
-                var authorObj = author.data()
-                authorObj.id = author.id
-                target.push(authorObj);
-              });
-            });
-          return target;
-        }
+          querySnapshot.forEach(frame => {
+            var frameData = frame.data();
+            frameData.id = frame.id
+            frames.push(frameData);
+          });
+        }).catch((err) => {
+          alert("コマの取得でエラーが発生しました")
+          console.warn("errorFU7", err)
+        });
+      return frames;
     },
 
-  };
+    //リストのratingを1増やし、user/listに追加。
+    //@param listId, userId
+    //@return null
+    addStarToList(listId, userId) {
+      this.db
+        .collection("lists")
+        .doc(listId)
+        .update({
+          rating: firebase.firestore.FieldValue.increment(1)
+        }).catch((err) => {
+          alert("フォローでエラーが発生しました")
+          console.warn("errorFU8", err)
+        });
+
+      this.db
+        .collection("users")
+        .doc(userId)
+        .update({
+          lists: firebase.firestore.FieldValue.arrayUnion(listId)
+        }).catch((err) => {
+          alert("フォローでエラーが発生しました")
+          console.warn("errorFU9", err)
+        });
+    },
+
+    //リストのratingを１減らし、user/listからlistIdを削除。
+    //@param listId, userId
+    //@return null
+    removeStarFromList(listId, userId) {
+      this.db
+        .collection("lists")
+        .doc(listId)
+        .update({
+          rating: firebase.firestore.FieldValue.increment(-1)
+        }).catch((err) => {
+          alert("アンフォローでエラーが発生しました")
+          console.warn("errorFU10", err)
+        });
+
+      this.db
+        .collection("users")
+        .doc(userId)
+        .update({
+          lists: firebase.firestore.FieldValue.arrayRemove(listId)
+        }).catch((err) => {
+          alert("アンフォローでエラーが発生しました")
+          console.warn("errorFU11", err)
+        });
+    },
+
+    //ユーザー情報をIDから取得
+    //@param userId
+    //@return Object
+    getUserById(userId) {
+      return this.db.collection("users")
+        .doc(userId)
+        .get().then((user) => {
+          var userData = user.data();
+          userData.id = user.id
+          return userData;
+        }).catch((err) => {
+          alert("ユーザー情報取得でエラーが発生しました")
+          console.warn("errorFU12", err)
+        })
+    },
+
+    //メッセージの送信
+    //@param userId,String,frameId
+    //@return null
+    sendMessage(userId, Message, frameId) {
+      var newId = this.db.collection("messages").doc().id;
+      this.db
+        .collection("messages")
+        .doc(newId)
+        .set({
+          text: Message,
+          userId: userId,
+          created: firebase.firestore.FieldValue.serverTimestamp(),
+          id: newId,
+          report: 0,
+          good: 0,
+          frame_id: frameId,
+          flameId: flameId
+        }).catch((err) => {
+          alert("メッセージの送信でエラーが発生しました")
+          console.warn("errorFU13", err)
+        });
+    },
+
+    //コマを指定してそのコマに対するメッセージの取得、ちゃんと動くか分かりません
+    //@param flameId,int
+    //@return Array
+    recieveMessage(frameId, count = 10) {
+      var returnMessages = [];
+      this.db
+        .collection("messages")
+        .where("frame_id", "==", frameId)
+        .orderBy("created")
+        .limit(count)
+        .get()
+        .then(messages => {
+          messages.forEach(message => {
+            returnMessages.push(message.data());
+          });
+        }).catch((err) => {
+          alert("メッセージの取得でエラーが発生しました")
+          console.warn("errorFU14", err)
+        });
+
+      return returnMessages;
+    },
+
+
+    newrecieveMessage(frame_id, count = 10) {
+      var returnMessages = [];
+      this.db
+        .collection("messages")
+        .where("frame_id", "==", frame_id)
+        .orderBy("created", "desc")
+        .limit(count)
+        .get()
+        .then(messages => {
+          messages.forEach(message => {
+            returnMessages.push(message.data());
+          });
+        }).catch((err) => {
+          alert("エラーが発生しました")
+          console.warn("errorFU15", err)
+        });
+
+      return returnMessages;
+    },
+
+
+
+
+    //メッセージを通報、reportの値を1増やす
+    //@param messageId
+    //@return null
+    reportMessage(messageId) {
+      this.db
+        .collection("messages")
+        .doc(messageId)
+        .update({
+          report: firebase.firestore.FieldValue.increment(1)
+        }).catch((err) => {
+          alert("通報処理でエラーが発生しました")
+          console.warn("errorFU16", err)
+        });
+    },
+
+    //firebaseのタイムスタンプを文字列にする
+    //@param FirebaseTimestamp
+    //return String
+    formatDate(firebaseTimestamp) {
+      var date = firebaseTimestamp.toDate()
+      return date.getFullYear() + "/" + (parseInt(date.getMonth()) + 1) + "/" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes()
+    },
+
+    //作者一覧をcount件とってくる
+    //@param null
+    //@return Array
+    getAllAuthors(count = 20) {
+      var target = []
+      this.db
+        .collection("users")
+        .where("isAuthor", "==", true)
+        .limit(count)
+        .get()
+        .then(authors => {
+          authors.forEach(author => {
+            var authorObj = author.data()
+            authorObj.id = author.id
+            target.push(authorObj);
+          });
+        }).catch((err) => {
+          alert("作者一覧取得でエラーが発生しました")
+          console.warn("errorFU17", err)
+        });
+      return target;
+    }
+  },
+
+};
