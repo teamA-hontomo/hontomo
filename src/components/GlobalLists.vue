@@ -63,7 +63,6 @@ export default {
   async created() {
     // this.db = firebase.firestore();
     console.log("fetch lists");
-    debugger;
     this.lists = this.getListsOrderByRating();
     
     console.log("this.lists", this.lists);
