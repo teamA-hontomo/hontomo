@@ -8,28 +8,30 @@
       <h2 class="my-3">人気のリスト一覧</h2>
       <ul id="v-for-object" class="cards-list">
         <li v-for="list in filteredLists" :key="list.id">
-          <div class="list-card mt-3">
-            <img :src="'../../' + list.cover_path" />
-            <p class="ttl" v-text="list.name"></p>
-            <p>
-              登録日：{{
-                String(list.created.toDate().getFullYear()) +
-                  "/" +
-                  String(list.created.toDate().getMonth() + 1) +
-                  "/" +
-                  String(list.created.toDate().getDate())
-              }}
-            </p>
-            <div slot="button">
-              <font-awesome-icon
-                icon="star"
-                class="fa-lg"
-                v-bind:class="starColor(list.id)"
-              />
-              <!-- v-on:click="onClickStar(list.id)" -->
-              {{ list.rating }}
+          <router-link :to='{ name: "List", params: { id: list.id } }' class='nav-link'>
+            <div class="list-card mt-3">
+              <img :src="'../../' + list.cover_path" />
+              <p class="ttl" v-text="list.name"></p>
+              <p>
+                登録日：{{
+                  String(list.created.toDate().getFullYear()) +
+                    "/" +
+                    String(list.created.toDate().getMonth() + 1) +
+                    "/" +
+                    String(list.created.toDate().getDate())
+                }}
+              </p>
+              <div slot="button">
+                <font-awesome-icon
+                  icon="star"
+                  class="fa-lg"
+                  v-bind:class="starColor(list.id)"
+                />
+                <!-- v-on:click="onClickStar(list.id)" -->
+                {{ list.rating }}
+              </div>
             </div>
-          </div>
+          </router-link>
         </li>
       </ul>
     </ContentsBox>
@@ -131,6 +133,10 @@ export default {
   margin: 0 15px;
   padding: 25px;
   background: rgb(44, 43, 43);
+  color: #fff;
+}
+.list-card:hover {
+  opacity: 0.5;
 }
 .list-card img {
   width: 100%;
