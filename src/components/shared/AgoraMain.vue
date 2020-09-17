@@ -8,7 +8,10 @@
         <h3 class="agora-title">Agora</h3>
       </div>
     </div>
-
+    <div class="input-group">
+      <textarea class="form-control" v-model="newMessage" placeholder="メッセージを追加"></textarea>
+      <button type="button" class="btn submit-button" @click="submitMessage()">送信</button>
+    </div>
     <div v-show="isMessageExist">
       <div v-for="message in messages" :key="message.id">
         <Message :message="message" />
@@ -16,10 +19,6 @@
     </div>
     <div v-show="!isMessageExist">
       <p>まだこのコマにはメッセージがありません</p>
-    </div>
-    <div class="input-group">
-      <textarea class="form-control" v-model="newMessage" placeholder="メッセージを追加"></textarea>
-      <button type="button" class="btn submit-button" @click="submitMessage()">送信</button>
     </div>
   </div>
 </template>
@@ -43,8 +42,7 @@ export default {
       //userId: "4oFo1QKy3X8wGwuGx98h",
       userId: "public",
       db: null,
-      messages: [
-      ],
+      messages: [],
     };
   },
 
@@ -62,13 +60,12 @@ export default {
         alert("メッセージを送信しました。");
       }
       //メッセージボックスを空にする
-      this.newMessage="";
+      this.newMessage = "";
     },
 
     closeAgora() {
       this.$emit("fromAgora");
     },
-
   },
 
   computed: {
@@ -77,11 +74,11 @@ export default {
     },
   },
 
-  mounted(){
-    this.db.collection("messages").onSnapshot(()=>{
-      this.messages = this.recieveMessage(this.frameId,10);
-    })
-  }
+  mounted() {
+    this.db.collection("messages").onSnapshot(() => {
+      this.messages = this.recieveMessage(this.frameId, 10);
+    });
+  },
 };
 </script>
 
