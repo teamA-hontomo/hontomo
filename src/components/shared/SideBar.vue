@@ -1,49 +1,45 @@
 <template>
-  <div id='sidebar'>
-    <ul class='nav flex-column'>
-      <li class='nav-brand'>
-        <router-link :to='{ name: "Top" }' class='my-auto mx-auto disable-router-link-active'>
-          <img src='/static/logo/hontomo_logo.png' width='100' height='35' class='my-3' />
+  <div id="sidebar">
+    <ul class="nav flex-column">
+      <li class="nav-brand">
+        <router-link :to="{ name: 'Top' }" class="my-auto mx-auto disable-router-link-active">
+          <img src="/static/logo/hontomo_logo.png" width="100" height="35" class="my-3" />
         </router-link>
       </li>
-      <li class='nav-item'>
-        <router-link :to='{ name: "Top" }' class='nav-link'>
-          <font-awesome-icon icon='home' class='fa-lg' />
+      <li class="nav-item">
+        <router-link :to="{ name: 'Top' }" class="nav-link">
+          <font-awesome-icon icon="home" class="fa-lg" />
           <span>トップ</span>
         </router-link>
       </li>
-      <li class='nav-item'>
-        <router-link :to='{ name: "Shelf" }' class='nav-link'>
-          <font-awesome-icon icon='book' class='fa-lg' />
+      <li class="nav-item">
+        <router-link :to="{ name: 'Shelf' }" class="nav-link">
+          <font-awesome-icon icon="book" class="fa-lg" />
           <span>本棚</span>
         </router-link>
       </li>
     </ul>
     <hr />
-    <router-link :to='{ name: "MyLists" }' class='nav-link'>
-      <font-awesome-icon icon='list' class='fa-lg' />
+    <router-link :to="{ name: 'MyLists' }" class="nav-link">
+      <font-awesome-icon icon="list" class="fa-lg" />
       <span>リスト一覧</span>
     </router-link>
-    <ul class='nav flex-column'>
-      <li
-        v-for='i in Array.from(Array(favoriteLists.length), (v, k)=> k)'
-        v-bind:key='i'
-        class='nav-item'
-      >
-        <router-link :to='{ name: "List", params: { id: favoriteLists[i] } }' class='nav-link'>
-          <font-awesome-icon icon='heart' class='fa-lg' v-show='favoriteLists[i] === "favorite"' />
-          <span>{{ favoriteListsNames[i] }}</span>
+    <ul class="nav flex-column">
+      <li v-for="list in limitFavoriteLists" v-bind:key="list.id" class="nav-item">
+        <router-link :to="{ name: 'List', params: { id: list.id } }" class="nav-link">
+          <font-awesome-icon icon="heart" class="fa-lg" v-show="list.id === 'favorite'" />
+          <span>{{ list.name}}</span>
         </router-link>
       </li>
     </ul>
     <hr />
-    <router-link :to='{ name: "GlobalLists" }' class='nav-link'>
-      <font-awesome-icon icon='globe-asia' class='fa-lg' />
+    <router-link :to="{ name: 'GlobalLists' }" class="nav-link">
+      <font-awesome-icon icon="globe-asia" class="fa-lg" />
       <span>みんなのリスト</span>
     </router-link>
     <hr />
-    <router-link :to='{ name: "AuthorIndex" }' class='nav-link'>
-      <font-awesome-icon icon='pen-fancy' class='fa-lg' />
+    <router-link :to="{ name: 'AuthorIndex' }" class="nav-link">
+      <font-awesome-icon icon="pen-fancy" class="fa-lg" />
       <span>作者一覧</span>
     </router-link>
   </div>
@@ -57,34 +53,28 @@ export default {
     return {
       db: "",
       favoriteLists: [],
-      favoriteListsNames: [],
       userId: "4oFo1QKy3X8wGwuGx98h", //TODO:ハードコーディング
     };
   },
 
   created() {
-    this.db = firebase.firestore();
-    let userDoc = this.db.collection("users").doc(this.userId);
-    userDoc.get().then((user) => {
-      this.favoriteLists = user.data().lists.slice(0, 3);
-      //console.log(this.favoriteLists);
-      let self = this;
-      let listsRef = this.db.collection("lists");
-      listsRef
-        .where("id", "in", this.favoriteLists)
-        .get()
-        .then((docs) => {
-          docs.forEach((doc) => {
-            self.favoriteListsNames.push(doc.data().name);
-          });
-        });
-      //console.log(this.favoriteListsNames);
-    });
+    this.favoriteLists = this.getSubscribedListsFromUserId(this.userId);
+  },
+
+  computed: {
+    limitFavoriteLists() {
+      this.favoriteLists.sort((a, b) => {
+        if (a.created < b.created) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+      return this.favoriteLists.slice(0, 3)
+    },
   },
 };
 </script>
-
-
 
 <style scoped>
 .nav-brand img {
