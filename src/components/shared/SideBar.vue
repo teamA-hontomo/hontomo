@@ -61,6 +61,12 @@ export default {
     this.favoriteLists = this.getSubscribedListsFromUserId(this.userId);
   },
 
+  mounted() {
+    this.db.collection("users").onSnapshot(() => {
+      this.favoriteLists = this.getSubscribedListsFromUserId(this.userId);
+    });
+  },
+
   computed: {
     limitFavoriteLists() {
       this.favoriteLists.sort((a, b) => {
