@@ -30,7 +30,7 @@ export default {
   color: #2c3e50;
 }
 .sidebar {
-  position: fixed;
+  position: fixed!important;
   top: 0;
   left: 0;
   height: 100vh;
