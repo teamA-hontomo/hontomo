@@ -3,7 +3,7 @@
     <ContentsBox class="mt-3">
       <h2 class="my-3">マイリスト一覧</h2>
       <ul id="v-for-object" class="cards-list">
-        <li v-for="list in myLists" :key="list.id">
+        <li v-for="list in filterList" :key="list.id">
           <router-link :to="{ name: 'List', params: { id: list.id } }" class="nav-link">
             <ListCard :list="list"></ListCard>
           </router-link>
@@ -31,8 +31,14 @@ export default {
   },
 
   created() {
-    this.myLists = this.getSubscribedListsFromUserId(this.userId);
+    this.myLists =this.getSubscribedListsFromUserId(this.userId);
   },
+
+  computed:{
+    filterList(){
+      return this.myLists.filter((list) => list);
+    }
+  }
 };
 </script>
 
