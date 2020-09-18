@@ -82,7 +82,7 @@ export default class Viewer {
     //リスト保存のために属性を追加しておく
     frame.setAttribute("frame_src", src);
     //リスト保存のためにページ番号を追加しておく
-    frame.setAttribute("page", this.current_page);
+    frame.setAttribute("page", this.current_page + 1);
 
     this.addBtns(frame);
     this.canvas.appendChild(frame);
