@@ -27,14 +27,18 @@ export default {
   data() {
     return {
       lists: [],
-      list_name: '',
+      list_name: "",
       show_input: false,
     };
   },
-  props: ['frame_src', 'frame_page'],
-  components: { "b-modal": BModal, "b-button": BButton, 'b-form-input': BFormInput},
+  props: ["frame_src", "frame_page"],
+  components: {
+    "b-modal": BModal,
+    "b-button": BButton,
+    "b-form-input": BFormInput,
+  },
   directives: {
-    "b-modal": VBModal
+    "b-modal": VBModal,
   },
   created() {
     this.lists = this.getOwnedListsFromUserId("4oFo1QKy3X8wGwuGx98h"); //TODO: ユーザーのidをちゃんと引っ張ってきて入れるようにする
@@ -45,7 +49,7 @@ export default {
       this.$bvModal.hide('modal');
     },
     show() {
-      this.$bvModal.show('modal');
+      this.$bvModal.show("modal");
     },
     showListInput() {
       this.show_input = true;
@@ -53,15 +57,16 @@ export default {
     async addList() {
       await this.createList({
         name: this.list_name,
+        cover_path: "static/default.png",
         open: false,
         rating: 0,
         ownerId: "4oFo1QKy3X8wGwuGx98h",
-      })
+      });
 
       this.list_name = "";
       this.lists = this.getOwnedListsFromUserId("4oFo1QKy3X8wGwuGx98h"); //TODO: ユーザーのidをちゃんと引っ張ってきて入れるようにする
-    }
-  }
+    },
+  },
 };
 </script>
 
