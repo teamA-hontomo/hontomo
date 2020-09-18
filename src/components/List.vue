@@ -95,7 +95,8 @@ import TitleBox from "./shared/TitleBox.vue";
 import ContentsBox from "./shared/ContentsBox.vue";
 import ModalWindow from "./shared/ModalWindow.vue";
 import StarButton from "./shared/StarButton.vue";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import 'firebase/app';
 import "firebase/firestore";
 
 export default {

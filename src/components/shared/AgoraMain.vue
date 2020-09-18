@@ -36,7 +36,8 @@
 <script>
 import { BIconAlarm } from "bootstrap-vue";
 import Message from "./Message";
-import firebase from "firebase";
+import firebase from "firebase/app";
+import 'firebase/app';
 import "firebase/firestore";
 export default {
   components: { Message },
